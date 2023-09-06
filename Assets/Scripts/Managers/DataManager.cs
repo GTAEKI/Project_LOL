@@ -13,7 +13,7 @@ public class DataManager
 
     public void Init()
     {
-        StatDict = LoadJson<StatData, int, Stat>("StatData").MakeDict();
+        //StatDict = LoadJson<StatData, int, Stat>("StatData").MakeDict();
     }
 
     private Loader LoadJson<Loader, Key, Value>(string _path) where Loader : ILoader<Key,Value>
