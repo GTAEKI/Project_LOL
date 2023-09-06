@@ -1,12 +1,34 @@
 using System;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public abstract class Unit : MonoBehaviour
 {
-    public delegate void CastActiveHandler();
-    public CastActiveHandler castActiveHandler;
+    protected Vector3 targetPos;          // 이동할 위치
 
-    private Vector3 targetPos;          // 이동할 위치
+    [Header("현재 유닛 상태")]
+    [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
+ 
+    /// <summary>
+    /// 현재 유닛 상태 프로퍼티
+    /// 김민섭_230906
+    /// </summary>
+    public virtual Define.UnitState CurrentState
+    {
+        get => currentState;
+        set
+        {
+            currentState = value;
+            
+            // TODO: 상태에 따라 관련된 애니메이션 실행
+        }
+    }
+
+    private void Start()
+    {
+        Init();
+    }
+
+    public abstract void Init();
 
     /// <summary>
     /// InputManager 클래스의 OnUpdate 함수에서 사용되는 함수
@@ -14,20 +36,62 @@ public class Unit : MonoBehaviour
     /// </summary>
     public void OnUpdate()
     {
-        //CastPassiveSkill();
+        Move();
+        Select();
 
-        //Move();
-        UpdateMove(targetPos);
-
-        //CastActiveSkill();
-        //CastSpellSkill();
+        switch (CurrentState)
+        {
+            case Define.UnitState.IDLE: UpdateIdle(); break;
+            case Define.UnitState.MOVE: UpdateMove(); break;
+        }
     }
 
-    #region 이동 관련 함수
+    #region 상태별 업데이트 함수
 
-    public void Move()
+    /// <summary>
+    /// 상태가 IDLE일 때 실행되는 업데이트 함수
+    /// 김민섭_230906
+    /// </summary>
+    protected virtual void UpdateIdle()
     {
-        if(Input.GetMouseButtonDown(0))
+        // TODO: 보류
+    }
+
+    /// <summary>
+    /// 상태가 MOVE일 때 실행되는 업데이트 함수
+    /// 김민섭_230906
+    /// </summary>
+    protected virtual void UpdateMove()
+    {
+        if (targetPos == default) return;
+
+        Vector3 direct = targetPos - transform.position;
+        direct.y = 0f;
+
+        float minDistance = direct.magnitude;
+        if (minDistance <= 1f)
+        {
+            targetPos = default;
+            CurrentState = Define.UnitState.IDLE;
+            return;
+        }
+        else
+        {
+            float moveDistance = Mathf.Clamp(5f * Time.deltaTime, 0f, direct.magnitude);
+            transform.position += direct.normalized * moveDistance;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), 20 * Time.deltaTime);
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 유닛 선택 함수
+    /// 김민섭_230906
+    /// </summary>
+    private void Select()
+    {
+        if(CheckKeyEvent(0))
         {
             Vector3 mousePos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
@@ -35,15 +99,17 @@ public class Unit : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Unit")))
             {
-                Vector3 rayStartPosition = Camera.main.transform.position;      // 레이를 그려줄 시작 위치 (카메라 위치)
-                Vector3 rayEndPosition = hit.point;         // 레이를 그려줄 끝 위치 (충돌 지점)    
-                float duration = 2f;        // 레이를 그려주기 위한 시간 (프레임당 레이가 유지될 시간)
-                Debug.DrawRay(rayStartPosition, rayEndPosition - rayStartPosition, Color.blue, duration);        // Debug.DrawRay를 사용하여 레이를 그림
-
-                Debug.Log("유닛을 선택했습니다.");
+                DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
             }
         }
+    }
 
+    /// <summary>
+    /// 유닛 움직임 체크 함수
+    /// 김민섭_230906
+    /// </summary>
+    public void Move()
+    {
         if (Input.GetMouseButtonDown(1))
         {
             Vector3 mousePos = Input.mousePosition;
@@ -52,39 +118,40 @@ public class Unit : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Floor")))
             {
-                Vector3 rayStartPosition = Camera.main.transform.position;      // 레이를 그려줄 시작 위치 (카메라 위치)
-                Vector3 rayEndPosition = hit.point;         // 레이를 그려줄 끝 위치 (충돌 지점)    
-                float duration = 2f;        // 레이를 그려주기 위한 시간 (프레임당 레이가 유지될 시간)
-                Debug.DrawRay(rayStartPosition, rayEndPosition - rayStartPosition, Color.red, duration);        // Debug.DrawRay를 사용하여 레이를 그림
+                DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
-                targetPos = rayEndPosition;
+                targetPos = hit.point;
+                CurrentState = Define.UnitState.MOVE;
             }
         }
     }
 
-    public void UpdateMove(Vector3 targetPos)
+    /// <summary>
+    /// 터치 지점으로 레이를 쏘는 함수
+    /// 김민섭_230906
+    /// </summary>
+    /// <param name="startPoint">시작 지점</param>
+    /// <param name="endPoint">끝 지점</param>
+    /// <param name="rayColor">레이 색상</param>
+    /// <param name="duration">지속 시간</param>
+    private void DrawTouchRay(Vector3 startPoint, Vector3 endPoint, Color rayColor, float duration = 1f)
     {
-        if (targetPos == default) return;
-
-        Vector3 direct = targetPos - transform.position;
-        direct.y = 0f;
-
-        float minDistance = direct.magnitude;
-        if(minDistance <= 1f)
-        {
-            targetPos = default;
-            Debug.Log("목표에 도착함");
-            return;
-        }
-        else
-        {
-            float moveDistance = Mathf.Clamp(5f * Time.deltaTime, 0f, direct.magnitude);
-            transform.position += direct.normalized * moveDistance;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), 20 * Time.deltaTime);
-        }    
+        Debug.DrawRay(startPoint, endPoint - startPoint, rayColor, duration);
     }
 
-    #endregion
+    /// <summary>
+    /// 마우스 클릭 이벤트 입력 유무 체크 함수
+    /// 김민섭_230906
+    /// </summary>
+    /// <param name="evt">이벤트 번호</param>
+    private bool CheckKeyEvent(int evt)
+    {
+        if(Input.GetMouseButtonDown(evt))
+        {
+            return true;
+        }
+        return false;
+    }
 
     #region 스킬 관련 함수
 
@@ -94,27 +161,25 @@ public class Unit : MonoBehaviour
     /// </summary>
     public virtual void CastActiveSkill()
     {
-        castActiveHandler();
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CastActiveQ();
+        }
 
-        //if(Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    CastActiveQ();
-        //}
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            CastActiveW();
+        }
 
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    CastActiveW();
-        //}
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            CastActiveE();
+        }
 
-        //if (Input.GetKeyDown(KeyCode.E))
-        //{
-        //    CastActiveE();
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    CastActiveR();
-        //}
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            CastActiveR();
+        }
     }
 
     /// <summary>

@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+/// 기타 Enum들을 모아 놓은 클래스
+/// 김민섭_230906
+/// </summary>
 public class Define
 {
     public enum Scene
@@ -35,4 +35,12 @@ public class Define
     {
         QuaterView
     }
+
+    /// <summary>
+    /// 유닛 상태 enum
+    /// </summary>
+    public enum UnitState
+    {
+        NONE, IDLE, MOVE
+    }   // 기본, 이동
 }
