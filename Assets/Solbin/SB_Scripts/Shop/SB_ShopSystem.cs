@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class ShopSystem : MonoBehaviour
+public class SB_ShopSystem : MonoBehaviour
 {
     private bool m_isShop = false;
     private RectTransform m_shopTransform;
