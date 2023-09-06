@@ -6,35 +6,36 @@ using UnityEngine.EventSystems;
 
 public class InputManager
 {
-    public Action keyAction = null;
-    public Action<Define.MouseEvent> mouseAction = null;
+    private GameObject playerSubject;      // 관찰 주체
+    private Unit playerUnit;               // 플레이어 (본인)
 
-    private bool mousePress = false;
-
-    public void OnUpdate()
+    /// <summary>
+    /// Managers 클래스의 Start 함수에서 동작하는 함수
+    /// 김민섭_230906
+    /// </summary>
+    public void Init()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
-
-        if (Input.anyKey && keyAction != null) keyAction.Invoke();
-
-        if(mouseAction != null)
-        {
-            if(Input.GetMouseButton(0))
-            {
-                mouseAction.Invoke(Define.MouseEvent.Press);
-                mousePress = true;
-            }
-            else
-            {
-                if (mousePress) mouseAction.Invoke(Define.MouseEvent.Click);
-                mousePress = false;
-            }
-        }
+        playerSubject = GameObject.FindGameObjectWithTag("Player");
+        playerUnit = playerSubject.GetOrAddComponent<Unit>();
     }
 
+    /// <summary>
+    /// Managers 클래스의 Update 함수에서 동작하는 함수
+    /// 김민섭_230906
+    /// </summary>
+    public void OnUpdate()
+    {
+        //if (EventSystem.current.IsPointerOverGameObject()) return;      // UI 터치 방지
+
+        playerUnit?.OnUpdate();
+    }
+
+    /// <summary>
+    /// Managers 클래스의 Clear 함수에서 동작하는 함수
+    /// 김민섭_230906
+    /// </summary>
     public void Clear()
     {
-        keyAction = null;
-        mouseAction = null;
+
     }
 }
