@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public Camera cameraBattle1;
     public Camera cameraBattle2;
 
+    // 타이머 _230906 배경택
+
     private void Awake()
     {
         //게임매니저 싱글톤_230906 배경택
