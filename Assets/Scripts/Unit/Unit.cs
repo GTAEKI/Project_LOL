@@ -3,11 +3,14 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
+    protected CharacterStat unitStat;     // 유닛 스탯 데이터 (원본값)
     protected Vector3 targetPos;          // 이동할 위치
 
     [Header("현재 유닛 상태")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
- 
+
+    #region 프로퍼티
+
     /// <summary>
     /// 현재 유닛 상태 프로퍼티
     /// 김민섭_230906
@@ -22,6 +25,15 @@ public abstract class Unit : MonoBehaviour
             // TODO: 상태에 따라 관련된 애니메이션 실행
         }
     }
+
+    #endregion
+
+    #region 상수
+
+    private const float ROTATE_SPEED = 20f;     // 유닛 회전속도
+    private const float RAY_DISTANCE = 100f;    // 레이 사정거리
+    
+    #endregion
 
     private void Start()
     {
@@ -77,9 +89,9 @@ public abstract class Unit : MonoBehaviour
         }
         else
         {
-            float moveDistance = Mathf.Clamp(5f * Time.deltaTime, 0f, direct.magnitude);
+            float moveDistance = Mathf.Clamp(unitStat.moveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
             transform.position += direct.normalized * moveDistance;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), 20 * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), ROTATE_SPEED * Time.deltaTime);
         }
     }
 
@@ -97,7 +109,7 @@ public abstract class Unit : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Unit")))
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
             {
                 DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
             }
@@ -116,7 +128,7 @@ public abstract class Unit : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Floor")))
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
             {
                 DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
