@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
     public Camera cameraBattleArea1;
     public Camera cameraBattleArea2;
 
+    // 자기장 _230906 배경택
+    public GameObject magneticField1;
+    public GameObject magneticField2;
+
     // 타이머 변수 _230906 배경택
     private float baseTime;
     private const float WAIT_AREA_TIME = 1f; //40f
@@ -37,7 +41,7 @@ public class GameManager : MonoBehaviour
     // 게임종료, 한 팀만 살아남았을 경우 _230906 배경택
     private bool isGameOver;
 
-    // 라운드에 맞춰서 대기실 모드 결정 _230906 배경택
+    // 라운드에 맞춰서 대기실 모드 결정(인스펙터창에서 변경 가능) _230906 배경택
     public WaitStageMode[] waitStageModes = {
         WaitStageMode.BASIC_MODE,
         WaitStageMode.MONEY_1000_MODE,
@@ -62,12 +66,12 @@ public class GameManager : MonoBehaviour
 
     #region 게임 스테이지 및 모드
     // 게임 스테이지 및 모드 _230906 배경택
-    public enum Stage
+    private enum Stage
     {
         WAIT_STAGE,
         BATTLE_STAGE
     }
-    public Stage stage;
+    private Stage stage;
     public enum WaitStageMode
     {
         BASIC_MODE,
@@ -75,16 +79,19 @@ public class GameManager : MonoBehaviour
         MONEY_3000_MODE,
         CARD_MODE
     }
-    public WaitStageMode waitStageMode;
-    public enum BattleStageMode
+    private WaitStageMode waitStageMode;
+    private enum BattleStageMode
     {
         READY_MODE,
         FIGHT_MODE,
         MANETIC_FIGHT_MODE
+
     }
-    public BattleStageMode battleStageMode;
+    private BattleStageMode battleStageMode;
     #endregion
 
+
+    //public delegate void 
 
 
     private void Awake()
@@ -137,6 +144,18 @@ public class GameManager : MonoBehaviour
                     stage = Stage.BATTLE_STAGE;
                     isRoundOver = false;
                     Debug.Log("경기장 이동");
+
+                    // 랜덤 한 위치로 카메라 이동
+                    int randomBattleArea = Random.Range(0, 2);
+                    if (randomBattleArea == 1)
+                    {
+                        MoveToBattleArea1();
+                    }
+                    else
+                    {
+                        MoveToBattlArea2();
+                    }
+
                     break;
                 }
 
@@ -172,6 +191,7 @@ public class GameManager : MonoBehaviour
                     roundNumber += 1;
                     waitStageMode = waitStageModes[roundNumber];
                     stage = Stage.WAIT_STAGE;
+                    ReturnWaitArea();
                     Debug.Log("대기실로 이동");
                     break;
                 }
@@ -228,10 +248,10 @@ public class GameManager : MonoBehaviour
 
     //TODO 팀 체력 제어
 
-    #region 카메라 이동
-    //TODO 카메라 제어
+    #region 맵 지역 이동
     /// <summary>
     /// 카메라 이동
+    /// TODO 캐릭터 이동
     /// 배경택 230906
     /// </summary>
     public void MoveToBattleArea1()
