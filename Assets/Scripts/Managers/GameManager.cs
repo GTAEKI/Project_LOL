@@ -38,6 +38,11 @@ public class GameManager : MonoBehaviour
         
     }
 
+    private void CreateMagneticField()
+    {
+
+    }
+
     //TODO 타이머
     //TODO 자기장
     //TODO 오브젝트 생성
