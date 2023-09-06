@@ -1,18 +1,25 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject[] card;
+    
 
-    // Update is called once per frame
-    void Update()
+    public Sprite[] strengthcard;
+
+
+
+    public void reroll()
     {
-        
+        for(int a = 0; a<3; a++)
+        {
+            int RandomNumber = Random.Range(0, 5);
+            card[a].GetComponent<Image>().sprite = strengthcard[RandomNumber];
+        }
     }
 }
