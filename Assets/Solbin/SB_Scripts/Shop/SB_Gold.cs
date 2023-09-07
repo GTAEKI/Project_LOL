@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// 골드 관리를 위한 클래스
+/// </summary>
+
 public class SB_Gold : MonoBehaviour
 {
     int m_gold;

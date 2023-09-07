@@ -1,0 +1,6 @@
+﻿TypeNumber,Job,ItemNumber,Name,EnglishName,AttackDamage,AttackSpeed,Armor,MagicResistance,Health,AbilityHaste,LifeSteal
+0,Fighter,0,수호 천사,GuardianAngel,45,,40,,,,
+0,Fighter,1,마법사의 최후,WitsEnd,40,40,,40,,,
+0,Fighter,2,몰락한 왕의 검,BladeOfTheRuinedKing,40,25,,,,,8
+0,Fighter,3,죽음의 무도,DeathsDance,55,,45,,,15,
+0,Fighter,4,쇼진의 창,SpearOfShojin,60,,,,500,20,
