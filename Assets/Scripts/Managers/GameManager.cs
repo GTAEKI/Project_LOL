@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     private const float WAIT_AREA_TIME = 1f; //40f
     private const float BATTLE_READY_TIME = 1f; //5f
     private const float START_MAGNETIC_TIME = 1f; //30f
-    private const float MAGNETIC_CYCLE = 1f; //5f
+    private const float MAGNETIC_CYCLE = 5f; //5f
 
     // 팀 체력 변수 _230906 배경택
     private const int TEAM_HP = 20;
@@ -59,9 +59,11 @@ public class GameManager : MonoBehaviour
     };
     private int roundNumber;
 
-
-    //Test용 y축
-    private int SphereY = 0;
+    // 자기장 움직임 변수 _230907 배경택
+    private int maneticCount = 0;
+    private Vector3 MoveTomagneticPos1;
+    private Vector3 MoveTomagneticPos2;
+    private bool isArriveMagnetic;
 
 
     #region 게임 스테이지 및 모드
@@ -122,7 +124,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        GameFlow(); //게임 흐름 함수 _ 시간에 따른 제어
+        GameFlow(); //게임 흐름 함수(시간에 따라 제어) _230906 배경택
+
+        if (!isArriveMagnetic) // 자기장이 전부 줄어들었는가 _230907 배경택
+        {
+            MoveUpMagneticField(); // 자기장 움직임 _230907 배경택
+        }
     }
 
     /// <summary>
@@ -141,6 +148,7 @@ public class GameManager : MonoBehaviour
                 if(baseTime >= WAIT_AREA_TIME) // 대기실 시간이 다 지나면 배틀스테이지로 이동
                 {
                     baseTime = 0f;
+                    battleStageMode = BattleStageMode.READY_MODE;
                     stage = Stage.BATTLE_STAGE;
                     isRoundOver = false;
                     Debug.Log("경기장 이동");
@@ -212,6 +220,7 @@ public class GameManager : MonoBehaviour
                         {
                             baseTime = 0f;
                             battleStageMode = BattleStageMode.MANETIC_FIGHT_MODE;
+                            StartMagneticField();
                         }
                         Debug.Log("전투모드");
                         break;
@@ -221,16 +230,13 @@ public class GameManager : MonoBehaviour
                         {
                             baseTime = 0f;
 
-                            //test
-                            if(SphereY < 3)
+                            if(maneticCount < 3) // Test : 3번 자기장 위로 움직이게 실행
                             {
-                                SphereY += 1;
-                                Debug.Log("자기장 +1");
+                                MangeticCycle(); // Cycle마다 자기장의 다음 움직일 위치 계산
                             }
-                            else if(SphereY == 3) // Test_ 자기장 일정높이 도달시 라운드종료 할 수 있도록
+                            else if(maneticCount == 3) // Test : 자기장 일정높이 도달시 라운드종료 할 수 있도록
                             {
-                                isRoundOver = true;
-                                SphereY = 0;
+                                EndMagneticField(); // 자기장 모드 종료시 실행
                             }
                         }
                         Debug.Log("자기장 모드");
@@ -240,7 +246,55 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //TODO 자기장
+    /// <summary>
+    /// 자기장 움직임
+    /// 배경택 230907
+    /// </summary>
+    #region 자기장 움직임
+
+    //배경택 230907
+    private void StartMagneticField() // 자기장 생성
+    {
+        magneticField1.transform.localPosition = Vector3.zero; // 자기장 위치 초기화
+        magneticField2.transform.localPosition = Vector3.zero; // 자기장 위치 초기화
+        MoveTomagneticPos1 = magneticField1.transform.localPosition; // 자기장이 움직일 위치 초기화
+        MoveTomagneticPos2 = magneticField2.transform.localPosition; // 자기장이 움직일 위치 초기화
+        magneticField1.SetActive(true);
+        magneticField2.SetActive(true);
+    }
+
+    //배경택 230907
+    private void EndMagneticField() // 자기장모드 종료
+    {
+        maneticCount = 0;
+        magneticField1.SetActive(false);
+        magneticField2.SetActive(false);
+
+        isRoundOver = true; // Test : 추후 게임결과 나올때 라운드 오버로 변경
+    }
+
+    //배경택 230907
+    private void MoveUpMagneticField() // 자기장 위쪽방향으로 움직이며 자기장 크기 조절
+    {
+        magneticField1.transform.localPosition = Vector3.Lerp(magneticField1.transform.localPosition, MoveTomagneticPos1, Time.deltaTime * 2f);
+        magneticField2.transform.localPosition = Vector3.Lerp(magneticField2.transform.localPosition, MoveTomagneticPos2, Time.deltaTime * 2f);
+        if(magneticField1.transform.position == MoveTomagneticPos1 && magneticField2.transform.position == MoveTomagneticPos2)
+        {
+            isArriveMagnetic = true;
+        }
+    }
+
+    //배경택 230907
+    private void MangeticCycle() // 자기장 위쪽방향의 위치값 저장
+    {
+        Debug.Log("자기장 +1");
+        maneticCount += 1;
+        isArriveMagnetic = false;
+
+        MoveTomagneticPos1 = magneticField1.transform.localPosition + (Vector3.up * 1.5f);
+        MoveTomagneticPos2 = magneticField2.transform.localPosition + (Vector3.up * 1.5f);
+    }
+    #endregion 자기장 움직임
 
     //TODO 오브젝트 생성
 
