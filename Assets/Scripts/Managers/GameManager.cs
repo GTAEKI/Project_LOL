@@ -31,6 +31,13 @@ public class GameManager : MonoBehaviour
 
     // 팀 체력 변수 _230906 배경택
     private const int TEAM_HP = 20;
+    // 라운드 별 패배시 데미지 _230907 배경택
+    private int teamDamage;
+    private int[] teamRoundDamages =
+    {
+        0,2,2,2,4,4,4,6,6,6,8,8,8,10,10,10
+    };
+
 
     // 캐릭터 체력 변수 _230906 배경택
     private float CharactorHP = 100f;
@@ -93,7 +100,19 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-    //public delegate void 
+    // 캐릭터 리스폰 포인트를 위한 변수 _230907 배경택
+    public GameObject[] waitAreaResPoint;
+    public GameObject[] battle1ResPoint;
+    public GameObject[] battle2ResPoint;
+
+    // 게임오브젝트 생성 및 삭제를 위한 변수 _230907 배경택
+    public GameObject healFlower; // 체력꽃 프리펩
+    public GameObject jumpFlower; // 점프꽃 프리펩
+    public GameObject[] healFlowerPoints; // 체력꽃 생성 위치
+    public GameObject[] jumpFlowerPoints; // 점프꽃 생성 위치
+    private List<GameObject> healFlowers; // 체력꽃 저장
+    private List<GameObject> jumpFlowers; // 점프꽃 저장
+
 
 
     private void Awake()
@@ -119,6 +138,10 @@ public class GameManager : MonoBehaviour
         //게임 시작시 bool값 초기화 _230906 배경택
         isRoundOver = false;
         isGameOver = false;
+
+        //게임 오브젝트를 담는 리스트 초기화 _230907 배경택
+        healFlowers = new List<GameObject>();
+        jumpFlowers = new List<GameObject>();
         #endregion
     }
 
@@ -163,7 +186,6 @@ public class GameManager : MonoBehaviour
                     {
                         MoveToBattlArea2();
                     }
-
                     break;
                 }
 
@@ -196,17 +218,16 @@ public class GameManager : MonoBehaviour
                 if (isRoundOver) // 라운드가 종료되었다면 라운드 수를 높이고 대기실로 이동
                 {
                     baseTime = 0f;
-                    roundNumber += 1;
-                    waitStageMode = waitStageModes[roundNumber];
-                    stage = Stage.WAIT_STAGE;
-                    ReturnWaitArea();
-                    Debug.Log("대기실로 이동");
+                    RoundOver(); //라운드 종료시 실행
                     break;
                 }
 
                 switch (battleStageMode) // 배틀스테이지 모드 시간에 따라 수행
                 {
                     case BattleStageMode.READY_MODE:
+
+                        CreateGameObject();
+
                         if(baseTime >= BATTLE_READY_TIME)
                         {
                             baseTime = 0f;
@@ -245,7 +266,6 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-
     /// <summary>
     /// 자기장 움직임
     /// 배경택 230907
@@ -296,11 +316,74 @@ public class GameManager : MonoBehaviour
     }
     #endregion 자기장 움직임
 
-    //TODO 오브젝트 생성
+
+    /// <summary>
+    /// 게임 오브젝트 생성
+    /// 배경택 _ 230907
+    /// </summary>
+    #region 게임오브젝트 생성
+    private void CreateGameObject() // 게임오브젝트 생성 _ 230907 배경택
+    {
+        CreateHealFlower();
+        CreateJumpFlower();
+    }
+    private void CreateHealFlower() // 체력을 채워주는 꽃 생성 _ 230907 배경택
+    {
+        foreach(GameObject healPoint in healFlowerPoints)
+        {
+            healFlowers.Add(Instantiate(healFlower, healPoint.transform.position, Quaternion.identity));
+        }
+    }
+    private void CreateJumpFlower() // 터지면 점프하게 하는 꽃 생성 _ 230907 배경택
+    {
+        foreach (GameObject jumpPoint in jumpFlowerPoints)
+        {
+            jumpFlowers.Add(Instantiate(jumpFlower, jumpPoint.transform.position, Quaternion.identity));
+        }
+    }
+
+    private void DestroyGameObject() // 게임오브젝트 삭제 _ 230907 배경택
+    {
+        DestroyHealFlower();
+        DestroyJumpFlower();
+    }
+    private void DestroyHealFlower() // 체력을 채워주는 꽃 파괴 _ 230907 배경택
+    {
+        foreach(GameObject healFlower in healFlowers)
+        {
+            Destroy(healFlower);
+        }
+    }
+    private void DestroyJumpFlower() // 점프를 하게만드는 꽃 파괴 _ 230907 배경택
+    {
+        foreach(GameObject jumpFlower in jumpFlowers)
+        {
+            Destroy(jumpFlower);
+        }
+    }
+    #endregion 게임 오브젝트 생성
+
+    
 
     //TODO 승패 판정
 
     //TODO 팀 체력 제어
+
+
+    /// <summary>
+    /// 라운드 오버시 실행
+    /// 배경택 _ 230907
+    /// </summary>
+    private void RoundOver()
+    {
+        roundNumber += 1;
+        waitStageMode = waitStageModes[roundNumber];
+        teamDamage = teamRoundDamages[roundNumber];
+        stage = Stage.WAIT_STAGE;
+        DestroyGameObject();
+        ReturnWaitArea();
+        Debug.Log("대기실로 이동");
+    }
 
     #region 맵 지역 이동
     /// <summary>
