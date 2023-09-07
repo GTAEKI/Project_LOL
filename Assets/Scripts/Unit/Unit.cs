@@ -50,7 +50,10 @@ public abstract class Unit : MonoBehaviour
     {
         Move();
         Select();
+    }
 
+    public void Update()
+    {
         switch (CurrentState)
         {
             case Define.UnitState.IDLE: UpdateIdle(); break;
@@ -106,15 +109,16 @@ public abstract class Unit : MonoBehaviour
         if(Managers.Input.CheckKeyEvent(0))
         {
             UI_DummyController ui_dummy = Managers.UI.GetPopupUI<UI_DummyController>();
-            if (ui_dummy != null) return;
-
-            Vector3 mousePos = Input.mousePosition;
-            Ray ray = Camera.main.ScreenPointToRay(mousePos);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
+            if (ui_dummy == null || (ui_dummy != null && !ui_dummy.IsCreate))
             {
-                Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
+                Vector3 mousePos = Input.mousePosition;
+                Ray ray = Camera.main.ScreenPointToRay(mousePos);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
+                {
+                    Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
+                }
             }
         }
     }
@@ -128,18 +132,19 @@ public abstract class Unit : MonoBehaviour
         if (Managers.Input.CheckKeyEvent(1))
         {
             UI_DummyController ui_dummy = Managers.UI.GetPopupUI<UI_DummyController>();
-            if (ui_dummy != null) return;
-
-            Vector3 mousePos = Input.mousePosition;
-            Ray ray = Camera.main.ScreenPointToRay(mousePos);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
+            if (ui_dummy == null || (ui_dummy != null && !ui_dummy.IsCreate))
             {
-                Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
+                Vector3 mousePos = Input.mousePosition;
+                Ray ray = Camera.main.ScreenPointToRay(mousePos);
+                RaycastHit hit;
 
-                targetPos = hit.point;
-                CurrentState = Define.UnitState.MOVE;
+                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
+                {
+                    Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
+
+                    targetPos = hit.point;
+                    CurrentState = Define.UnitState.MOVE;
+                }
             }
         }
     }

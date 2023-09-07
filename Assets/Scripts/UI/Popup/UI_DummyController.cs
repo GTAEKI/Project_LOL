@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,6 +14,8 @@ public class UI_DummyController : UI_Popup
         Btn_Exit
     }
 
+    private GameObject illusionDummy;               // 설치 위치 생성 더미
+
     public bool IsCreate { private set; get; }      // 생성 활성화 체크
 
     private const float RAY_DISTANCE = 100f;     // 레이 사정거리
@@ -25,6 +28,8 @@ public class UI_DummyController : UI_Popup
     {
         base.Init();
 
+        illusionDummy = Managers.Resource.Instantiate("Unit/Dummy_Illusion");
+        illusionDummy.SetActive(false);
         IsCreate = false;
 
         // UI 세팅
@@ -47,6 +52,7 @@ public class UI_DummyController : UI_Popup
     {
         Debug.Log("더미 생성 활성화!");
         IsCreate = true;
+        illusionDummy?.SetActive(true);
     }
 
     /// <summary>
@@ -58,6 +64,7 @@ public class UI_DummyController : UI_Popup
     {
         Debug.Log("더미 생성 비활성화!");
         IsCreate = false;
+        illusionDummy?.SetActive(false);
     }
 
     /// <summary>
@@ -73,6 +80,19 @@ public class UI_DummyController : UI_Popup
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;      // UI 터치 방지
 
+        if(IsCreate && illusionDummy != null)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
+            {
+                Vector3 _location = hit.point;
+                illusionDummy.transform.position = _location;
+                illusionDummy.transform.position = new Vector3(illusionDummy.transform.position.x, illusionDummy.transform.localScale.y, illusionDummy.transform.position.z);
+            }
+        }
+
         if (Managers.Input.CheckKeyEvent(0))
         {
             Vector3 mousePos = Input.mousePosition;
@@ -80,7 +100,7 @@ public class UI_DummyController : UI_Popup
             RaycastHit hit;
 
             if(IsCreate)
-            {
+            {   // 더미 생성
                 if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
                 {
                     GameObject dummy = Managers.Resource.Instantiate("Unit/Dummy", hit.point, Quaternion.identity);
@@ -88,7 +108,7 @@ public class UI_DummyController : UI_Popup
                 }
             }
             else
-            {
+            {   // 더미 제거
                 if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
                 {
                     Dummy dummy = hit.transform.GetComponent<Dummy>();
