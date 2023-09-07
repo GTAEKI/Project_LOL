@@ -35,7 +35,7 @@ public class ResourceManager
         }
 
         if(prefab.GetComponent<Poolable>() != null)
-        {   // TODO: 풀링 안에 있는 오브젝트인지 체크
+        {   // 풀링 안에 있는 오브젝트인지 체크
             return Managers.Pool.Pop(prefab, _parent).gameObject;
         }
 
@@ -54,7 +54,7 @@ public class ResourceManager
         }
 
         if (prefab.GetComponent<Poolable>() != null)
-        {   // TODO: 풀링 안에 있는 오브젝트인지 체크
+        {   // 풀링 안에 있는 오브젝트인지 체크
             return Managers.Pool.Pop(prefab, _parent).gameObject;
         }
 

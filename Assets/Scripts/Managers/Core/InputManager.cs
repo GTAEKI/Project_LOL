@@ -25,9 +25,28 @@ public class InputManager
     /// </summary>
     public void OnUpdate()
     {
-        //if (EventSystem.current.IsPointerOverGameObject()) return;      // UI 터치 방지
+        if (EventSystem.current.IsPointerOverGameObject()) return;      // UI 터치 방지
 
         playerUnit?.OnUpdate();
+
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            Managers.UI.ShowPopupUI<UI_DummyController>();
+        }
+    }
+
+    /// <summary>
+    /// 마우스 클릭 이벤트 입력 유무 체크 함수
+    /// 김민섭_230906
+    /// </summary>
+    /// <param name="evt">이벤트 번호</param>
+    public bool CheckKeyEvent(int evt)
+    {
+        if (Input.GetMouseButtonDown(evt))
+        {
+            return true;
+        }
+        return false;
     }
 
     /// <summary>

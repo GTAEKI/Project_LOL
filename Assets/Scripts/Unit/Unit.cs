@@ -31,8 +31,8 @@ public abstract class Unit : MonoBehaviour
     #region 상수
 
     private const float ROTATE_SPEED = 20f;     // 유닛 회전속도
-    private const float RAY_DISTANCE = 100f;    // 레이 사정거리
-    
+    private const float RAY_DISTANCE = 100f;     // 레이 사정거리
+
     #endregion
 
     private void Start()
@@ -103,15 +103,18 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     private void Select()
     {
-        if(CheckKeyEvent(0))
+        if(Managers.Input.CheckKeyEvent(0))
         {
+            UI_DummyController ui_dummy = Managers.UI.GetPopupUI<UI_DummyController>();
+            if (ui_dummy != null) return;
+
             Vector3 mousePos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
             {
-                DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
+                Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
             }
         }
     }
@@ -122,47 +125,23 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public void Move()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Managers.Input.CheckKeyEvent(1))
         {
+            UI_DummyController ui_dummy = Managers.UI.GetPopupUI<UI_DummyController>();
+            if (ui_dummy != null) return;
+
             Vector3 mousePos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
             {
-                DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
+                Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
                 targetPos = hit.point;
                 CurrentState = Define.UnitState.MOVE;
             }
         }
-    }
-
-    /// <summary>
-    /// 터치 지점으로 레이를 쏘는 함수
-    /// 김민섭_230906
-    /// </summary>
-    /// <param name="startPoint">시작 지점</param>
-    /// <param name="endPoint">끝 지점</param>
-    /// <param name="rayColor">레이 색상</param>
-    /// <param name="duration">지속 시간</param>
-    private void DrawTouchRay(Vector3 startPoint, Vector3 endPoint, Color rayColor, float duration = 1f)
-    {
-        Debug.DrawRay(startPoint, endPoint - startPoint, rayColor, duration);
-    }
-
-    /// <summary>
-    /// 마우스 클릭 이벤트 입력 유무 체크 함수
-    /// 김민섭_230906
-    /// </summary>
-    /// <param name="evt">이벤트 번호</param>
-    private bool CheckKeyEvent(int evt)
-    {
-        if(Input.GetMouseButtonDown(evt))
-        {
-            return true;
-        }
-        return false;
     }
 
     #region 스킬 관련 함수

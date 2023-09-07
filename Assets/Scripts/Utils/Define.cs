@@ -1,5 +1,5 @@
 /// <summary>
-/// 기타 Enum들을 모아 놓은 클래스
+/// 기타 값들을 모아 놓은 클래스
 /// 김민섭_230906
 /// </summary>
 public class Define
@@ -38,6 +38,7 @@ public class Define
 
     /// <summary>
     /// 유닛 상태 enum
+    /// 김민섭_230907
     /// </summary>
     public enum UnitState
     {

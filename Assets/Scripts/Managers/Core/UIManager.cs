@@ -1,12 +1,34 @@
  using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UIManager
 {
+    private Camera uiCamera;        // UI Ä«¸Þ¶ó
+    
     private Stack<UI_Popup> popupStack = new Stack<UI_Popup>();
     private Dictionary<string, UI_Scene> sceneDict = new Dictionary<string, UI_Scene>();
+    
     private int order = 10;      // ÇöÀç Äµ¹ö½ºÀÇ ¿À´õ
+
+    public GameObject Root
+    {
+        get
+        {
+            GameObject root = GameObject.Find("@UI_Root");
+            if (root == null)
+            {
+                root = new GameObject { name = "@UI_Root" };
+            }
+            return root;
+        }
+    }
+
+    public void Init()
+    {
+        uiCamera = GameObject.Find("UI Camera").GetComponent<Camera>();
+    }
 
     public T GetScene<T>() where T : UI_Scene
     {
@@ -15,23 +37,11 @@ public class UIManager
         return null;
     }
 
-    public GameObject Root
-    {
-        get
-        {
-            GameObject root = GameObject.Find("@UI_Root");
-            if(root == null)
-            {
-                root = new GameObject { name = "@UI_Root" };
-            }
-            return root;
-        }
-    }
-
     public void SetCanvas(GameObject _target, bool _sort = true)
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(_target);
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        canvas.worldCamera = uiCamera;
         canvas.overrideSorting = true;
 
         if (_sort)
@@ -48,10 +58,10 @@ public class UIManager
     #region Scene °ü¸®
     /// <summary>
     /// ¾À UI¸¦ È£ÃâÇÏ´Â ÇÔ¼ö
+    /// ±è¹Î¼·_230906
     /// </summary>
     /// <typeparam name="T">½ºÅ©¸³Æ® ÀÌ¸§</typeparam>
     /// <param name="_name">ÇÁ¸®ÆÕ ÀÌ¸§</param>
-    /// <returns></returns>
     public T ShowSceneUI<T>(string _name = null) where T : UI_Scene
     {
         if (string.IsNullOrEmpty(_name)) _name = typeof(T).Name;
@@ -76,11 +86,11 @@ public class UIManager
 
     /// <summary>
     /// ¼­ºê¾ÆÀÌÅÛ »ý¼º ÇÔ¼ö
+    /// ±è¹Î¼·_230906
     /// </summary>
     /// <typeparam name="T">½ºÅ©¸³Æ® ÀÌ¸§</typeparam>
     /// <param name="_parent">»ý¼ºµÉ À§Ä¡ (ºÎ¸ð)</param>
     /// <param name="_name">ÇÁ¸®ÆÕ ÀÌ¸§</param>
-    /// <returns></returns>
     public T MakeSubItem<T>(Transform _parent = null, string _name = null) where T: UI_Base
     {
         if (string.IsNullOrEmpty(_name)) _name = typeof(T).Name;
@@ -114,12 +124,25 @@ public class UIManager
     #endregion
 
     #region Popup °ü¸®
+
+    public T GetPopupUI<T>(string name = null) where T: UI_Popup
+    {
+        if (string.IsNullOrEmpty(name)) name = typeof(T).Name;
+
+        List<UI_Popup> popList = popupStack.ToList();
+        if(popList.Count > 0)
+        {
+            return popList.Find(x => x.name == name) as T;
+        }
+        return null;
+    }
+
     /// <summary>
     /// ÆË¾÷ UI¸¦ È£ÃâÇÏ´Â ÇÔ¼ö
+    /// ±è¹Î¼·_230906
     /// </summary>
     /// <typeparam name="T">½ºÅ©¸³Æ® ÀÌ¸§</typeparam>
     /// <param name="_name">ÇÁ¸®ÆÕ ÀÌ¸§</param>
-    /// <returns></returns>
     public T ShowPopupUI<T>(string _name = null) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(_name)) _name = typeof(T).Name;
@@ -135,6 +158,7 @@ public class UIManager
 
     /// <summary>
     /// ´Ý´Â ÆË¾÷ UI°¡ ¸Â´ÂÁö ºñ±³ ÈÄ ´Ý´Â ÇÔ¼ö
+    /// ±è¹Î¼·_230906
     /// </summary>
     /// <param name="_popup">´ÝÈ÷´Â ÆË¾÷</param>
     public void ClosePopupUI(UI_Popup _popup)
@@ -151,6 +175,7 @@ public class UIManager
 
     /// <summary>
     /// ÆË¾÷ UI¸¦ ´Ý´Â ÇÔ¼ö
+    /// ±è¹Î¼·_230906
     /// </summary>
     public void ClosePopupUI()
     {
@@ -164,6 +189,7 @@ public class UIManager
 
     /// <summary>
     /// ¸ðµç ÆË¾÷ UI¸¦ ´Ý´Â ÇÔ¼ö
+    /// ±è¹Î¼·_230906
     /// </summary>
     public void CloseAllPopupUI()
     {
