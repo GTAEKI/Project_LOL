@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +15,8 @@ public class UI_DummyController : UI_Popup
         Btn_Exit
     }
 
-    private GameObject illusionDummy;               // 설치 위치 생성 더미
+    private GameObject create_dummy_illusion;               // 설치 위치 생성 더미
+    private Dummy_Illusion dummy_illusion;          
 
     public bool IsCreate { private set; get; }      // 생성 활성화 체크
 
@@ -28,12 +30,14 @@ public class UI_DummyController : UI_Popup
     {
         base.Init();
 
-        illusionDummy = Managers.Resource.Instantiate("Unit/Dummy_Illusion");
-        illusionDummy.SetActive(false);
+        create_dummy_illusion = Managers.Resource.Instantiate("Unit/Dummy_Illusion");
+        dummy_illusion = create_dummy_illusion.GetComponent<Dummy_Illusion>();
         IsCreate = false;
 
+        create_dummy_illusion.SetActive(false);
+
         // UI 세팅
-        Bind<Button>(typeof(Buttons));      // Button 타입의 UI들을 바인딩
+        Bind<Button>(typeof(Buttons));                    // Button 타입의 UI들을 바인딩
 
         // 버튼 이벤트 세팅
         BindEvent(GetButton((int)Buttons.Btn_CreateDummy).gameObject, OnCreateDummy);       // 더미 생성 버튼 이벤트 부여
@@ -52,7 +56,7 @@ public class UI_DummyController : UI_Popup
     {
         Debug.Log("더미 생성 활성화!");
         IsCreate = true;
-        illusionDummy?.SetActive(true);
+        create_dummy_illusion?.SetActive(true);
     }
 
     /// <summary>
@@ -64,7 +68,7 @@ public class UI_DummyController : UI_Popup
     {
         Debug.Log("더미 생성 비활성화!");
         IsCreate = false;
-        illusionDummy?.SetActive(false);
+        create_dummy_illusion?.SetActive(false);
     }
 
     /// <summary>
@@ -80,7 +84,7 @@ public class UI_DummyController : UI_Popup
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;      // UI 터치 방지
 
-        if(IsCreate && illusionDummy != null)
+        if(IsCreate && create_dummy_illusion != null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -88,12 +92,12 @@ public class UI_DummyController : UI_Popup
             if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
             {
                 Vector3 _location = hit.point;
-                illusionDummy.transform.position = _location;
-                illusionDummy.transform.position = new Vector3(illusionDummy.transform.position.x, illusionDummy.transform.localScale.y, illusionDummy.transform.position.z);
+                create_dummy_illusion.transform.position = _location;
+                create_dummy_illusion.transform.position = new Vector3(create_dummy_illusion.transform.position.x, create_dummy_illusion.transform.localScale.y, create_dummy_illusion.transform.position.z);
             }
         }
 
-        if (Managers.Input.CheckKeyEvent(0))
+        if (dummy_illusion != null && dummy_illusion.IsPossible && Managers.Input.CheckKeyEvent(0))
         {
             Vector3 mousePos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(mousePos);

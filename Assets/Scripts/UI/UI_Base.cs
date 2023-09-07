@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -81,6 +82,7 @@ public abstract class UI_Base : MonoBehaviour
 
     protected GameObject GetObject(int _index) => Get<GameObject>(_index);
     protected Text GetText(int _index) => Get<Text>(_index);
+    protected TextMeshProUGUI GetTMP(int index) => Get<TextMeshProUGUI>(index);
     protected Image GetImage(int _index) => Get<Image>(_index);
     protected Button GetButton(int _index) => Get<Button>(_index);
 }
