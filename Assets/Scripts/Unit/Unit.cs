@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
-    protected CharacterStat unitStat;     // 유닛 스탯 데이터 (원본값)
+    protected UnitStat unitStat;     // 유닛 스탯 데이터 (원본값)
     protected Vector3 targetPos;          // 이동할 위치
 
     [Header("현재 유닛 상태")]
@@ -92,7 +92,7 @@ public abstract class Unit : MonoBehaviour
         }
         else
         {
-            float moveDistance = Mathf.Clamp(unitStat.moveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
+            float moveDistance = Mathf.Clamp(unitStat.MoveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
             transform.position += direct.normalized * moveDistance;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), ROTATE_SPEED * Time.deltaTime);
         }

@@ -68,4 +68,13 @@ public class UnitStat
     //성장사정거리
     public float GrowthattackRange { get; private set; }
 
+    /// <summary>
+    /// 임시 생성자
+    /// 김민섭_230908
+    /// </summary>
+    /// <param name="movementSpeed"></param>
+    public UnitStat(float movementSpeed)
+    {
+        MoveMentSpeed = movementSpeed;
+    }
 }

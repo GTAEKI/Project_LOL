@@ -8,9 +8,6 @@ public class TestPlayer : Unit
     {
         Debug.Log("테스트 플레이어가 생성되었습니다.");
 
-        unitStat = new CharacterStat
-        {
-            moveMentSpeed = 5f
-        };
+        unitStat = new UnitStat(5f);
     }
 }
