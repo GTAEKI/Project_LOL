@@ -15,7 +15,7 @@ public class SB_Gold : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_gold = 1000; // 임시값
+        m_gold = 15000; // 임시값
         m_goldText = GetComponent<TMP_Text>();
     }
 
