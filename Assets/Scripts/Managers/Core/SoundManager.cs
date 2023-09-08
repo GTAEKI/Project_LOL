@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SoundManager
 {
+    private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
     private AudioSource[] audioSources = new AudioSource[(int)Define.Sound.MaxCount];
-    private Dictionary<string, AudioClip> audioClipDict = new Dictionary<string, AudioClip>();
 
     public void Init()
     {
@@ -15,10 +15,10 @@ public class SoundManager
             root = new GameObject { name = "@Sound" };
             Object.DontDestroyOnLoad(root);
 
-            string[] names = System.Enum.GetNames(typeof(Define.Sound));
-            for(int i = 0; i < names.Length - 1; i++)
+            string[] soundNames = System.Enum.GetNames(typeof(Define.Sound));
+            for(int i = 0; i < soundNames.Length - 1; i++)
             {
-               GameObject temp = new GameObject { name = names[i] };
+                GameObject temp = new GameObject { name = soundNames[i] };
                 audioSources[i] = temp.AddComponent<AudioSource>();
                 temp.transform.parent = root.transform;
             }
@@ -34,59 +34,79 @@ public class SoundManager
             source.clip = null;
             source.Stop();
         }
-        audioClipDict.Clear();
+        audioClips.Clear();
     }
 
+    /// <summary>
+    /// 사운드 재생 함수
+    /// </summary>
+    /// <param name="_path">사운드 파일 경로</param>
+    /// <param name="_type">사운드 타입</param>
+    /// <param name="_pitch">음의 높낮이</param>
     public void Play(string _path, Define.Sound _type = Define.Sound.Sfx, float _pitch = 1f)
     {
         AudioClip clip = GetOrAddAudioClip(_path, _type);
         Play(clip, _type, _pitch);
     }
 
+    /// <summary>
+    /// 사운드 재생 함수
+    /// </summary>
+    /// <param name="_path">사운드 파일 경로</param>
+    /// <param name="_type">사운드 타입</param>
+    /// <param name="_pitch">음의 높낮이</param>
     public void Play(AudioClip _clip, Define.Sound _type = Define.Sound.Sfx, float _pitch = 1f)
     {
         if (_clip == null) return;
 
         if (_type == Define.Sound.Bgm)
-        {
+        {   // TODO: 배경음 재생
             AudioSource source = audioSources[(int)Define.Sound.Bgm];
             if (source.isPlaying) source.Stop();
-
             source.pitch = _pitch;
             source.clip = _clip;
             source.Play();
         }
         else
-        {
+        {   // TODO: 효과음 재생
             AudioSource source = audioSources[(int)Define.Sound.Sfx];
             source.pitch = _pitch;
             source.PlayOneShot(_clip);
         }
     }
 
+    /// <summary>
+    /// 사운드 파일을 가져오거나 새로 추가 하는 함수
+    /// </summary>
+    /// <param name="_path">사운드 파일 경로</param>
+    /// <param name="_type">사운드 타입</param>
+    /// <returns></returns>
     private AudioClip GetOrAddAudioClip(string _path, Define.Sound _type = Define.Sound.Sfx)
     {
-        if (!_path.Contains("Sound/")) _path = $"Sound/{_path}";
+        if (!_path.Contains("Sounds/")) _path = $"Sounds/{_path}";
 
         AudioClip clip = null;
 
         if (_type == Define.Sound.Bgm)
-        {
+        {   // TODO: 배경음 재생
             clip = Managers.Resource.Load<AudioClip>(_path);
-        }
-        else
-        {
-
-            if (!audioClipDict.TryGetValue(_path, out clip))
+            if (clip == null)
             {
-                clip = Managers.Resource.Load<AudioClip>(_path);
-                audioClipDict.Add(_path, clip);
+                Debug.LogWarning($"AudioClip Missing! {_path}");
             }
         }
+        else
+        {   // TODO: 효과음 재생
+            if (!audioClips.TryGetValue(_path, out clip))
+            {
+                clip = Managers.Resource.Load<AudioClip>(_path);
+                audioClips.Add(_path, clip);
+            }
 
-        if (clip == null)
-        {
-            Debug.LogError($"AudioClip Mission! : {_path}");
+            if (clip == null)
+            {
+                Debug.LogWarning($"AudioClip Missing! {_path}");
+            }
         }
         return clip;
     }
