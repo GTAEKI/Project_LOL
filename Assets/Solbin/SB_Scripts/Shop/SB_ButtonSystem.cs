@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class SB_ButtonSystem : MonoBehaviour
 {
-    Button m_buyButton;
+    Button m_buyButton; // 구매 버튼
+    Button m_returnButton;
     GameObject m_item;
     SB_InvenrotySlot invenrotySlot;
+    SB_Gold gold;
+
+    public UnityEvent buyItem;
+    public UnityEvent sellItem;
 
     public void Start()
     {
         Transform buy = transform.GetChild(3);
         m_buyButton = buy.GetComponent<Button>();
         m_buyButton.interactable = false;
+        m_returnButton = transform.GetChild(2).GetComponent<Button>();
+        m_returnButton.interactable = false;
 
         invenrotySlot = GameObject.Find("Slot Group").transform.GetComponent<SB_InvenrotySlot>();
     }
@@ -38,5 +46,17 @@ public class SB_ButtonSystem : MonoBehaviour
 
         invenrotySlot.ReceiveItem(item);
         m_buyButton.interactable = false;
+
+        buyItem.Invoke();
+
+        ReturnButton();
+    }
+
+    /// <summary>
+    /// 구매와 동시에 되돌리기 버튼을 활성화
+    /// </summary>
+    public void ReturnButton()
+    {
+        m_returnButton.interactable = true;
     }
 }
