@@ -1,0 +1,276 @@
+using System;
+using UnityEngine;
+
+public abstract class Unit : MonoBehaviour
+{
+    protected Vector3 targetPos;          // 이동할 위치
+
+    [Header("현재 유닛 상태")]
+    [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
+ 
+    /// <summary>
+    /// 현재 유닛 상태 프로퍼티
+    /// 김민섭_230906
+    /// </summary>
+    public virtual Define.UnitState CurrentState
+    {
+        get => currentState;
+        set
+        {
+            currentState = value;
+            
+            // TODO: 상태에 따라 관련된 애니메이션 실행
+        }
+    }
+
+    private void Start()
+    {
+        Init();
+    }
+
+    public abstract void Init();
+
+    /// <summary>
+    /// InputManager 클래스의 OnUpdate 함수에서 사용되는 함수
+    /// 김민섭_230906
+    /// </summary>
+    public void OnUpdate()
+    {
+        Move();
+        Select();
+
+        switch (CurrentState)
+        {
+            case Define.UnitState.IDLE: UpdateIdle(); break;
+            case Define.UnitState.MOVE: UpdateMove(); break;
+        }
+    }
+
+    #region 상태별 업데이트 함수
+
+    /// <summary>
+    /// 상태가 IDLE일 때 실행되는 업데이트 함수
+    /// 김민섭_230906
+    /// </summary>
+    protected virtual void UpdateIdle()
+    {
+        // TODO: 보류
+    }
+
+    /// <summary>
+    /// 상태가 MOVE일 때 실행되는 업데이트 함수
+    /// 김민섭_230906
+    /// </summary>
+    protected virtual void UpdateMove()
+    {
+        if (targetPos == default) return;
+
+        Vector3 direct = targetPos - transform.position;
+        direct.y = 0f;
+
+        float minDistance = direct.magnitude;
+        if (minDistance <= 1f)
+        {
+            targetPos = default;
+            CurrentState = Define.UnitState.IDLE;
+            return;
+        }
+        else
+        {
+            float moveDistance = Mathf.Clamp(5f * Time.deltaTime, 0f, direct.magnitude);
+            transform.position += direct.normalized * moveDistance;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), 20 * Time.deltaTime);
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 유닛 선택 함수
+    /// 김민섭_230906
+    /// </summary>
+    private void Select()
+    {
+        if(CheckKeyEvent(0))
+        {
+            Vector3 mousePos = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Unit")))
+            {
+                DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 유닛 움직임 체크 함수
+    /// 김민섭_230906
+    /// </summary>
+    public void Move()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector3 mousePos = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Floor")))
+            {
+                DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
+
+                targetPos = hit.point;
+                CurrentState = Define.UnitState.MOVE;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 터치 지점으로 레이를 쏘는 함수
+    /// 김민섭_230906
+    /// </summary>
+    /// <param name="startPoint">시작 지점</param>
+    /// <param name="endPoint">끝 지점</param>
+    /// <param name="rayColor">레이 색상</param>
+    /// <param name="duration">지속 시간</param>
+    private void DrawTouchRay(Vector3 startPoint, Vector3 endPoint, Color rayColor, float duration = 1f)
+    {
+        Debug.DrawRay(startPoint, endPoint - startPoint, rayColor, duration);
+    }
+
+    /// <summary>
+    /// 마우스 클릭 이벤트 입력 유무 체크 함수
+    /// 김민섭_230906
+    /// </summary>
+    /// <param name="evt">이벤트 번호</param>
+    private bool CheckKeyEvent(int evt)
+    {
+        if(Input.GetMouseButtonDown(evt))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    #region 스킬 관련 함수
+
+    /// <summary>
+    /// 키 입력에 따라 액티브 스킬 시전하는 함수
+    /// 김민섭_230906
+    /// </summary>
+    public virtual void CastActiveSkill()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CastActiveQ();
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            CastActiveW();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            CastActiveE();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            CastActiveR();
+        }
+    }
+
+    /// <summary>
+    /// 패시브 스킬 시전하는 함수
+    /// 김민섭_230906
+    /// </summary>
+    public virtual void CastPassiveSkill()
+    {
+        CastPassive();
+    }
+
+    /// <summary>
+    /// 키 입력에 따라 스펠 스킬 시전하는 함수
+    /// 김민섭_230906
+    /// </summary>
+    /// <param name="key"></param>
+    public virtual void CastSpellSkill()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            CastSpellD();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            CastSpellF();
+        }
+    }
+
+    #region 액티브 스킬
+
+    /// <summary>
+    /// 액티브 스킬 Q 시전 함수
+    /// 김민섭_230906
+    /// </summary>
+    protected virtual void CastActiveQ()
+    {
+        Debug.Log("Q 스킬 발동");
+    }
+
+    /// <summary>
+    /// 액티브 스킬 W 시전 함수
+    /// 김민섭_230906
+    /// </summary>
+    protected virtual void CastActiveW()
+    {
+        Debug.Log("W 스킬 발동");
+    }
+
+    /// <summary>
+    /// 액티브 스킬 E 시전 함수
+    /// 김민섭_230906
+    /// </summary>
+    protected virtual void CastActiveE()
+    {
+        Debug.Log("E 스킬 발동");
+    }
+
+    /// <summary>
+    /// 액티브 스킬 R 시전 함수
+    /// 김민섭_230906
+    /// </summary>
+    protected virtual void CastActiveR()
+    {
+        Debug.Log("R 스킬 발동");
+    }
+
+    #endregion
+
+    #region 패시브 스킬
+
+    protected virtual void CastPassive()
+    {
+        Debug.Log("패시브 스킬");
+    }
+
+    #endregion
+
+    #region 스펠 스킬
+
+    protected virtual void CastSpellD()
+    {
+        Debug.Log("D 스펠 발동");
+    }
+
+    protected virtual void CastSpellF()
+    {
+        Debug.Log("F 스펠 발동");
+    }
+
+    #endregion
+
+    #endregion
+}
