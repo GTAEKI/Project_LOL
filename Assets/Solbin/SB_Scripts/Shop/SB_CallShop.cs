@@ -4,7 +4,7 @@ using System.Threading;
 using UnityEngine;
 
 /// <summary>
-/// »óÁ¡ È£ÃâÀ» À§ÇÑ Å¬·¡½º
+/// ìƒì  í˜¸ì¶œì„ ìœ„í•œ í´ë˜ìŠ¤
 /// </summary>
 public class SB_CallShop : MonoBehaviour
 {
@@ -30,8 +30,8 @@ public class SB_CallShop : MonoBehaviour
     }
 
     /// <summary>
-    /// PÀÔ·ÂÀ» ¹Ş¾Æ »óÁ¡Ã¢ ¿­±â
-    /// ³ë¼Öºó_230906
+    /// Pì…ë ¥ì„ ë°›ì•„ ìƒì ì°½ ì—´ê¸°
+    /// ë…¸ì†”ë¹ˆ_230906
     /// </summary>
     void OpenShop()
     {
@@ -42,8 +42,8 @@ public class SB_CallShop : MonoBehaviour
     }
 
     /// <summary>
-    /// PÀÔ·ÂÀ» ¹Ş¾Æ »óÁ¡Ã¢ ´İ±â
-    /// ³ë¼Öºó_230906
+    /// Pì…ë ¥ì„ ë°›ì•„ ìƒì ì°½ ë‹«ê¸°
+    /// ë…¸ì†”ë¹ˆ_230906
     /// </summary>
     public void ExitShop()
     {

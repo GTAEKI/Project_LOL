@@ -14,9 +14,9 @@ public class SB_PopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     /// <summary>
-    /// Ä¿¼­°¡ ¿Ã¶ó¿À¸é ÆË¾÷, ¾Æ´Ï¸é ¿ø·¡´ë·Î
+    /// ì»¤ì„œê°€ ì˜¬ë¼ì˜¤ë©´ íŒì—…, ì•„ë‹ˆë©´ ì›ë˜ëŒ€ë¡œ
     /// </summary>
-    /// <param name="eventData">Ä¿¼­ °¨Áö</param>
+    /// <param name="eventData">ì»¤ì„œ ê°ì§€</param>
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!m_isPop)
@@ -30,7 +30,7 @@ public class SB_PopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     /// <summary>
-    /// ÆË¾÷°ú ¿øÀ§Ä¡ ±¸Çö
+    /// íŒì—…ê³¼ ì›ìœ„ì¹˜ êµ¬í˜„
     /// </summary>
     void PopUp()
     {

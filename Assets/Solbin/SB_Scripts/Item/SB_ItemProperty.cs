@@ -5,30 +5,30 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ¾ÆÀÌÅÛ ¼Ó¼ºÀ» ´ã±â À§ÇÑ Å¬·¡½º
+/// ì•„ì´í…œ ì†ì„±ì„ ë‹´ê¸° ìœ„í•œ í´ë˜ìŠ¤
 /// </summary>
 
 public class SB_ItemProperty : MonoBehaviour
 {
-    public int typeNumber; // 0: Àü¼³, 1: ½ÅÈ­
-    public string name; // ¾ÆÀÌÅÛ ÀÌ¸§
-    public string englishName; // ÀÌ¹ÌÁö ¸ÅÄª - ¿µ¹®¸í
-    public int attackDamage; // °ø°İ·Â
-    public int attackSpeed; // °ø°İ ¼Óµµ
-    public int armor; // ¹æ¾î·Â
-    public int magicResistance; // ¸¶¹ı¹æ¾î·Â
-    public int health; // Ã¼·Â
-    public int abilityHaste; // ½ºÅ³ °¡¼Ó
-    public int lifeSteal; // »ı¸í·Â Èí¼ö
-    public int criticalStrikeChance; // Ä¡¸íÅ¸ È®·ü
+    public int typeNumber; // 0: ì „ì„¤, 1: ì‹ í™”
+    public string name; // ì•„ì´í…œ ì´ë¦„
+    public string englishName; // ì´ë¯¸ì§€ ë§¤ì¹­ - ì˜ë¬¸ëª…
+    public int attackDamage; // ê³µê²©ë ¥
+    public int attackSpeed; // ê³µê²© ì†ë„
+    public int armor; // ë°©ì–´ë ¥
+    public int magicResistance; // ë§ˆë²•ë°©ì–´ë ¥
+    public int health; // ì²´ë ¥
+    public int abilityHaste; // ìŠ¤í‚¬ ê°€ì†
+    public int lifeSteal; // ìƒëª…ë ¥ í¡ìˆ˜
+    public int criticalStrikeChance; // ì¹˜ëª…íƒ€ í™•ë¥ 
     public int movementSpeed;
     public int lethality;
-    public int gold = 3000; // ¾ÆÀÌÅÛ °¡°İ (ÅëÀÏ)
+    public int gold = 3000; // ì•„ì´í…œ ê°€ê²© (í†µì¼)
         
     /// <summary>
-    /// ÀÌ¹ÌÁö ±³Ã¼¸¦ À§ÇÑ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ì´ë¯¸ì§€ êµì²´ë¥¼ ìœ„í•œ ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="_sprite">ItemDataReader.cs¿¡¼­ Sprite Name ¹Ş±â</param>
+    /// <param name="_sprite">ItemDataReader.csì—ì„œ Sprite Name ë°›ê¸°</param>
     public void ChangeImg(string _sprite)
     {
         string sprite = _sprite;

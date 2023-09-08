@@ -11,14 +11,14 @@ public class SB_ItemDataReader : MonoBehaviour
 
     private void Awake()
     {
-        m_legendContainer = GameObject.Find("Container_Legend").transform; // Àü¼³ ¾ÆÀÌÅÛ ¸ñ·Ï
+        m_legendContainer = GameObject.Find("Container_Legend").transform; // ì „ì„¤ ì•„ì´í…œ ëª©ë¡
         Debug.Assert(m_legendItemPrefab != null);
     }
 
     void Start()
     {
         /// <summary>
-        /// itemInfo csv¸¦ ÀĞ°í Á¤º¸¸¦ ºĞ¸®, ½ºÅ©¸³ÅÍºí ¿ÀºêÁ§Æ®¿¡ ¼Ó¼ºÀ» ÇÒ´çÇÕ´Ï´Ù.
+        /// itemInfo csvë¥¼ ì½ê³  ì •ë³´ë¥¼ ë¶„ë¦¬, ìŠ¤í¬ë¦½í„°ë¸” ì˜¤ë¸Œì íŠ¸ì— ì†ì„±ì„ í• ë‹¹í•©ë‹ˆë‹¤.
         /// </summary>
 
         string filePath = "Assets/Solbin/SB_csv/itemInfo.csv";
@@ -26,17 +26,17 @@ public class SB_ItemDataReader : MonoBehaviour
         if (File.Exists(filePath))
         {
             string[] lines = File.ReadAllLines(filePath);
-            int itemAccount = lines.Length - 1; // Çì´õ Á¦¿Ü Ç°¸ñ °³¼ö
+            int itemAccount = lines.Length - 1; // í—¤ë” ì œì™¸ í’ˆëª© ê°œìˆ˜
             string[] value = new string[itemAccount];
             GameObject[] newLegendItem = new GameObject[itemAccount];
 
-            for (int i = 0; i < itemAccount; i++) // ¾ÆÀÌÅÛ ½½·Ô »ı¼º
+            for (int i = 0; i < itemAccount; i++) // ì•„ì´í…œ ìŠ¬ë¡¯ ìƒì„±
             {
                 newLegendItem[i] = Instantiate(m_legendItemPrefab);
                 newLegendItem[i].transform.SetParent(m_legendContainer.transform, false);
             }
 
-            for (int i = 1; i < lines.Length; i++) // ½°Ç¥ ºĞ¸®(Çì´õ Á¦¿Ü) & ¾ÆÀÌÅÛ ¼Ó¼º »ğÀÔ
+            for (int i = 1; i < lines.Length; i++) // ì‰¼í‘œ ë¶„ë¦¬(í—¤ë” ì œì™¸) & ì•„ì´í…œ ì†ì„± ì‚½ì…
             {
                 value = lines[i].Split(",");
 
@@ -46,7 +46,7 @@ public class SB_ItemDataReader : MonoBehaviour
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().attackDamage = int.Parse(value[5]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().attackSpeed = int.Parse(value[6]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().armor = int.Parse(value[7]);
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().magicResistance = 
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().magicResistance =
                     int.Parse(value[8]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().health = int.Parse(value[9]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().abilityHaste = int.Parse(value[10]);
@@ -55,7 +55,7 @@ public class SB_ItemDataReader : MonoBehaviour
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().movementSpeed = int.Parse(value[13]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().lethality = int.Parse(value[14]);
 
-                // ÀÌ¹ÌÁö »ğÀÔÀ» À§ÇÔ
+                // ì´ë¯¸ì§€ ì‚½ì…ì„ ìœ„í•¨
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeImg(value[3]);
             }
         }

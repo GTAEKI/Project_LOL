@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// °ñµå °ü¸®¸¦ À§ÇÑ Å¬·¡½º
+/// ê³¨ë“œ ê´€ë¦¬ë¥¼ ìœ„í•œ í´ë˜ìŠ¤
 /// </summary>
 
 public class SB_Gold : MonoBehaviour
@@ -15,7 +15,7 @@ public class SB_Gold : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_gold = 15000; // ÀÓ½Ã°ª
+        m_gold = 15000; // ì„ì‹œê°’
         m_goldText = GetComponent<TMP_Text>();
     }
 
