@@ -30,7 +30,28 @@ public class GameManager : MonoBehaviour
     private const float MAGNETIC_CYCLE = 5f; //5f
 
     // 팀 체력 변수 _230906 배경택
-    private const int TEAM_HP = 20;
+    private const int TEAM_HP_20 = 20;
+    private int team1HP;
+    private int team2HP;
+    private int team3HP;
+    private int team4HP;
+    public bool isTeam1Win;
+    public bool isTeam2Win;
+    public bool isTeam3Win;
+    public bool isTeam4Win;
+
+
+    //TEST player
+    private int player1HP = 10;
+    private int player2HP = 10;
+    private int player3HP = 10;
+    private int player4HP = 10;
+    private int player5HP = 10;
+    private int player6HP = 10;
+    private int player7HP = 10;
+    private int player8HP = 10;
+
+
     // 라운드 별 패배시 데미지 _230907 배경택
     private int teamDamage;
     private int[] teamRoundDamages =
@@ -44,6 +65,7 @@ public class GameManager : MonoBehaviour
 
     // 라운드 종료 _230906 배경택
     private bool isRoundOver;
+    //private 
 
     // 게임종료, 한 팀만 살아남았을 경우 _230906 배경택
     private bool isGameOver;
@@ -72,8 +94,7 @@ public class GameManager : MonoBehaviour
     private Vector3 MoveTomagneticPos2;
     private bool isArriveMagnetic;
 
-
-    #region 게임 스테이지 및 모드
+    #region 게임 스테이지 및 모드 _230906 배경택
     // 게임 스테이지 및 모드 _230906 배경택
     private enum Stage
     {
@@ -99,7 +120,6 @@ public class GameManager : MonoBehaviour
     private BattleStageMode battleStageMode;
     #endregion
 
-
     // 캐릭터 리스폰 포인트를 위한 변수 _230907 배경택
     public GameObject[] waitAreaResPoint;
     public GameObject[] battle1ResPoint;
@@ -112,8 +132,6 @@ public class GameManager : MonoBehaviour
     public GameObject[] jumpFlowerPoints; // 점프꽃 생성 위치
     private List<GameObject> healFlowers; // 체력꽃 저장
     private List<GameObject> jumpFlowers; // 점프꽃 저장
-
-
 
     private void Awake()
     {
@@ -142,6 +160,12 @@ public class GameManager : MonoBehaviour
         //게임 오브젝트를 담는 리스트 초기화 _230907 배경택
         healFlowers = new List<GameObject>();
         jumpFlowers = new List<GameObject>();
+
+        //게임 시작시 팀 체력 초기화
+        team1HP = TEAM_HP_20;
+        team2HP = TEAM_HP_20;
+        team3HP = TEAM_HP_20;
+        team4HP = TEAM_HP_20;
         #endregion
     }
 
@@ -266,6 +290,10 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+
+
+
+
     /// <summary>
     /// 자기장 움직임
     /// 배경택 230907
@@ -363,23 +391,19 @@ public class GameManager : MonoBehaviour
     }
     #endregion 게임 오브젝트 생성
 
-    
-
-    //TODO 승패 판정
-
-    //TODO 팀 체력 제어
-
-
     /// <summary>
     /// 라운드 오버시 실행
     /// 배경택 _ 230907
     /// </summary>
     private void RoundOver()
     {
-        roundNumber += 1;
-        waitStageMode = waitStageModes[roundNumber];
-        teamDamage = teamRoundDamages[roundNumber];
+        roundNumber += 1; // 라운드 변경
+        waitStageMode = waitStageModes[roundNumber]; //라운드별 스테이지 모드 적용
+        teamDamage = teamRoundDamages[roundNumber]; //라운드별 체력감소량 적용
+
         stage = Stage.WAIT_STAGE;
+        RoundResult(); // 캐릭터 및 팀 체력계산되면서 수정필요
+        GameResult(); // 게임 결과 계산 내용 수정필요 
         DestroyGameObject();
         ReturnWaitArea();
         Debug.Log("대기실로 이동");
@@ -396,6 +420,7 @@ public class GameManager : MonoBehaviour
         cameraWaitArea.gameObject.SetActive(false);
         cameraBattleArea2.gameObject.SetActive(false);
         cameraBattleArea1.gameObject.SetActive(true);
+        //TODO 캐릭터 이동
     }
 
     public void MoveToBattlArea2()
@@ -403,6 +428,7 @@ public class GameManager : MonoBehaviour
         cameraWaitArea.gameObject.SetActive(false);
         cameraBattleArea1.gameObject.SetActive(false);
         cameraBattleArea2.gameObject.SetActive(true);
+        //TODO 캐릭터 이동
     }
 
     public void ReturnWaitArea()
@@ -410,6 +436,77 @@ public class GameManager : MonoBehaviour
         cameraBattleArea1.gameObject.SetActive(false);
         cameraBattleArea2.gameObject.SetActive(false);
         cameraWaitArea.gameObject.SetActive(true);
+        //TODO 캐릭터 이동
     }
     #endregion
+
+    #region 라운드 및 최종 결과 계산 _230907 배경택
+    // 라운드 결과 계산 _230907 배경택
+    private void RoundResult()
+    {
+        if (!isTeam1Win)
+        {
+            team1HP -= teamDamage;
+            isTeam1Win = true;
+        }
+
+        if (!isTeam2Win)
+        {
+            team2HP -= teamDamage;
+            isTeam2Win = true;
+        }
+
+        if (!isTeam3Win)
+        {
+            team3HP -= teamDamage;
+            isTeam3Win = true;
+        }
+
+        if (!isTeam4Win)
+        {
+            team4HP -= teamDamage;
+            isTeam4Win = true;
+        }
+    }
+
+    //최종 경기 결과 계산 _ 230906 배경택
+    private void GameResult() 
+    {
+        if(team1HP <= 0)
+        {
+            //TODO team1을 갖고있는 플레이어들은 게임 결과창이 보이는 로비로 나가짐
+        }
+        if (team2HP <= 0)
+        {
+            //TODO team2을 갖고있는 플레이어들은 게임 결과창이 보이는 로비로 나가짐
+        }
+        if (team3HP <= 0)
+        {
+            //TODO team3을 갖고있는 플레이어들은 게임 결과창이 보이는 로비로 나가짐
+        }
+        if (team4HP <= 0)
+        {
+            //TODO team4을 갖고있는 플레이어들은 게임 결과창이 보이는 로비로 나가짐
+        }
+
+        if (team1HP != 0 && team2HP == 0 && team3HP == 0 && team4HP == 0)
+        {
+            //TODO team1 게임승리
+        }
+        else if(team2HP != 0 && team1HP == 0 && team3HP == 0 && team4HP == 0)
+        {
+            //TODO team2 게임승리
+        }
+        else if(team3HP != 0 && team1HP == 0 && team2HP == 0 && team4HP == 0)
+        {
+            //TODO team3 게임승리
+        }
+        else if(team4HP != 0 && team1HP == 0 && team2HP == 0 && team3HP == 0)
+        {
+            //TODO team4 게임승리
+        }
+    }
+    #endregion
+
+    //TODO 관전시 시야 이동
 }
