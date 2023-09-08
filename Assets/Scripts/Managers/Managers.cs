@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
-    private static Managers s_instance;
+    private static Managers s_instance; // 매니저 인스턴스 생성
+
+    // Instance가 get? 호출되면 Init함수가 실행되고 s_instance를 반환함
     private static Managers Instance { get { Init(); return s_instance; } }
 
+    // 매니저별로 신규로 할당
     private DataManager _data = new DataManager();
     private InputManager _input = new InputManager();
     private PoolManager _pool = new PoolManager();
