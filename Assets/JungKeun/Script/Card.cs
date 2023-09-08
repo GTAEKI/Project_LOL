@@ -12,7 +12,7 @@ public class Card : MonoBehaviour
 
     public Sprite[] strengthcard;
 
-    // ±âÁ¸ Ä«µå
+    // ê¸°ì¡´ ì¹´ë“œ
     public List<int> cardNum = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     private int chance = 0;
@@ -22,7 +22,7 @@ public class Card : MonoBehaviour
     {
         if (chance == 0)
         {
-            // ½º¿ÒÀ» 500¹ø µ¹·Á
+            // ìŠ¤ì™‘ì„ 500ë²ˆ ëŒë ¤
             for (int i = 0; i < 500; i++)
             {
                 Swap();
@@ -59,7 +59,7 @@ public class Card : MonoBehaviour
         else { return; }
     }
 
-    // ½º¿ÒÀ¸·Î Â¥
+    // ìŠ¤ì™‘ìœ¼ë¡œ ì§œ
     public void Swap()
     {
         int ranIndex1 = Random.Range(0, 10);
