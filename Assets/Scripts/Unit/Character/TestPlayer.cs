@@ -6,8 +6,8 @@ public class TestPlayer : Unit
 {
     public override void Init()
     {
-        Debug.Log("Å×½ºÆ® ÇÃ·¹ÀÌ¾î°¡ »ı¼ºµÇ¾ú½À´Ï´Ù.");
+        Debug.Log("í…ŒìŠ¤íŠ¸ í”Œë ˆì´ì–´ê°€ ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤.");
 
-        unitStat = new UnitStat(5f);
+        //unitStat = new UnitStat(5f);
     }
 }
