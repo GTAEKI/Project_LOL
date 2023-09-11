@@ -11,11 +11,13 @@ public class UI_EventHandler : MonoBehaviour, IDragHandler, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Right) return;
         if (OnClickHandler != null) OnClickHandler.Invoke(eventData);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Right) return;
         if (OnDragHandler != null) OnDragHandler.Invoke(eventData);
     }
 }
