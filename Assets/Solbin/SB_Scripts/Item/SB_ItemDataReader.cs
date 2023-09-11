@@ -21,11 +21,11 @@ public class SB_ItemDataReader : MonoBehaviour
         /// itemInfo csv를 읽고 정보를 분리, 스크립터블 오브젝트에 속성을 할당합니다.
         /// </summary>
 
-        string filePath = "Assets/Solbin/SB_csv/itemInfo.csv";
+        string itemFilePath = "Assets/Solbin/SB_csv/itemInfo.csv";
 
-        if (File.Exists(filePath))
+        if (File.Exists(itemFilePath))
         {
-            string[] lines = File.ReadAllLines(filePath);
+            string[] lines = File.ReadAllLines(itemFilePath);
             int itemAccount = lines.Length - 1; // 헤더 제외 품목 개수
             string[] value = new string[itemAccount];
             GameObject[] newLegendItem = new GameObject[itemAccount];
@@ -54,14 +54,14 @@ public class SB_ItemDataReader : MonoBehaviour
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().criticalStrikeChance = int.Parse(value[12]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().movementSpeed = int.Parse(value[13]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().lethality = int.Parse(value[14]);
-
+                
                 // 이미지 삽입을 위함
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeImg(value[3]);
             }
         }
         else
         {
-            Debug.LogError("csv Missing: " + filePath);
+            Debug.LogError("csv Missing: " + itemFilePath);
         }
     }
 }

@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class UnitStat
 {
+    /// <summary>
+    /// �ӽ� ������
+    /// ��μ�_230908
+    //인덱스 번호
+    public int indexnumber { get; private set; }
+    //챔피언 한글이름
+    public string name { get; private set; }
+    //챔피언 영문이름
+    public string EnglishName { get; private set; }
+    //챔피언 레벨
+    public int Level { get; private set; }
     //1레벨 체력
     public float Hp { get; private set; }
     //1레벨 마나
@@ -73,8 +84,31 @@ public class UnitStat
     /// 김민섭_230908
     /// </summary>
     /// <param name="movementSpeed"></param>
-    public UnitStat(float movementSpeed)
+    public UnitStat(int indexnumber, string name, string EnglishName, float Hp, float Mp, float Atk, float Defence, float MDefence, float AtkSpeed, float MoveMentSpeed,
+                    float HpRecovery, float MpRecovery,float AttackRange, float Growthhp, float Growthmp, float Growthatk, float Growthdefence, float GrowthatkSpeed,
+                    float GrowthmoveMentSpeed, float GrowthhpRecovery, float GrowthmpRecovery, float GrowthattackRange)
     {
-        MoveMentSpeed = movementSpeed;
+        this.indexnumber = indexnumber;
+        this.name = name;
+        this.EnglishName = EnglishName;
+        this.Hp = Hp;
+        this.Mp = Mp;
+        this.Atk = Atk;
+        this.Defence = Defence;
+        this.MDefence = MDefence;
+        this.AtkSpeed = AtkSpeed;
+        this.MoveMentSpeed = MoveMentSpeed;
+        this.HpRecovery = HpRecovery;
+        this.MpRecovery = MpRecovery;
+        this.AttackRange = AttackRange;
+        this.Growthhp = Growthhp;
+        this.Growthmp = Growthmp;
+        this.Growthatk = Growthatk;
+        this.Growthdefence = Growthdefence;
+        this.GrowthatkSpeed = GrowthatkSpeed;
+        this.GrowthmoveMentSpeed = GrowthmoveMentSpeed;
+        this.GrowthhpRecovery = GrowthhpRecovery;
+        this.GrowthmpRecovery = GrowthmpRecovery;
+        this.GrowthattackRange = GrowthattackRange;
     }
 }
