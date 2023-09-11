@@ -36,14 +36,22 @@ public class SB_InvenrotySlot : MonoBehaviour, IDropHandler
     public void ReceiveItem(GameObject _item)
     {
         GameObject itemContainer = this.gameObject;
+        GameObject item = _item;
 
         m_leftSlot = m_childCount - m_items.Count; // 남은 슬롯 개수 = 슬롯 개수 - 아이템 개수
-        m_items.Add(Instantiate(_item)); // 상점 아이템을 복사한 것을 아이템 리스트에 추가함.
+        m_items.Add(Instantiate(item)); // 상점 아이템을 복사한 것을 아이템 리스트에 추가함.
 
         m_items[m_items.Count - 1].transform.SetParent(itemContainer.transform, false); // 위치 수정
         m_items[m_items.Count - 1].transform.SetSiblingIndex(m_items.Count - 1);
-        m_slots[m_items.Count - 1].SetActive(false);
 
+        m_slots[m_items.Count - 1].SetActive(false); // 원 슬롯 비활성화
+    }
+
+    public void ReturnItem()
+    {
+        Destroy(m_items[m_items.Count - 1]);
+        m_slots[m_items.Count - 1].SetActive(true); // 원 슬롯 활성화
+        m_items.RemoveAt(m_items.Count - 1);
     }
 
     /// <summary>
