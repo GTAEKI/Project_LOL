@@ -1,31 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
-using static UnityEditor.Progress;
+using UnityEngine;
 
-public class SB_ItemDataReader : MonoBehaviour
+public class SB_BootsDataReader : MonoBehaviour
 {
-    Transform m_legendContainer;
+    Transform m_sideDownContainer;
     public GameObject m_itemPrefab;
 
     private void Awake()
     {
-        m_legendContainer = GameObject.Find("Container_Legend").transform; // 전설 아이템 목록
-        Debug.Assert(m_itemPrefab != null);
+        m_sideDownContainer = GameObject.Find("Side Shop_Down").transform;
     }
 
+    // Start is called before the first frame update
     void Start()
     {
-        /// <summary>
-        /// itemInfo csv를 읽고 정보를 분리, 스크립터블 오브젝트에 속성을 할당합니다.
-        /// </summary>
+        string bootsFilePath = "Assets/Solbin/SB_csv/bootsInfo.csv";
 
-        string itemFilePath = "Assets/Solbin/SB_csv/itemInfo.csv";
-
-        if (File.Exists(itemFilePath))
+        if (File.Exists(bootsFilePath))
         {
-            string[] lines = File.ReadAllLines(itemFilePath);
+            string[] lines = File.ReadAllLines(bootsFilePath);
             int itemAccount = lines.Length - 1; // 헤더 제외 품목 개수
             string[] value = new string[itemAccount];
             GameObject[] newLegendItem = new GameObject[itemAccount];
@@ -33,7 +28,7 @@ public class SB_ItemDataReader : MonoBehaviour
             for (int i = 0; i < itemAccount; i++) // 아이템 슬롯 생성
             {
                 newLegendItem[i] = Instantiate(m_itemPrefab);
-                newLegendItem[i].transform.SetParent(m_legendContainer.transform, false);
+                newLegendItem[i].transform.SetParent(m_sideDownContainer.transform, false);
             }
 
             for (int i = 1; i < lines.Length; i++) // 쉼표 분리(헤더 제외) & 아이템 속성 삽입
@@ -54,14 +49,20 @@ public class SB_ItemDataReader : MonoBehaviour
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().criticalStrikeChance = int.Parse(value[12]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().movementSpeed = int.Parse(value[13]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().lethality = int.Parse(value[14]);
-                
+
                 // 이미지 삽입을 위함
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeImg(value[3]);
             }
         }
         else
         {
-            Debug.LogError("csv Missing: " + itemFilePath);
+            Debug.LogError("csv Missing: " + bootsFilePath);
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

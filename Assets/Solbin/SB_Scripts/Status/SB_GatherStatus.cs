@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class SB_GatherStatus : MonoBehaviour
 {
+    public int attackDamege = 0;
+    public int attackSpeed = 0;
+    public int armor = 0;
+    public int magicResistance = 0;
+    public int health = 0;
+    public int abilityHaste = 0;
+    public int lifeSteal = 0; // 생명력 흡수
+    public int criticalStrikeChance = 0; // 치명타 확률
+    public int movementSpeed = 0;
+    public int lethality = 0;
+
     public void AllItemStatus(List<GameObject> _itemList)
     {
         List<GameObject> itemList = _itemList;
-
-        int attackDamege = 0;
-        int attackSpeed = 0;
-        int armor = 0;
-        int magicResistance = 0;
-        int health = 0;
-        int abilityHaste = 0;
-        int lifeSteal = 0; // 생명력 흡수
-        int criticalStrikeChance = 0; // 치명타 확률
-        int movementSpeed = 0;
-        int lethality = 0;
 
         for (int i = 0; i < itemList.Count; i++)
         {
@@ -34,3 +34,4 @@ public class SB_GatherStatus : MonoBehaviour
         }
     }
 }
+

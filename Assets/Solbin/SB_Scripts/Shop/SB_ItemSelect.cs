@@ -47,8 +47,10 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (hoverMouse)
         {
             RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
-            infoRect.anchoredPosition = Input.mousePosition;
-            Debug.Log(Input.mousePosition);
+            Vector2 localMousePos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(infoRect.parent as RectTransform, 
+                Input.mousePosition, Camera.main, out localMousePos);
+            infoRect.anchoredPosition = localMousePos;
         }
         else
         {
