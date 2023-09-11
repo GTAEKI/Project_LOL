@@ -9,20 +9,41 @@ using System;
 
 public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    TMP_Text m_itemInfo;
+    Canvas m_canvas;
+    TMP_Text m_largeItemInfo;
+    GameObject m_smallItemInfo;
     SB_ItemProperty m_itemProperty;
     Button m_buyButton;
 
     SB_ButtonSystem m_buttonSystem;
+
+    bool hoverMouse = false;
     
     // Start is called before the first frame update
     void Start()
     {
-        m_itemInfo = GameObject.Find("Explain Window").GetComponent<TMP_Text>();
+        
+        m_largeItemInfo = GameObject.Find("Explain Window").GetComponent<TMP_Text>();
+        m_smallItemInfo = GameObject.Find("Item Info");
         m_itemProperty = transform.GetComponent<SB_ItemProperty>();
 
         m_buttonSystem = GameObject.Find("Background").transform.GetComponent<SB_ButtonSystem>();
+
     }
+
+    void Update()
+    {
+        // 인포창이 마우스를 따라다니도록
+        if (hoverMouse)
+        {
+            // 마우스 위치를 월드 좌표로 변환
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+
+
+
+        }
+    }    
 
     /// <summary>
     /// 아이콘 위: 아이템 이름 출력
@@ -30,7 +51,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <param name="eventData">입력받기</param>
     public void OnPointerEnter(PointerEventData eventData)
     {
-
+        hoverMouse = true;
     }
 
     /// <summary>
@@ -39,7 +60,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <param name="eventData">입력받기</param>
     public void OnPointerExit(PointerEventData eventData)
     {
-
+        hoverMouse = false;
     }
 
     /// <summary>
@@ -48,7 +69,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <param name="eventData">입력받기</param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        m_itemInfo.text = m_itemProperty.name; // 아이템 이름을 정보 창에 띄운다.
+        m_largeItemInfo.text = m_itemProperty.name; // 아이템 이름을 정보 창에 띄운다.
         m_buttonSystem.ActiveBuyButton(gameObject);
     }
 }

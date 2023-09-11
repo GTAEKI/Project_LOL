@@ -9,6 +9,8 @@ public class SB_InvenrotySlot : MonoBehaviour, IDropHandler
     GameObject[] m_slots;
     List<GameObject> m_items = new List<GameObject>();
 
+    SB_GatherStatus gatherStatus;
+
     int m_childCount; // 자식 오브젝트 개수
     int m_leftSlot; // 남은 슬롯 개수
 
@@ -21,6 +23,8 @@ public class SB_InvenrotySlot : MonoBehaviour, IDropHandler
         {
             m_slots[i] = transform.GetChild(i).gameObject;
         }
+
+        gatherStatus = transform.parent.GetComponent<SB_GatherStatus>();
     }
 
     // Update is called once per frame
@@ -45,6 +49,8 @@ public class SB_InvenrotySlot : MonoBehaviour, IDropHandler
         m_items[m_items.Count - 1].transform.SetSiblingIndex(m_items.Count - 1);
 
         m_slots[m_items.Count - 1].SetActive(false); // 원 슬롯 비활성화
+
+        gatherStatus.AllItemStatus(m_items);
     }
 
     public void ReturnItem()
