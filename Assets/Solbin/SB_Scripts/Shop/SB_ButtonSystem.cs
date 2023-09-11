@@ -16,6 +16,7 @@ public class SB_ButtonSystem : MonoBehaviour
     public UnityEvent buyItem;
     public UnityEvent sellItem;
 
+
     public void Start()
     {
         Transform buy = transform.GetChild(3);
@@ -25,6 +26,7 @@ public class SB_ButtonSystem : MonoBehaviour
         m_returnButton.interactable = false;
 
         invenrotySlot = GameObject.Find("Slot Group").transform.GetComponent<SB_InvenrotySlot>();
+        gold = GameObject.Find("Inven Gold").transform.GetComponent<SB_Gold>();
     }
 
     /// <summary>
@@ -33,8 +35,12 @@ public class SB_ButtonSystem : MonoBehaviour
     /// <param name="_itemName">구매한 아이템 오브젝트</param>
     public void ActiveBuyButton(GameObject _item)
     {
-        m_item = _item;
-        m_buyButton.interactable = true;
+        if (gold.m_gold > 3000)
+        {
+            m_item = _item;
+            m_item.GetComponent<Button>().interactable = true; // 선택한 아이템 버튼 활성화
+            m_buyButton.interactable = true;
+        }
     }
 
     /// <summary>
@@ -46,17 +52,27 @@ public class SB_ButtonSystem : MonoBehaviour
 
         invenrotySlot.ReceiveItem(item);
         m_buyButton.interactable = false;
+        m_item.GetComponent<Button>().interactable = false; // 선택한 아이템 버튼 비활성화
 
         buyItem.Invoke();
 
-        ReturnButton();
+        ActiveReturnButton();
     }
 
     /// <summary>
     /// 구매와 동시에 되돌리기 버튼을 활성화
     /// </summary>
-    public void ReturnButton()
+    public void ActiveReturnButton()
     {
         m_returnButton.interactable = true;
+    }
+
+    public void PressReturn()
+    {
+        invenrotySlot.ReturnItem();
+
+        sellItem.Invoke();
+
+        ActiveBuyButton(m_item);
     }
 }
