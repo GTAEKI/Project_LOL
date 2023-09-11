@@ -2,6 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ÇöÀç À¯´ÖÀÇ ½ºÅÈ Å¬·¡½º
+/// ±è¹Î¼·_230911
+/// </summary>
+public class CurrentUnitStat
+{
+    public UnitStat UnitStat { private set; get; }       // ¿øº» ½ºÅÈ µ¥ÀÌÅÍ
+
+    public float Hp { private set; get; } = 0f;
+
+    /// <summary>
+    /// ¿øº» ½ºÅÈ µ¥ÀÌÅÍ¸¦ ¼¼ÆÃÇÏ´Â »ý¼ºÀÚ
+    /// ±è¹Î¼·_230911
+    /// </summary>
+    /// <param name="unitStat"></param>
+    public CurrentUnitStat(UnitStat unitStat)
+    {
+        UnitStat = unitStat;
+    }
+
+    /// <summary>
+    /// Ã¼·Â ¼¼ÆÃ ÇÔ¼ö
+    /// ±è¹Î¼·_230911
+    /// </summary>
+    /// <param name="value">¼öÄ¡°ª</param>
+    public void SettingHp(float value) => Hp = value;
+
+    /// <summary>
+    /// Ã¼·Â È¸º¹ ÇÔ¼ö
+    /// ±è¹Î¼·_230911
+    /// </summary>
+    /// <param name="value">È¸º¹·®</param>
+    public void OnHeal(float value)
+    {
+        Hp += value;
+        
+        if(Hp >= UnitStat.Hp)
+        {
+            Hp = UnitStat.Hp;
+        }
+    }
+
+    /// <summary>
+    /// µ¥¹ÌÁö ºÎ¿© ÇÔ¼ö
+    /// ±è¹Î¼·_230911
+    /// </summary>
+    /// <param name="value">µ¥¹ÌÁö</param>
+    public void OnDamaged(float value)
+    {
+        Hp -= value;
+
+        if(Hp <= 0)
+        {
+            Hp = 0;
+        }
+    }
+}
+
 
 public class UnitStat
 {
@@ -73,8 +131,26 @@ public class UnitStat
     /// ±è¹Î¼·_230908
     /// </summary>
     /// <param name="movementSpeed"></param>
-    public UnitStat(float movementSpeed)
+    public UnitStat(int hp, float movementSpeed)
     {
+        Hp = hp;
         MoveMentSpeed = movementSpeed;
+    }
+
+    /// <summary>
+    /// ÃÖ´ë Ã¼·Â ¼¼ÆÃ ÇÔ¼ö
+    /// ±è¹Î¼·_230911
+    /// </summary>
+    /// <param name="value">¼öÄ¡°ª</param>
+    public void SettingMaxHp(float value) => Hp = value;
+
+    /// <summary>
+    /// ÃÖ´ë Ã¼·Â Á¶Á¤ ÇÔ¼ö
+    /// ±è¹Î¼·_230911
+    /// </summary>
+    /// <param name="value">Á¶Á¤°ª</param>
+    public void OnChangeMaxHp(float value)
+    {
+        Hp += value;
     }
 }

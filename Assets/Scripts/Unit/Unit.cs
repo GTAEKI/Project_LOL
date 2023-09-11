@@ -4,8 +4,9 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     // 데이터
-    protected UnitStat unitStat;        // 유닛 스탯 데이터 (원본값)
-    protected Vector3 targetPos;        // 이동할 위치
+    protected UnitStat unitStat;                    // 유닛 스탯 데이터 (원본값)
+    protected CurrentUnitStat currentUnitStat;      // 유닛 스탯 데이터 (현재값)
+    protected Vector3 targetPos;                    // 이동할 위치
 
     // UI
     protected UI_UnitHUD unitHUD;       // 유닛 체력바
@@ -30,6 +31,15 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public CurrentUnitStat CurrentUnitStat
+    {
+        get => currentUnitStat;
+        set
+        {
+            currentUnitStat = value;
+        }
+    }
+
     #endregion
 
     #region 상수
@@ -50,6 +60,9 @@ public class Unit : MonoBehaviour
     /// </summary>
     public virtual void Init()
     {
+        currentUnitStat = new CurrentUnitStat(unitStat);
+        currentUnitStat.OnHeal(unitStat.Hp);
+
         unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // 유닛 HUD 생성
     }
 

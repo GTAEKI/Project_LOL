@@ -15,12 +15,14 @@ public class UI_UnitHUD : UI_Base
     }
 
     private Camera gameViewCamera;
+    private Unit unit;
 
     public override void Init()
     {
         Bind<Image>(typeof(Images));
 
         gameViewCamera = GameObject.Find("GameView Camera").GetComponent<Camera>();
+        unit = transform.parent.GetComponent<Unit>();
 
         CreateMaterial();
         StartCoroutine(CoroutineTest());
@@ -32,10 +34,7 @@ public class UI_UnitHUD : UI_Base
     /// </summary>
     private void CreateMaterial()
     {
-        //if(GetImage((int)Images.Img_Separator).material == null)
-        {
-            GetImage((int)Images.Img_Separator).material = new Material(Shader.Find("MinSeob/UI/HUD"));
-        }
+        GetImage((int)Images.Img_Separator).material = new Material(Shader.Find("MinSeob/UI/HUD"));
     }
 
     private const string STEP = "_Steps";
@@ -48,8 +47,8 @@ public class UI_UnitHUD : UI_Base
     private static readonly int floatWidth = Shader.PropertyToID(WIDTH);
     private static readonly int floatThickness = Shader.PropertyToID(THICKNESS);
 
-    [Range(0, 2800f)] public float hp = 1000f;
-    [Range(0, 2800f)] public float maxHp = 1000f;
+    //[Range(0, 2800f)] public float hp = 1000f;
+    //[Range(0, 2800f)] public float maxHp = 1000f;
     [Range(0, 920f)] public float sp = 0f;
     [Range(0, 10f)] public float speed = 3f;
 
@@ -61,8 +60,8 @@ public class UI_UnitHUD : UI_Base
     {
         yield return new WaitForSeconds(2f);
 
-        hp = 1500;
-        maxHp = 1500;
+        //hp = 1500;
+        //maxHp = 1500;
         sp = 400;
 
         while(sp > 0)
@@ -77,14 +76,14 @@ public class UI_UnitHUD : UI_Base
 
         for(int i = 0; i < 8; i++)
         {
-            hp -= 120;
+            unit.CurrentUnitStat.OnDamaged(120f);
             yield return new WaitForSeconds(1f);
         }
 
         for(int i = 0; i < 8; i++)
         {
-            maxHp += 200;
-            hp = maxHp;
+            unit.CurrentUnitStat.UnitStat.OnChangeMaxHp(200f);
+            unit.CurrentUnitStat.SettingHp(unit.CurrentUnitStat.UnitStat.Hp);
 
             yield return new WaitForSeconds(1f);
         }
@@ -96,9 +95,9 @@ public class UI_UnitHUD : UI_Base
     {
         UpdateHUD();
 
-        if(maxHp < hp)
+        if(unit.CurrentUnitStat.UnitStat.Hp < unit.CurrentUnitStat.Hp)
         {
-            maxHp = hp;
+            unit.CurrentUnitStat.UnitStat.SettingMaxHp(unit.CurrentUnitStat.Hp);
         }
 
         float step;
@@ -106,32 +105,31 @@ public class UI_UnitHUD : UI_Base
         // 쉴드가 존재 할 때
         if (sp > 0)
         {
-            // 현재체력 + 쉴드 > 최대 체력
-            if (hp + sp > maxHp)
-            {
-                hpShieldRatio = hp / (hp + sp);
+            if(unit.CurrentUnitStat.Hp + sp > unit.CurrentUnitStat.UnitStat.Hp)
+            {   // 현재 체력 + 쉴드 > 최대 체력
+                hpShieldRatio = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
                 GetImage((int)Images.Img_Mana).fillAmount = 1f;
-                step = (hp) / 300f;
-                GetImage((int)Images.Img_Hp).fillAmount = hp / (hp + sp);
+                step = unit.CurrentUnitStat.Hp / 300f;
+                GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
             }
             else
             {
-                GetImage((int)Images.Img_Mana).fillAmount = (hp + sp) / maxHp;
-                hpShieldRatio = hp / maxHp;
-                step = hp / 300f;
-                GetImage((int)Images.Img_Hp).fillAmount = hp / maxHp;
+                GetImage((int)Images.Img_Mana).fillAmount = (unit.CurrentUnitStat.Hp + sp) / unit.CurrentUnitStat.UnitStat.Hp;
+                hpShieldRatio = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
+                step = unit.CurrentUnitStat.Hp / 300f;
+                GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
             }
         }
         else
         {
             GetImage((int)Images.Img_Mana).fillAmount = 0f;
-            step = maxHp / 300f;
+            step = unit.CurrentUnitStat.UnitStat.Hp / 300f;
             hpShieldRatio = 1f;
-            GetImage((int)Images.Img_Hp).fillAmount = hp / maxHp;
+            GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
         }
 
         GetImage((int)Images.Img_Damaged).fillAmount = Mathf.Lerp(GetImage((int)Images.Img_Damaged).fillAmount,
-            GetImage((int)Images.Img_Hp).fillAmount, Time.deltaTime * 5f);
+            GetImage((int)Images.Img_Hp).fillAmount, Time.deltaTime * speed);
 
         GetImage((int)Images.Img_Separator).material.SetFloat(floatSteps, step);
         GetImage((int)Images.Img_Separator).material.SetFloat(floatRatio, hpShieldRatio);
