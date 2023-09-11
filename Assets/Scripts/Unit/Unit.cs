@@ -3,17 +3,17 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
-    protected UnitStat unitStat;     // À¯´Ö ½ºÅÈ µ¥ÀÌÅÍ (¿øº»°ª)
-    protected Vector3 targetPos;          // ÀÌµ¿ÇÒ À§Ä¡
+    protected UnitStat unitStat;     // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+    protected Vector3 targetPos;          // ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
 
-    [Header("ÇöÀç À¯´Ö »óÅÂ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
 
-    #region ÇÁ·ÎÆÛÆ¼
+    #region ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼
 
     /// <summary>
-    /// ÇöÀç À¯´Ö »óÅÂ ÇÁ·ÎÆÛÆ¼
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     public virtual Define.UnitState CurrentState
     {
@@ -22,16 +22,16 @@ public abstract class Unit : MonoBehaviour
         {
             currentState = value;
             
-            // TODO: »óÅÂ¿¡ µû¶ó °ü·ÃµÈ ¾Ö´Ï¸ÞÀÌ¼Ç ½ÇÇà
+            // TODO: ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
 
     #endregion
 
-    #region »ó¼ö
+    #region ï¿½ï¿½ï¿½
 
-    private const float ROTATE_SPEED = 20f;     // À¯´Ö È¸Àü¼Óµµ
-    private const float RAY_DISTANCE = 100f;     // ·¹ÀÌ »çÁ¤°Å¸®
+    private const float ROTATE_SPEED = 20f;     // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Óµï¿½
+    private const float RAY_DISTANCE = 100f;     // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½
 
     #endregion
 
@@ -43,8 +43,8 @@ public abstract class Unit : MonoBehaviour
     public abstract void Init();
 
     /// <summary>
-    /// InputManager Å¬·¡½ºÀÇ OnUpdate ÇÔ¼ö¿¡¼­ »ç¿ëµÇ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// InputManager Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ OnUpdate ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     public void OnUpdate()
     {
@@ -61,20 +61,20 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    #region »óÅÂº° ¾÷µ¥ÀÌÆ® ÇÔ¼ö
+    #region ï¿½ï¿½ï¿½Âºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ô¼ï¿½
 
     /// <summary>
-    /// »óÅÂ°¡ IDLEÀÏ ¶§ ½ÇÇàµÇ´Â ¾÷µ¥ÀÌÆ® ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½ï¿½Â°ï¿½ IDLEï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     protected virtual void UpdateIdle()
     {
-        // TODO: º¸·ù
+        // TODO: ï¿½ï¿½ï¿½ï¿½
     }
 
     /// <summary>
-    /// »óÅÂ°¡ MOVEÀÏ ¶§ ½ÇÇàµÇ´Â ¾÷µ¥ÀÌÆ® ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½ï¿½Â°ï¿½ MOVEï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     protected virtual void UpdateMove()
     {
@@ -101,8 +101,8 @@ public abstract class Unit : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// À¯´Ö ¼±ÅÃ ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     private void Select()
     {
@@ -124,8 +124,8 @@ public abstract class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// À¯´Ö ¿òÁ÷ÀÓ Ã¼Å© ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å© ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     public void Move()
     {
@@ -149,11 +149,11 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    #region ½ºÅ³ °ü·Ã ÇÔ¼ö
+    #region ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 
     /// <summary>
-    /// Å° ÀÔ·Â¿¡ µû¶ó ¾×Æ¼ºê ½ºÅ³ ½ÃÀüÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// Å° ï¿½Ô·Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     public virtual void CastActiveSkill()
     {
@@ -179,8 +179,8 @@ public abstract class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ÆÐ½Ãºê ½ºÅ³ ½ÃÀüÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½Ð½Ãºï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     public virtual void CastPassiveSkill()
     {
@@ -188,8 +188,8 @@ public abstract class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// Å° ÀÔ·Â¿¡ µû¶ó ½ºÆç ½ºÅ³ ½ÃÀüÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// Å° ï¿½Ô·Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     /// <param name="key"></param>
     public virtual void CastSpellSkill()
@@ -205,65 +205,65 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    #region ¾×Æ¼ºê ½ºÅ³
+    #region ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½Å³
 
     /// <summary>
-    /// ¾×Æ¼ºê ½ºÅ³ Q ½ÃÀü ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½Å³ Q ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     protected virtual void CastActiveQ()
     {
-        Debug.Log("Q ½ºÅ³ ¹ßµ¿");
+        Debug.Log("Q ï¿½ï¿½Å³ ï¿½ßµï¿½");
     }
 
     /// <summary>
-    /// ¾×Æ¼ºê ½ºÅ³ W ½ÃÀü ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½Å³ W ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     protected virtual void CastActiveW()
     {
-        Debug.Log("W ½ºÅ³ ¹ßµ¿");
+        Debug.Log("W ï¿½ï¿½Å³ ï¿½ßµï¿½");
     }
 
     /// <summary>
-    /// ¾×Æ¼ºê ½ºÅ³ E ½ÃÀü ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½Å³ E ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     protected virtual void CastActiveE()
     {
-        Debug.Log("E ½ºÅ³ ¹ßµ¿");
+        Debug.Log("E ï¿½ï¿½Å³ ï¿½ßµï¿½");
     }
 
     /// <summary>
-    /// ¾×Æ¼ºê ½ºÅ³ R ½ÃÀü ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½Å³ R ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     protected virtual void CastActiveR()
     {
-        Debug.Log("R ½ºÅ³ ¹ßµ¿");
+        Debug.Log("R ï¿½ï¿½Å³ ï¿½ßµï¿½");
     }
 
     #endregion
 
-    #region ÆÐ½Ãºê ½ºÅ³
+    #region ï¿½Ð½Ãºï¿½ ï¿½ï¿½Å³
 
     protected virtual void CastPassive()
     {
-        Debug.Log("ÆÐ½Ãºê ½ºÅ³");
+        Debug.Log("ï¿½Ð½Ãºï¿½ ï¿½ï¿½Å³");
     }
 
     #endregion
 
-    #region ½ºÆç ½ºÅ³
+    #region ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³
 
     protected virtual void CastSpellD()
     {
-        Debug.Log("D ½ºÆç ¹ßµ¿");
+        Debug.Log("D ï¿½ï¿½ï¿½ï¿½ ï¿½ßµï¿½");
     }
 
     protected virtual void CastSpellF()
     {
-        Debug.Log("F ½ºÆç ¹ßµ¿");
+        Debug.Log("F ï¿½ï¿½ï¿½ï¿½ ï¿½ßµï¿½");
     }
 
     #endregion
