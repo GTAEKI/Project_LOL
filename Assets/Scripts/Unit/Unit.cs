@@ -1,10 +1,14 @@
 using System;
 using UnityEngine;
 
-public abstract class Unit : MonoBehaviour
+public class Unit : MonoBehaviour
 {
-    protected UnitStat unitStat;     // 유닛 스탯 데이터 (원본값)
-    protected Vector3 targetPos;          // 이동할 위치
+    // 데이터
+    protected UnitStat unitStat;        // 유닛 스탯 데이터 (원본값)
+    protected Vector3 targetPos;        // 이동할 위치
+
+    // UI
+    protected UI_UnitHUD unitHUD;       // 유닛 체력바
 
     [Header("현재 유닛 상태")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
@@ -40,7 +44,14 @@ public abstract class Unit : MonoBehaviour
         Init();
     }
 
-    public abstract void Init();
+    /// <summary>
+    /// 유닛 초기화 함수
+    /// 김민섭_230911
+    /// </summary>
+    public virtual void Init()
+    {
+        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // 유닛 HUD 생성
+    }
 
     /// <summary>
     /// InputManager 클래스의 OnUpdate 함수에서 사용되는 함수
