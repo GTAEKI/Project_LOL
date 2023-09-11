@@ -5,72 +5,72 @@ using UnityEngine;
 
 public class UnitStat
 {
-    //1·¹º§ Ã¼·Â
+    //1ë ˆë²¨ ì²´ë ¥
     public float Hp { get; private set; }
-    //1·¹º§ ¸¶³ª
+    //1ë ˆë²¨ ë§ˆë‚˜
     public float Mp { get; private set; }
-    //1·¹º§ °ø°İ·Â
+    //1ë ˆë²¨ ê³µê²©ë ¥
     public float Atk { get; private set; }
-    //1·¹º§ ÁÖ¹®·Â
+    //1ë ˆë²¨ ì£¼ë¬¸ë ¥
     public float Apk { get; private set; }
-    //1·¹º§ ¹æ¾î·Â
+    //1ë ˆë²¨ ë°©ì–´ë ¥
     public float Defence { get; private set; }
-    //1·¹º§ ¸¶¹ıÀúÇ×·Â
+    //1ë ˆë²¨ ë§ˆë²•ì €í•­ë ¥
     public float MDefence { get; private set; }
-    //1·¹º§ °ø°İ¼Óµµ
+    //1ë ˆë²¨ ê³µê²©ì†ë„
     public float AtkSpeed { get; private set; }
-    //1·¹º§ ÁÖ¹®°¡¼Ó
+    //1ë ˆë²¨ ì£¼ë¬¸ê°€ì†
     public float SkillBoost { get; private set; }
-    //1·¹º§ Å©¸®Æ¼ÄÃÈ®·ü
+    //1ë ˆë²¨ í¬ë¦¬í‹°ì»¬í™•ë¥ 
     public float CriticalPer { get; private set; }
-    //1·¹º§ ÀÌµ¿¼Óµµ
+    //1ë ˆë²¨ ì´ë™ì†ë„
     public float MoveMentSpeed { get; private set; }
-    //1·¹º§ Ã¼·ÂÈ¸º¹(5ÃÊ´ç)
+    //1ë ˆë²¨ ì²´ë ¥íšŒë³µ(5ì´ˆë‹¹)
     public float HpRecovery { get; private set; }
-    //1·¹º§ ¸¶³ªÈ¸º¹(5ÃÊ´ç)
+    //1ë ˆë²¨ ë§ˆë‚˜íšŒë³µ(5ì´ˆë‹¹)
     public float MpRecovery { get; private set; }
-    //1·¹º§ ¹æ¾î±¸°üÅë·Â
+    //1ë ˆë²¨ ë°©ì–´êµ¬ê´€í†µë ¥
     public float ArmorPenetration { get; private set; }
-    //1·¹º§ ¹æ¾î±¸°üÅë·Â(ÆÛ¼¾Æ®)
+    //1ë ˆë²¨ ë°©ì–´êµ¬ê´€í†µë ¥(í¼ì„¼íŠ¸)
     public float ArmorPenetrationPer { get; private set; }
-    //1·¹º§ ¸¶¹ı°üÅë·Â
+    //1ë ˆë²¨ ë§ˆë²•ê´€í†µë ¥
     public float MagicPenetration { get; private set; }
-    //1·¹º§ ¸¶¹ı°üÅë·Â(ÆÛ¼¾Æ®)
+    //1ë ˆë²¨ ë§ˆë²•ê´€í†µë ¥(í¼ì„¼íŠ¸)
     public float MagicPenetrationPer { get; private set; }
-    //1·¹º§ ÆòÅ¸±â¹İÈíÇ÷ÆÛ¼¾Æ®
+    //1ë ˆë²¨ í‰íƒ€ê¸°ë°˜í¡í˜ˆí¼ì„¼íŠ¸
     public float AttakBloodSucking { get; private set; }
-    //1·¹º§ ¸ğµçÈíÇ÷ÆÛ¼¾Æ®
+    //1ë ˆë²¨ ëª¨ë“ í¡í˜ˆí¼ì„¼íŠ¸
     public float SkillBloodSucking { get; private set; }
-    //1·¹º§ »çÁ¤°Å¸®
+    //1ë ˆë²¨ ì‚¬ì •ê±°ë¦¬
     public float AttackRange { get; private set; }
-    //1·¹º§ °­ÀÎÇÔ
+    //1ë ˆë²¨ ê°•ì¸í•¨
     public float Tenacity { get; private set; }
 
-    //--------·¹º§¿¡µû¸¥ ¼ºÀå ½ºÅİ---------
-    //¼ºÀåÃ¼·Â
+    //--------ë ˆë²¨ì—ë”°ë¥¸ ì„±ì¥ ìŠ¤í…Ÿ---------
+    //ì„±ì¥ì²´ë ¥
     public float Growthhp { get; private set; }
-    //¼ºÀå¸¶³ª
+    //ì„±ì¥ë§ˆë‚˜
     public float Growthmp { get; private set; }
-    //¼ºÀå°ø°İ·Â
+    //ì„±ì¥ê³µê²©ë ¥
     public float Growthatk { get; private set; }
-    //¼ºÀå¹æ¾î·Â
+    //ì„±ì¥ë°©ì–´ë ¥
     public float Growthdefence { get; private set; }
-    //¼ºÀå¸¶¹ıÀúÇ×·Â
+    //ì„±ì¥ë§ˆë²•ì €í•­ë ¥
     public float GrowthmDefence { get; private set; }
-    //¼ºÀå°ø°İ¼Óµµ
+    //ì„±ì¥ê³µê²©ì†ë„
     public float GrowthatkSpeed { get; private set; }
-    //¼ºÀåÀÌµ¿¼Óµµ
+    //ì„±ì¥ì´ë™ì†ë„
     public float GrowthmoveMentSpeed { get; private set; }
-    //¼ºÀåÃ¼·ÂÈ¸º¹(5ÃÊ´ç)
+    //ì„±ì¥ì²´ë ¥íšŒë³µ(5ì´ˆë‹¹)
     public float GrowthhpRecovery { get; private set; }
-    //¼ºÀå¸¶³ªÈ¸º¹(5ÃÊ´ç)
+    //ì„±ì¥ë§ˆë‚˜íšŒë³µ(5ì´ˆë‹¹)
     public float GrowthmpRecovery { get; private set; }
-    //¼ºÀå»çÁ¤°Å¸®
+    //ì„±ì¥ì‚¬ì •ê±°ë¦¬
     public float GrowthattackRange { get; private set; }
 
     /// <summary>
-    /// ÀÓ½Ã »ı¼ºÀÚ
-    /// ±è¹Î¼·_230908
+    /// ì„ì‹œ ìƒì„±ì
+    /// ê¹€ë¯¼ì„­_230908
     /// </summary>
     /// <param name="movementSpeed"></param>
     public UnitStat(float movementSpeed)
