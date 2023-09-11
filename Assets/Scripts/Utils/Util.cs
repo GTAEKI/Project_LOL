@@ -46,4 +46,17 @@ public class Util
         }
         return null;
     }
+
+    /// <summary>
+    /// 터치 지점으로 레이를 쏘는 함수
+    /// 김민섭_230906
+    /// </summary>
+    /// <param name="startPoint">시작 지점</param>
+    /// <param name="endPoint">끝 지점</param>
+    /// <param name="rayColor">레이 색상</param>
+    /// <param name="duration">지속 시간</param>
+    public static void DrawTouchRay(Vector3 startPoint, Vector3 endPoint, Color rayColor, float duration = 1f)
+    {
+        Debug.DrawRay(startPoint, endPoint - startPoint, rayColor, duration);
+    }
 }

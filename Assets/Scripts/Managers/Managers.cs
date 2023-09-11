@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
-    private static Managers s_instance;
+    private static Managers s_instance; // 매니저 인스턴스 생성
+
+    // Instance가 get? 호출되면 Init함수가 실행되고 s_instance를 반환함
     private static Managers Instance { get { Init(); return s_instance; } }
 
+    // 매니저별로 신규로 할당
     private DataManager _data = new DataManager();
     private InputManager _input = new InputManager();
     private PoolManager _pool = new PoolManager();
     private ResourceManager _resource = new ResourceManager();
-    private SceneManagerEX _scene = new SceneManagerEX();
+    private SceneManagerEx _scene = new SceneManagerEx();
     private SoundManager _sound = new SoundManager();
     private UIManager _ui = new UIManager();
 
@@ -19,7 +22,7 @@ public class Managers : MonoBehaviour
     public static InputManager Input => Instance._input;
     public static PoolManager Pool => Instance._pool;
     public static ResourceManager Resource => Instance._resource;
-    public static SceneManagerEX Scene => Instance._scene;
+    public static SceneManagerEx Scene => Instance._scene;
     public static SoundManager Sound => Instance._sound;
     public static UIManager UI => Instance._ui;
 
@@ -51,6 +54,7 @@ public class Managers : MonoBehaviour
             s_instance._pool.Init();
             s_instance._sound.Init();
             s_instance._input.Init();
+            s_instance._ui.Init();
         }
     }
 
