@@ -9,22 +9,14 @@ using TMPro;
 
 public class SB_Gold : MonoBehaviour
 {
-    int m_gold;
+    public int m_gold;
     TMP_Text m_goldText;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_gold = 15000; // 임시값
         m_goldText = GetComponent<TMP_Text>();
-    }
-
-    /// <summary>
-    /// 골드 값을 UI 출력
-    /// </summary>
-    // Update is called once per frame
-    void Update()
-    {
+        m_gold = 15000; // 임시값
         m_goldText.text = m_gold.ToString();
     }
 
@@ -34,6 +26,7 @@ public class SB_Gold : MonoBehaviour
     public void SpendMoney()
     {
         m_gold -= 3000;
+        m_goldText.text = m_gold.ToString();
     }
 
     /// <summary>
@@ -42,5 +35,6 @@ public class SB_Gold : MonoBehaviour
     public void ReturnMoney()
     {
         m_gold += 3000;
+        m_goldText.text = m_gold.ToString();
     }
 }
