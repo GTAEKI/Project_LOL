@@ -5,12 +5,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Strength : MonoBehaviour
+public class Card : MonoBehaviour
 {
-    public GameObject[] strength;
+    public GameObject[] card;
     public GameObject RetryNumber;
 
-    public Sprite[] strengthicon;
+    public Sprite[] strengthcard;
 
     // 기존 카드
     public List<int> cardNum = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -30,7 +30,7 @@ public class Strength : MonoBehaviour
 
             for (int a = 0; a < 3; a++)
             {
-                strength[a].GetComponent<Image>().sprite = strengthicon[cardNum[a]];
+                card[a].GetComponent<Image>().sprite = strengthcard[cardNum[a]];
             }
             RetryNumber.GetComponent<Text>().text = "2";
             chance++;
@@ -40,7 +40,7 @@ public class Strength : MonoBehaviour
         {
             for (int a = 0; a < 3; a++)
             {
-                strength[a].GetComponent<Image>().sprite = strengthicon[cardNum[a + 3]];
+                card[a].GetComponent<Image>().sprite = strengthcard[cardNum[a + 3]];
             }
             RetryNumber.GetComponent<Text>().text = "1";
             chance++;
@@ -50,7 +50,7 @@ public class Strength : MonoBehaviour
         {
             for (int a = 0; a < 3; a++)
             {
-                strength[a].GetComponent<Image>().sprite = strengthicon[cardNum[a + 6]];
+                card[a].GetComponent<Image>().sprite = strengthcard[cardNum[a + 6]];
             }
             RetryNumber.GetComponent<Text>().text = "0";
             chance++;
@@ -59,6 +59,7 @@ public class Strength : MonoBehaviour
         else { return; }
     }
 
+    // 스왑으로 짜
     public void Swap()
     {
         int ranIndex1 = Random.Range(0, 10);

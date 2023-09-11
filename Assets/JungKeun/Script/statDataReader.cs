@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class statDataReader : MonoBehaviour
 {
-    Transform m_statData;
-    public GameObject m_statPrefab;
-    
-
-    private void Awake()
-    {
-        m_statData = GameObject.Find("Data_stat").transform; // 스텟목록
-        Debug.Assert(m_statPrefab != null);
-    }
 
     void Start()
     {
