@@ -5,21 +5,25 @@ using UnityEngine.EventSystems;
 
 public class explanationManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    
+    public GameObject explanation;
+
     void Start()
-    {
+    { 
+
     }
 
 
     public void OnPointerEnter(PointerEventData eventData)
 
     {
-        transform.GetChild(0).gameObject.SetActive(true);
+        explanation.gameObject.SetActive(true);
         
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
 
-        transform.GetChild(0).gameObject.SetActive(false);
+        explanation.gameObject.SetActive(false);
     }
 }

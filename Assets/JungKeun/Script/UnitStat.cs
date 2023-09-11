@@ -5,72 +5,17 @@ using UnityEngine;
 
 public class UnitStat
 {
-    //1���� ü��
-    public float Hp { get; private set; }
-    //1���� ����
-    public float Mp { get; private set; }
-    //1���� ���ݷ�
-    public float Atk { get; private set; }
-    //1���� �ֹ���
-    public float Apk { get; private set; }
-    //1���� ����
-    public float Defence { get; private set; }
-    //1���� �������׷�
-    public float MDefence { get; private set; }
-    //1���� ���ݼӵ�
-    public float AtkSpeed { get; private set; }
-    //1���� �ֹ�����
-    public float SkillBoost { get; private set; }
-    //1���� ũ��Ƽ��Ȯ��
-    public float CriticalPer { get; private set; }
-    //1���� �̵��ӵ�
-    public float MoveMentSpeed { get; private set; }
-    //1���� ü��ȸ��(5�ʴ�)
-    public float HpRecovery { get; private set; }
-    //1���� ����ȸ��(5�ʴ�)
-    public float MpRecovery { get; private set; }
-    //1���� �������
-    public float ArmorPenetration { get; private set; }
-    //1���� �������(�ۼ�Ʈ)
-    public float ArmorPenetrationPer { get; private set; }
-    //1���� ���������
-    public float MagicPenetration { get; private set; }
-    //1���� ���������(�ۼ�Ʈ)
-    public float MagicPenetrationPer { get; private set; }
-    //1���� ��Ÿ��������ۼ�Ʈ
-    public float AttakBloodSucking { get; private set; }
-    //1���� ��������ۼ�Ʈ
-    public float SkillBloodSucking { get; private set; }
-    //1���� �����Ÿ�
-    public float AttackRange { get; private set; }
-    //1���� ������
-    public float Tenacity { get; private set; }
-
-    //--------���������� ���� ����---------
-    //����ü��
-    public float Growthhp { get; private set; }
-    //���帶��
-    public float Growthmp { get; private set; }
-    //������ݷ�
-    public float Growthatk { get; private set; }
-    //�������
-    public float Growthdefence { get; private set; }
-    //���帶�����׷�
-    public float GrowthmDefence { get; private set; }
-    //������ݼӵ�
-    public float GrowthatkSpeed { get; private set; }
-    //�����̵��ӵ�
-    public float GrowthmoveMentSpeed { get; private set; }
-    //����ü��ȸ��(5�ʴ�)
-    public float GrowthhpRecovery { get; private set; }
-    //���帶��ȸ��(5�ʴ�)
-    public float GrowthmpRecovery { get; private set; }
-    //��������Ÿ�
-    public float GrowthattackRange { get; private set; }
-
     /// <summary>
     /// �ӽ� ������
     /// ��μ�_230908
+    //인덱스 번호
+    public int indexnumber { get; private set; }
+    //챔피언 한글이름
+    public string name { get; private set; }
+    //챔피언 영문이름
+    public string EnglishName { get; private set; }
+    //챔피언 레벨
+    public int Level { get; private set; }
     //1레벨 체력
     public float Hp { get; private set; }
     //1레벨 마나
@@ -139,8 +84,31 @@ public class UnitStat
     /// 김민섭_230908
     /// </summary>
     /// <param name="movementSpeed"></param>
-    public UnitStat(float movementSpeed)
+    public UnitStat(int indexnumber, string name, string EnglishName, float Hp, float Mp, float Atk, float Defence, float MDefence, float AtkSpeed, float MoveMentSpeed,
+                    float HpRecovery, float MpRecovery,float AttackRange, float Growthhp, float Growthmp, float Growthatk, float Growthdefence, float GrowthatkSpeed,
+                    float GrowthmoveMentSpeed, float GrowthhpRecovery, float GrowthmpRecovery, float GrowthattackRange)
     {
-        MoveMentSpeed = movementSpeed;
+        this.indexnumber = indexnumber;
+        this.name = name;
+        this.EnglishName = EnglishName;
+        this.Hp = Hp;
+        this.Mp = Mp;
+        this.Atk = Atk;
+        this.Defence = Defence;
+        this.MDefence = MDefence;
+        this.AtkSpeed = AtkSpeed;
+        this.MoveMentSpeed = MoveMentSpeed;
+        this.HpRecovery = HpRecovery;
+        this.MpRecovery = MpRecovery;
+        this.AttackRange = AttackRange;
+        this.Growthhp = Growthhp;
+        this.Growthmp = Growthmp;
+        this.Growthatk = Growthatk;
+        this.Growthdefence = Growthdefence;
+        this.GrowthatkSpeed = GrowthatkSpeed;
+        this.GrowthmoveMentSpeed = GrowthmoveMentSpeed;
+        this.GrowthhpRecovery = GrowthhpRecovery;
+        this.GrowthmpRecovery = GrowthmpRecovery;
+        this.GrowthattackRange = GrowthattackRange;
     }
 }
