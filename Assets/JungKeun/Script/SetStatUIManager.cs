@@ -52,65 +52,66 @@ public class SetStatUIManager : MonoBehaviour
     {
 
         status = GameObject.Find("Inventory").GetComponent<SB_GatherStatus>();
-
+        
     }
 
 
 
     void Update()
     {
+        if (MainStatSystem.activeSelf)
+        {
+            atkSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
+            atk.text = string.Format("현재 공격력 : {0} (기본 {1} + 추가 {2})\r\n기본 공격 시  {3} 의 물리 피해를 입힙니다."
+                , DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege
+                , DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
+                , DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
+                , DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
+                );
 
-        atkSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
-        atk.text = string.Format("현재 공격력 : {0} (기본 {1} + 추가 {2})\r\n기본 공격 시  {3} 의 물리 피해를 입힙니다."
-            , DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege
-            , DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
-            , DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
-            , DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
-            );
 
+            defSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
+            def.text = string.Format("현재 방어력: {0}(기본 {1} + 추가 {2})\r\n물리 피해를 {3}%만큼 덜 받습니다."
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              );
 
-        defSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
-        def.text = string.Format("현재 방어력: {0}(기본 {1} + 추가 {2})\r\n물리 피해를 {3}%만큼 덜 받습니다."
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          );
-
-        atkspeedSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
-        atkspeed.text = string.Format("추가 공격 속도: {0} %\r\n현재 초당 공격 횟수: {1}\r\n공격 속도 계수 : {2}"
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          );
-        criticalchanceSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
-        criticalchance.text = string.Format("각 기본 공격으로 75%의 추가 피해를 입힐 확률을 부여합니다.\r\n\r\n현재 치명타율:{0}%"
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          );
-        apSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
-        ap.text = string.Format("현재 주문력 : 0"
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          );
-        mdefSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
-        mdef.text = string.Format("현재 마법 저항력: {0} (기본 {1} + 추가 {2})\r\n마법 피해를 {3}% 만큼 덜 받습니다."
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          );
-        SkillBoostSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
-        SkillBoost.text = string.Format("현재 스킬 가속: {0}\r\n스킬 재사용 대기시간이 {1}% 감소하는 효과와 동일합니다."
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          );
-        movementSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
-        movement.text = string.Format("현재 이동 속도 : 초당 {0}(기본 {1} + 추가 {2})"
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-          );
-
+            atkspeedSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
+            atkspeed.text = string.Format("추가 공격 속도: {0} %\r\n현재 초당 공격 횟수: {1}\r\n공격 속도 계수 : {2}"
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              );
+            criticalchanceSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
+            criticalchance.text = string.Format("각 기본 공격으로 75%의 추가 피해를 입힐 확률을 부여합니다.\r\n\r\n현재 치명타율:{0}%"
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              );
+            apSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
+            ap.text = string.Format("현재 주문력 : 0"
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              );
+            mdefSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
+            mdef.text = string.Format("현재 마법 저항력: {0} (기본 {1} + 추가 {2})\r\n마법 피해를 {3}% 만큼 덜 받습니다."
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              );
+            SkillBoostSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
+            SkillBoost.text = string.Format("현재 스킬 가속: {0}\r\n스킬 재사용 대기시간이 {1}% 감소하는 효과와 동일합니다."
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              );
+            movementSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
+            movement.text = string.Format("현재 이동 속도 : 초당 {0}(기본 {1} + 추가 {2})"
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+              );
+        }
         if (otherStatSystem.activeSelf)
         {
             hpRegenSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + status.attackDamege);
@@ -157,45 +158,7 @@ public class SetStatUIManager : MonoBehaviour
               , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
               );
         }
-        else if (strengthStatSystem.activeSelf)
-        {
-            if (strengthes[0].GetComponent<Image>().sprite != null)
-            {
-                FirstStrengthexplanation.transform.GetChild(0).GetComponent<TMP_Text>().text = string.Format("{0}"
-                  , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-                  );
-                FirstStrengthexplanation.transform.GetChild(1).GetComponent<TMP_Text>().text = string.Format("{0}"
-                  , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-                  );
-            }
-            if (strengthes[1].GetComponent<Image>().sprite != null)
-            {
-                SecondStrengthexplanation.transform.GetChild(0).GetComponent<TMP_Text>().text = string.Format("{0}"
-              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-              );
-                SecondStrengthexplanation.transform.GetChild(1).GetComponent<TMP_Text>().text = string.Format("{0}"
-              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-              );
-            }
-            if (strengthes[2].GetComponent<Image>().sprite != null)
-            {
-                ThirdStrengthexplanation.transform.GetChild(0).GetComponent<TMP_Text>().text = string.Format("{0}"
-              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-              );
-                ThirdStrengthexplanation.transform.GetChild(1).GetComponent<TMP_Text>().text = string.Format("{0}"
-              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-              );
-            }
-            if (strengthes[3].GetComponent<Image>().sprite != null)
-            {
-                FourthStrengthexplanation.transform.GetChild(0).GetComponent<TMP_Text>().text = string.Format("{0}"
-              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-              );
-                FourthStrengthexplanation.transform.GetChild(1).GetComponent<TMP_Text>().text = string.Format("{0}"
-              , DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-              );
-            }
-        }
+
 
 
     }

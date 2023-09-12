@@ -67,6 +67,9 @@ public class UnitStat
     /// 占쌈쏙옙 占쏙옙占쏙옙占쏙옙
     /// 占쏙옙關占?230908
     //?몃뜳??踰덊샇
+    public static int PlayerCharacterId = -1;
+
+
     public int indexnumber { get; private set; }
     //梨뷀뵾???쒓??대쫫
     public string name { get; private set; }
@@ -178,6 +181,10 @@ public class UnitStat
         this.GrowthmpRecovery = GrowthmpRecovery;
         this.GrowthattackRange = GrowthattackRange;
     }
+
+
+
+
 
     /// <summary>
     /// 占쌍댐옙 체占쏙옙 占쏙옙占쏙옙 占쌉쇽옙
