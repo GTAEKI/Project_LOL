@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÇöÀç À¯´ÖÀÇ ½ºÅÈ Å¬·¡½º
-/// ±è¹Î¼·_230911
+/// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
+/// ï¿½ï¿½Î¼ï¿½_230911
 /// </summary>
 public class CurrentUnitStat
 {
-    public UnitStat UnitStat { private set; get; }       // ¿øº» ½ºÅÈ µ¥ÀÌÅÍ
+    public UnitStat UnitStat { private set; get; }       // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     public float Hp { private set; get; } = 0f;
 
     /// <summary>
-    /// ¿øº» ½ºÅÈ µ¥ÀÌÅÍ¸¦ ¼¼ÆÃÇÏ´Â »ı¼ºÀÚ
-    /// ±è¹Î¼·_230911
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230911
     /// </summary>
     /// <param name="unitStat"></param>
     public CurrentUnitStat(UnitStat unitStat)
@@ -23,17 +23,17 @@ public class CurrentUnitStat
     }
 
     /// <summary>
-    /// Ã¼·Â ¼¼ÆÃ ÇÔ¼ö
-    /// ±è¹Î¼·_230911
+    /// Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230911
     /// </summary>
-    /// <param name="value">¼öÄ¡°ª</param>
+    /// <param name="value">ï¿½ï¿½Ä¡ï¿½ï¿½</param>
     public void SettingHp(float value) => Hp = value;
 
     /// <summary>
-    /// Ã¼·Â È¸º¹ ÇÔ¼ö
-    /// ±è¹Î¼·_230911
+    /// Ã¼ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230911
     /// </summary>
-    /// <param name="value">È¸º¹·®</param>
+    /// <param name="value">È¸ï¿½ï¿½ï¿½ï¿½</param>
     public void OnHeal(float value)
     {
         Hp += value;
@@ -45,10 +45,10 @@ public class CurrentUnitStat
     }
 
     /// <summary>
-    /// µ¥¹ÌÁö ºÎ¿© ÇÔ¼ö
-    /// ±è¹Î¼·_230911
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230911
     /// </summary>
-    /// <param name="value">µ¥¹ÌÁö</param>
+    /// <param name="value">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
     public void OnDamaged(float value)
     {
         Hp -= value;
@@ -63,92 +63,134 @@ public class CurrentUnitStat
 
 public class UnitStat
 {
-    //1·¹º§ Ã¼·Â
+    /// <summary>
+    /// ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230908
+    //ì¸ë±ìŠ¤ ë²ˆí˜¸
+    public int indexnumber { get; private set; }
+    //ì±”í”¼ì–¸ í•œê¸€ì´ë¦„
+    public string name { get; private set; }
+    //ì±”í”¼ì–¸ ì˜ë¬¸ì´ë¦„
+    public string EnglishName { get; private set; }
+    //ì±”í”¼ì–¸ ë ˆë²¨
+    public int Level { get; private set; }
+    //1ë ˆë²¨ ì²´ë ¥
     public float Hp { get; private set; }
-    //1·¹º§ ¸¶³ª
+    //1ë ˆë²¨ ë§ˆë‚˜
     public float Mp { get; private set; }
-    //1·¹º§ °ø°İ·Â
+    //1ë ˆë²¨ ê³µê²©ë ¥
     public float Atk { get; private set; }
-    //1·¹º§ ÁÖ¹®·Â
+    //1ë ˆë²¨ ì£¼ë¬¸ë ¥
     public float Apk { get; private set; }
-    //1·¹º§ ¹æ¾î·Â
+    //1ë ˆë²¨ ë°©ì–´ë ¥
     public float Defence { get; private set; }
-    //1·¹º§ ¸¶¹ıÀúÇ×·Â
+    //1ë ˆë²¨ ë§ˆë²•ì €í•­ë ¥
     public float MDefence { get; private set; }
-    //1·¹º§ °ø°İ¼Óµµ
+    //1ë ˆë²¨ ê³µê²©ì†ë„
     public float AtkSpeed { get; private set; }
-    //1·¹º§ ÁÖ¹®°¡¼Ó
+    //1ë ˆë²¨ ì£¼ë¬¸ê°€ì†
     public float SkillBoost { get; private set; }
-    //1·¹º§ Å©¸®Æ¼ÄÃÈ®·ü
+    //1ë ˆë²¨ í¬ë¦¬í‹°ì»¬í™•ë¥ 
     public float CriticalPer { get; private set; }
-    //1·¹º§ ÀÌµ¿¼Óµµ
+    //1ë ˆë²¨ ì´ë™ì†ë„
     public float MoveMentSpeed { get; private set; }
-    //1·¹º§ Ã¼·ÂÈ¸º¹(5ÃÊ´ç)
+    //1ë ˆë²¨ ì²´ë ¥íšŒë³µ(5ì´ˆë‹¹)
     public float HpRecovery { get; private set; }
-    //1·¹º§ ¸¶³ªÈ¸º¹(5ÃÊ´ç)
+    //1ë ˆë²¨ ë§ˆë‚˜íšŒë³µ(5ì´ˆë‹¹)
     public float MpRecovery { get; private set; }
-    //1·¹º§ ¹æ¾î±¸°üÅë·Â
+    //1ë ˆë²¨ ë°©ì–´êµ¬ê´€í†µë ¥
     public float ArmorPenetration { get; private set; }
-    //1·¹º§ ¹æ¾î±¸°üÅë·Â(ÆÛ¼¾Æ®)
+    //1ë ˆë²¨ ë°©ì–´êµ¬ê´€í†µë ¥(í¼ì„¼íŠ¸)
     public float ArmorPenetrationPer { get; private set; }
-    //1·¹º§ ¸¶¹ı°üÅë·Â
+    //1ë ˆë²¨ ë§ˆë²•ê´€í†µë ¥
     public float MagicPenetration { get; private set; }
-    //1·¹º§ ¸¶¹ı°üÅë·Â(ÆÛ¼¾Æ®)
+    //1ë ˆë²¨ ë§ˆë²•ê´€í†µë ¥(í¼ì„¼íŠ¸)
     public float MagicPenetrationPer { get; private set; }
-    //1·¹º§ ÆòÅ¸±â¹İÈíÇ÷ÆÛ¼¾Æ®
+    //1ë ˆë²¨ í‰íƒ€ê¸°ë°˜í¡í˜ˆí¼ì„¼íŠ¸
     public float AttakBloodSucking { get; private set; }
-    //1·¹º§ ¸ğµçÈíÇ÷ÆÛ¼¾Æ®
+    //1ë ˆë²¨ ëª¨ë“ í¡í˜ˆí¼ì„¼íŠ¸
     public float SkillBloodSucking { get; private set; }
-    //1·¹º§ »çÁ¤°Å¸®
+    //1ë ˆë²¨ ì‚¬ì •ê±°ë¦¬
     public float AttackRange { get; private set; }
-    //1·¹º§ °­ÀÎÇÔ
+    //1ë ˆë²¨ ê°•ì¸í•¨
     public float Tenacity { get; private set; }
 
-    //--------·¹º§¿¡µû¸¥ ¼ºÀå ½ºÅİ---------
-    //¼ºÀåÃ¼·Â
+    //--------ë ˆë²¨ì—ë”°ë¥¸ ì„±ì¥ ìŠ¤í…Ÿ---------
+    //ì„±ì¥ì²´ë ¥
     public float Growthhp { get; private set; }
-    //¼ºÀå¸¶³ª
+    //ì„±ì¥ë§ˆë‚˜
     public float Growthmp { get; private set; }
-    //¼ºÀå°ø°İ·Â
+    //ì„±ì¥ê³µê²©ë ¥
     public float Growthatk { get; private set; }
-    //¼ºÀå¹æ¾î·Â
+    //ì„±ì¥ë°©ì–´ë ¥
     public float Growthdefence { get; private set; }
-    //¼ºÀå¸¶¹ıÀúÇ×·Â
+    //ì„±ì¥ë§ˆë²•ì €í•­ë ¥
     public float GrowthmDefence { get; private set; }
-    //¼ºÀå°ø°İ¼Óµµ
+    //ì„±ì¥ê³µê²©ì†ë„
     public float GrowthatkSpeed { get; private set; }
-    //¼ºÀåÀÌµ¿¼Óµµ
+    //ì„±ì¥ì´ë™ì†ë„
     public float GrowthmoveMentSpeed { get; private set; }
-    //¼ºÀåÃ¼·ÂÈ¸º¹(5ÃÊ´ç)
+    //ì„±ì¥ì²´ë ¥íšŒë³µ(5ì´ˆë‹¹)
     public float GrowthhpRecovery { get; private set; }
-    //¼ºÀå¸¶³ªÈ¸º¹(5ÃÊ´ç)
+    //ì„±ì¥ë§ˆë‚˜íšŒë³µ(5ì´ˆë‹¹)
     public float GrowthmpRecovery { get; private set; }
-    //¼ºÀå»çÁ¤°Å¸®
+    //ì„±ì¥ì‚¬ì •ê±°ë¦¬
     public float GrowthattackRange { get; private set; }
 
     /// <summary>
-    /// ÀÓ½Ã »ı¼ºÀÚ
-    /// ±è¹Î¼·_230908
+    /// ì„ì‹œ ìƒì„±ì
+    /// ê¹€ë¯¼ì„­_230908
     /// </summary>
-    /// <param name="movementSpeed"></param>
     public UnitStat(int hp, float movementSpeed)
     {
         Hp = hp;
-        MoveMentSpeed = movementSpeed;
+        MovementSpeed = movementSpeed;
+    }
+  
+    /// <summary>
+    /// ì„ì‹œ ìƒì„±ì
+    /// ê¹€ë¯¼ì„­_230908
+    /// </summary>
+    public UnitStat(int indexnumber, string name, string EnglishName, float Hp, float Mp, float Atk, float Defence, float MDefence, float AtkSpeed, float MoveMentSpeed,
+                    float HpRecovery, float MpRecovery,float AttackRange, float Growthhp, float Growthmp, float Growthatk, float Growthdefence, float GrowthatkSpeed,
+                    float GrowthmoveMentSpeed, float GrowthhpRecovery, float GrowthmpRecovery, float GrowthattackRange)
+    {
+        this.indexnumber = indexnumber;
+        this.name = name;
+        this.EnglishName = EnglishName;
+        this.Hp = Hp;
+        this.Mp = Mp;
+        this.Atk = Atk;
+        this.Defence = Defence;
+        this.MDefence = MDefence;
+        this.AtkSpeed = AtkSpeed;
+        this.MoveMentSpeed = MoveMentSpeed;
+        this.HpRecovery = HpRecovery;
+        this.MpRecovery = MpRecovery;
+        this.AttackRange = AttackRange;
+        this.Growthhp = Growthhp;
+        this.Growthmp = Growthmp;
+        this.Growthatk = Growthatk;
+        this.Growthdefence = Growthdefence;
+        this.GrowthatkSpeed = GrowthatkSpeed;
+        this.GrowthmoveMentSpeed = GrowthmoveMentSpeed;
+        this.GrowthhpRecovery = GrowthhpRecovery;
+        this.GrowthmpRecovery = GrowthmpRecovery;
+        this.GrowthattackRange = GrowthattackRange;
     }
 
     /// <summary>
-    /// ÃÖ´ë Ã¼·Â ¼¼ÆÃ ÇÔ¼ö
-    /// ±è¹Î¼·_230911
+    /// ï¿½Ö´ï¿½ Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230911
     /// </summary>
-    /// <param name="value">¼öÄ¡°ª</param>
+    /// <param name="value">ï¿½ï¿½Ä¡ï¿½ï¿½</param>
     public void SettingMaxHp(float value) => Hp = value;
 
     /// <summary>
-    /// ÃÖ´ë Ã¼·Â Á¶Á¤ ÇÔ¼ö
-    /// ±è¹Î¼·_230911
+    /// ï¿½Ö´ï¿½ Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230911
     /// </summary>
-    /// <param name="value">Á¶Á¤°ª</param>
+    /// <param name="value">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
     public void OnChangeMaxHp(float value)
     {
         Hp += value;
