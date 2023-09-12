@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ���� ������ ���� Ŭ����
-/// ��μ�_230911
+/// 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙 클占쏙옙占쏙옙
+/// 占쏙옙關占?230911
 /// </summary>
 public class CurrentUnitStat
 {
-    public UnitStat UnitStat { private set; get; }       // ���� ���� ������
+    public UnitStat UnitStat { private set; get; }       // 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙
 
     public float Hp { private set; get; } = 0f;
 
     /// <summary>
-    /// ���� ���� �����͸� �����ϴ� ������
-    /// ��μ�_230911
+    /// 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占싶몌옙 占쏙옙占쏙옙占싹댐옙 占쏙옙占쏙옙占쏙옙
+    /// 占쏙옙關占?230911
     /// </summary>
     /// <param name="unitStat"></param>
     public CurrentUnitStat(UnitStat unitStat)
@@ -23,17 +23,17 @@ public class CurrentUnitStat
     }
 
     /// <summary>
-    /// ü�� ���� �Լ�
-    /// ��μ�_230911
+    /// 체占쏙옙 占쏙옙占쏙옙 占쌉쇽옙
+    /// 占쏙옙關占?230911
     /// </summary>
-    /// <param name="value">��ġ��</param>
+    /// <param name="value">占쏙옙치占쏙옙</param>
     public void SettingHp(float value) => Hp = value;
 
     /// <summary>
-    /// ü�� ȸ�� �Լ�
-    /// ��μ�_230911
+    /// 체占쏙옙 회占쏙옙 占쌉쇽옙
+    /// 占쏙옙關占?230911
     /// </summary>
-    /// <param name="value">ȸ����</param>
+    /// <param name="value">회占쏙옙占쏙옙</param>
     public void OnHeal(float value)
     {
         Hp += value;
@@ -45,10 +45,10 @@ public class CurrentUnitStat
     }
 
     /// <summary>
-    /// ������ �ο� �Լ�
-    /// ��μ�_230911
+    /// 占쏙옙占쏙옙占쏙옙 占싸울옙 占쌉쇽옙
+    /// 占쏙옙關占?230911
     /// </summary>
-    /// <param name="value">������</param>
+    /// <param name="value">占쏙옙占쏙옙占쏙옙</param>
     public void OnDamaged(float value)
     {
         Hp -= value;
@@ -64,92 +64,92 @@ public class CurrentUnitStat
 public class UnitStat
 {
     /// <summary>
-    /// �ӽ� ������
-    /// ��μ�_230908
-    //인덱스 번호
+    /// 占쌈쏙옙 占쏙옙占쏙옙占쏙옙
+    /// 占쏙옙關占?230908
+    //?몃뜳??踰덊샇
     public int indexnumber { get; private set; }
-    //챔피언 한글이름
+    //梨뷀뵾???쒓??대쫫
     public string name { get; private set; }
-    //챔피언 영문이름
+    //梨뷀뵾???곷Ц?대쫫
     public string EnglishName { get; private set; }
-    //챔피언 레벨
+    //梨뷀뵾???덈꺼
     public int Level { get; private set; }
-    //1레벨 체력
+    //1?덈꺼 泥대젰
     public float Hp { get; private set; }
-    //1레벨 마나
+    //1?덈꺼 留덈굹
     public float Mp { get; private set; }
-    //1레벨 공격력
+    //1?덈꺼 怨듦꺽??
     public float Atk { get; private set; }
-    //1레벨 주문력
+    //1?덈꺼 二쇰Ц??
     public float Apk { get; private set; }
-    //1레벨 방어력
+    //1?덈꺼 諛⑹뼱??
     public float Defence { get; private set; }
-    //1레벨 마법저항력
+    //1?덈꺼 留덈쾿???젰
     public float MDefence { get; private set; }
-    //1레벨 공격속도
+    //1?덈꺼 怨듦꺽?띾룄
     public float AtkSpeed { get; private set; }
-    //1레벨 주문가속
+    //1?덈꺼 二쇰Ц媛??
     public float SkillBoost { get; private set; }
-    //1레벨 크리티컬확률
+    //1?덈꺼 ?щ━?곗뺄?뺣쪧
     public float CriticalPer { get; private set; }
-    //1레벨 이동속도
+    //1?덈꺼 ?대룞?띾룄
     public float MoveMentSpeed { get; private set; }
-    //1레벨 체력회복(5초당)
+    //1?덈꺼 泥대젰?뚮났(5珥덈떦)
     public float HpRecovery { get; private set; }
-    //1레벨 마나회복(5초당)
+    //1?덈꺼 留덈굹?뚮났(5珥덈떦)
     public float MpRecovery { get; private set; }
-    //1레벨 방어구관통력
+    //1?덈꺼 諛⑹뼱援ш??듬젰
     public float ArmorPenetration { get; private set; }
-    //1레벨 방어구관통력(퍼센트)
+    //1?덈꺼 諛⑹뼱援ш??듬젰(?쇱꽱??
     public float ArmorPenetrationPer { get; private set; }
-    //1레벨 마법관통력
+    //1?덈꺼 留덈쾿愿?듬젰
     public float MagicPenetration { get; private set; }
-    //1레벨 마법관통력(퍼센트)
+    //1?덈꺼 留덈쾿愿?듬젰(?쇱꽱??
     public float MagicPenetrationPer { get; private set; }
-    //1레벨 평타기반흡혈퍼센트
+    //1?덈꺼 ?됲?湲곕컲?≫삁?쇱꽱??
     public float AttakBloodSucking { get; private set; }
-    //1레벨 모든흡혈퍼센트
+    //1?덈꺼 紐⑤뱺?≫삁?쇱꽱??
     public float SkillBloodSucking { get; private set; }
-    //1레벨 사정거리
+    //1?덈꺼 ?ъ젙嫄곕━
     public float AttackRange { get; private set; }
-    //1레벨 강인함
+    //1?덈꺼 媛뺤씤??
     public float Tenacity { get; private set; }
 
-    //--------레벨에따른 성장 스텟---------
-    //성장체력
+    //--------?덈꺼?먮뵲瑜??깆옣 ?ㅽ뀩---------
+    //?깆옣泥대젰
     public float Growthhp { get; private set; }
-    //성장마나
+    //?깆옣留덈굹
     public float Growthmp { get; private set; }
-    //성장공격력
+    //?깆옣怨듦꺽??
     public float Growthatk { get; private set; }
-    //성장방어력
+    //?깆옣諛⑹뼱??
     public float Growthdefence { get; private set; }
-    //성장마법저항력
+    //?깆옣留덈쾿???젰
     public float GrowthmDefence { get; private set; }
-    //성장공격속도
+    //?깆옣怨듦꺽?띾룄
     public float GrowthatkSpeed { get; private set; }
-    //성장이동속도
+    //?깆옣?대룞?띾룄
     public float GrowthmoveMentSpeed { get; private set; }
-    //성장체력회복(5초당)
+    //?깆옣泥대젰?뚮났(5珥덈떦)
     public float GrowthhpRecovery { get; private set; }
-    //성장마나회복(5초당)
+    //?깆옣留덈굹?뚮났(5珥덈떦)
     public float GrowthmpRecovery { get; private set; }
-    //성장사정거리
+    //?깆옣?ъ젙嫄곕━
     public float GrowthattackRange { get; private set; }
 
     /// <summary>
-    /// 임시 생성자
-    /// 김민섭_230908
+    /// ?꾩떆 ?앹꽦??
+    /// 源誘쇱꽠_230908
     /// </summary>
     public UnitStat(int hp, float movementSpeed)
     {
         Hp = hp;
-        MovementSpeed = movementSpeed;
+        MoveMentSpeed = movementSpeed;
     }
   
     /// <summary>
-    /// 임시 생성자
-    /// 김민섭_230908
+    /// ?꾩떆 ?앹꽦??
+    /// 源誘쇱꽠_230908
     /// </summary>
     public UnitStat(int indexnumber, string name, string EnglishName, float Hp, float Mp, float Atk, float Defence, float MDefence, float AtkSpeed, float MoveMentSpeed,
                     float HpRecovery, float MpRecovery,float AttackRange, float Growthhp, float Growthmp, float Growthatk, float Growthdefence, float GrowthatkSpeed,
@@ -180,17 +180,17 @@ public class UnitStat
     }
 
     /// <summary>
-    /// �ִ� ü�� ���� �Լ�
-    /// ��μ�_230911
+    /// 占쌍댐옙 체占쏙옙 占쏙옙占쏙옙 占쌉쇽옙
+    /// 占쏙옙關占?230911
     /// </summary>
-    /// <param name="value">��ġ��</param>
+    /// <param name="value">占쏙옙치占쏙옙</param>
     public void SettingMaxHp(float value) => Hp = value;
 
     /// <summary>
-    /// �ִ� ü�� ���� �Լ�
-    /// ��μ�_230911
+    /// 占쌍댐옙 체占쏙옙 占쏙옙占쏙옙 占쌉쇽옙
+    /// 占쏙옙關占?230911
     /// </summary>
-    /// <param name="value">������</param>
+    /// <param name="value">占쏙옙占쏙옙占쏙옙</param>
     public void OnChangeMaxHp(float value)
     {
         Hp += value;

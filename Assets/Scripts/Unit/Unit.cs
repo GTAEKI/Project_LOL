@@ -3,22 +3,22 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    // ������
-    protected UnitStat unitStat;                    // ���� ���� ������ (������)
-    protected CurrentUnitStat currentUnitStat;      // ���� ���� ������ (���簪)
-    protected Vector3 targetPos;                    // �̵��� ��ġ
+    // ?좎룞?쇿뜝?숈삕?좎룞??
+    protected UnitStat unitStat;                    // ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕?좎룞??(?좎룞?쇿뜝?숈삕?좎룞??
+    protected CurrentUnitStat currentUnitStat;      // ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕?좎룞??(?좎룞?쇿뜝?밴컪)
+    protected Vector3 targetPos;                    // ?좎떛?몄삕?좎룞???좎룞?숈튂
 
     // UI
-    protected UI_UnitHUD unitHUD;       // ���� ü�¹�
+    protected UI_UnitHUD unitHUD;       // ?좎룞?쇿뜝?숈삕 泥닷뜝?밸콈??
 
-    [Header("���� ���� ����")]
+    [Header("?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
 
-    #region ������Ƽ
+    #region ?좎룞?쇿뜝?숈삕?좎룞?숉떚
 
     /// <summary>
-    /// ���� ���� ���� ������Ƽ
-    /// ��μ�_230906
+    /// ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕?좎룞?숉떚
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     public virtual Define.UnitState CurrentState
     {
@@ -27,7 +27,7 @@ public class Unit : MonoBehaviour
         {
             currentState = value;
             
-            // TODO: ���¿� ���� ���õ� �ִϸ��̼� ����
+            // TODO: ?좎룞?쇿뜝?뱀슱???좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?쒕벝???좎뙇?덈챿?쇿뜝?깆눦???좎룞?쇿뜝?숈삕
         }
     }
 
@@ -42,10 +42,10 @@ public class Unit : MonoBehaviour
 
     #endregion
 
-    #region ���
+    #region ?좎룞?쇿뜝?
 
-    private const float ROTATE_SPEED = 20f;     // ���� ȸ���ӵ�
-    private const float RAY_DISTANCE = 100f;     // ���� �����Ÿ�
+    private const float ROTATE_SPEED = 20f;     // ?좎룞?쇿뜝?숈삕 ?뚦뜝?숈삕?좎뙂?몄삕
+    private const float RAY_DISTANCE = 100f;     // ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕?좎떊紐뚯삕
 
     #endregion
 
@@ -55,20 +55,20 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ���� �ʱ�ȭ �Լ�
-    /// ��μ�_230911
+    /// ?좎룞?쇿뜝?숈삕 ?좎떗源띿삕???좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230911
     /// </summary>
     public virtual void Init()
     {
         currentUnitStat = new CurrentUnitStat(unitStat);
         currentUnitStat.OnHeal(unitStat.Hp);
 
-        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // ���� HUD ����
+        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // ?좎룞?쇿뜝?숈삕 HUD ?좎룞?쇿뜝?숈삕
     }
 
     /// <summary>
-    /// InputManager Ŭ������ OnUpdate �Լ����� ���Ǵ� �Լ�
-    /// ��μ�_230906
+    /// InputManager ?닷뜝?숈삕?좎룞?쇿뜝?숈삕 OnUpdate ?좎뙃?쎌삕?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?ㅻ뙋???좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     public void OnUpdate()
     {
@@ -85,20 +85,20 @@ public class Unit : MonoBehaviour
         }
     }
 
-    #region ���º� ������Ʈ �Լ�
+    #region ?좎룞?쇿뜝?밸툦???좎룞?쇿뜝?숈삕?좎룞?숉듃 ?좎뙃?쎌삕
 
     /// <summary>
-    /// ���°� IDLE�� �� ����Ǵ� ������Ʈ �Լ�
-    /// ��μ�_230906
+    /// ?좎룞?쇿뜝?밴낀??IDLE?좎룞???좎룞???좎룞?쇿뜝?숈삕?붷뜝??좎룞?쇿뜝?숈삕?좎룞?숉듃 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     protected virtual void UpdateIdle()
     {
-        // TODO: ����
+        // TODO: ?좎룞?쇿뜝?숈삕
     }
 
     /// <summary>
-    /// ���°� MOVE�� �� ����Ǵ� ������Ʈ �Լ�
-    /// ��μ�_230906
+    /// ?좎룞?쇿뜝?밴낀??MOVE?좎룞???좎룞???좎룞?쇿뜝?숈삕?붷뜝??좎룞?쇿뜝?숈삕?좎룞?숉듃 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     protected virtual void UpdateMove()
     {
@@ -125,8 +125,8 @@ public class Unit : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// ���� ���� �Լ�
-    /// ��μ�_230906
+    /// ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     private void Select()
     {
@@ -148,8 +148,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ���� ������ üũ �Լ�
-    /// ��μ�_230906
+    /// ?좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕?좎룞??泥댄겕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     public void Move()
     {
@@ -173,11 +173,11 @@ public class Unit : MonoBehaviour
         }
     }
 
-    #region ��ų ���� �Լ�
+    #region ?좎룞?숉궗 ?좎룞?쇿뜝?숈삕 ?좎뙃?쎌삕
 
     /// <summary>
-    /// Ű �Է¿� ���� ��Ƽ�� ��ų �����ϴ� �Լ�
-    /// ��μ�_230906
+    /// ???좎뙃?μ슱???좎룞?쇿뜝?숈삕 ?좎룞?숉떚?좎룞???좎룞?숉궗 ?좎룞?쇿뜝?숈삕?좎떦?먯삕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     public virtual void CastActiveSkill()
     {
@@ -203,8 +203,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// �нú� ��ų �����ϴ� �Լ�
-    /// ��μ�_230906
+    /// ?좎떩?쒕툦???좎룞?숉궗 ?좎룞?쇿뜝?숈삕?좎떦?먯삕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     public virtual void CastPassiveSkill()
     {
@@ -212,8 +212,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// Ű �Է¿� ���� ���� ��ų �����ϴ� �Լ�
-    /// ��μ�_230906
+    /// ???좎뙃?μ슱???좎룞?쇿뜝?숈삕 ?좎룞?쇿뜝?숈삕 ?좎룞?숉궗 ?좎룞?쇿뜝?숈삕?좎떦?먯삕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     /// <param name="key"></param>
     public virtual void CastSpellSkill()
@@ -229,65 +229,65 @@ public class Unit : MonoBehaviour
         }
     }
 
-    #region ��Ƽ�� ��ų
+    #region ?좎룞?숉떚?좎룞???좎룞?숉궗
 
     /// <summary>
-    /// ��Ƽ�� ��ų Q ���� �Լ�
-    /// ��μ�_230906
+    /// ?좎룞?숉떚?좎룞???좎룞?숉궗 Q ?좎룞?쇿뜝?숈삕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     protected virtual void CastActiveQ()
     {
-        Debug.Log("Q ��ų �ߵ�");
+        Debug.Log("Q ?좎룞?숉궗 ?좎뙥?몄삕");
     }
 
     /// <summary>
-    /// ��Ƽ�� ��ų W ���� �Լ�
-    /// ��μ�_230906
+    /// ?좎룞?숉떚?좎룞???좎룞?숉궗 W ?좎룞?쇿뜝?숈삕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     protected virtual void CastActiveW()
     {
-        Debug.Log("W ��ų �ߵ�");
+        Debug.Log("W ?좎룞?숉궗 ?좎뙥?몄삕");
     }
 
     /// <summary>
-    /// ��Ƽ�� ��ų E ���� �Լ�
-    /// ��μ�_230906
+    /// ?좎룞?숉떚?좎룞???좎룞?숉궗 E ?좎룞?쇿뜝?숈삕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     protected virtual void CastActiveE()
     {
-        Debug.Log("E ��ų �ߵ�");
+        Debug.Log("E ?좎룞?숉궗 ?좎뙥?몄삕");
     }
 
     /// <summary>
-    /// ��Ƽ�� ��ų R ���� �Լ�
-    /// ��μ�_230906
+    /// ?좎룞?숉떚?좎룞???좎룞?숉궗 R ?좎룞?쇿뜝?숈삕 ?좎뙃?쎌삕
+    /// ?좎룞?숅뿙??230906
     /// </summary>
     protected virtual void CastActiveR()
     {
-        Debug.Log("R ��ų �ߵ�");
+        Debug.Log("R ?좎룞?숉궗 ?좎뙥?몄삕");
     }
 
     #endregion
 
-    #region �нú� ��ų
+    #region ?좎떩?쒕툦???좎룞?숉궗
 
     protected virtual void CastPassive()
     {
-        Debug.Log("�нú� ��ų");
+        Debug.Log("?좎떩?쒕툦???좎룞?숉궗");
     }
 
     #endregion
 
-    #region ���� ��ų
+    #region ?좎룞?쇿뜝?숈삕 ?좎룞?숉궗
 
     protected virtual void CastSpellD()
     {
-        Debug.Log("D ���� �ߵ�");
+        Debug.Log("D ?좎룞?쇿뜝?숈삕 ?좎뙥?몄삕");
     }
 
     protected virtual void CastSpellF()
     {
-        Debug.Log("F ���� �ߵ�");
+        Debug.Log("F ?좎룞?쇿뜝?숈삕 ?좎뙥?몄삕");
     }
 
     #endregion
