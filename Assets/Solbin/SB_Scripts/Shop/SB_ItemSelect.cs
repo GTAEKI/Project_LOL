@@ -42,7 +42,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         };
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (hoverMouse)
         {
@@ -50,7 +50,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             Vector2 localMousePos;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(infoRect.parent as RectTransform, 
                 Input.mousePosition, Camera.main, out localMousePos);
-            infoRect.anchoredPosition = localMousePos;
+            infoRect.anchoredPosition = new Vector2(localMousePos.x, localMousePos.y - 50); // 임의 위치보정: -50
         }
         else
         {
@@ -81,6 +81,12 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         TMP_Text itemProperty = infoWindow.GetChild(2).GetComponent<TMP_Text>();
 
         Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
+
+        if (itemImg == null)
+        {
+            itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
+        }
+
         image.sprite = itemImg;
         itemName.text = m_itemProperty.name;
 
@@ -89,7 +95,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if (propertyValue > 0)
             {
-                allProperty += $"{propertyName}: {propertyValue}\n"; // 아이템 속성 누적
+                allProperty += $"{propertyName} : {propertyValue}\n"; // 아이템 속성 누적
             }
         }
 

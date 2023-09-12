@@ -56,7 +56,7 @@ public class SB_ItemDataReader : MonoBehaviour
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().lethality = int.Parse(value[14]);
                 
                 // 이미지 삽입을 위함
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeImg(value[3]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeItemImg(value[3]);
             }
         }
         else

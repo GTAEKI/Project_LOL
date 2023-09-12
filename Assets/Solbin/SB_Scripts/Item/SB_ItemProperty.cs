@@ -17,6 +17,8 @@ public class SB_ItemProperty : MonoBehaviour
     public int attackSpeed; // 공격 속도
     public int armor; // 방어력
     public int magicResistance; // 마법방어력
+    public int magicPenetration; // 마법관통력
+    public int tenacity; // 강인함
     public int health; // 체력
     public int abilityHaste; // 스킬 가속
     public int lifeSteal; // 생명력 흡수
@@ -26,15 +28,28 @@ public class SB_ItemProperty : MonoBehaviour
     public int gold = 3000; // 아이템 가격 (통일)
         
     /// <summary>
-    /// 이미지 교체를 위한 메서드입니다.
+    /// 아이템 이미지 교체를 위한 메서드입니다.
     /// </summary>
     /// <param name="_sprite">ItemDataReader.cs에서 Sprite Name 받기</param>
-    public void ChangeImg(string _sprite)
+    public void ChangeItemImg(string _sprite)
     {
         string sprite = _sprite;
 
         Image image = transform.GetComponent<Image>();
         Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{sprite}");
+        Debug.Assert(itemImg != null);
+        image.sprite = itemImg;
+    }
+
+    /// <summary>
+    /// 장화 이미지 교체를 위한 메서드입니다.
+    /// </summary>
+    public void ChangeBootsImg(string _sprite)
+    {
+        string sprite = _sprite;
+
+        Image image = transform.GetComponent<Image>();
+        Sprite itemImg = Resources.Load<Sprite>($"Item Img/Boots/{sprite}");
         Debug.Assert(itemImg != null);
         image.sprite = itemImg;
     }
