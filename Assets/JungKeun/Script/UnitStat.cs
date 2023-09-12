@@ -2,6 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ���� ������ ���� Ŭ����
+/// ��μ�_230911
+/// </summary>
+public class CurrentUnitStat
+{
+    public UnitStat UnitStat { private set; get; }       // ���� ���� ������
+
+    public float Hp { private set; get; } = 0f;
+
+    /// <summary>
+    /// ���� ���� �����͸� �����ϴ� ������
+    /// ��μ�_230911
+    /// </summary>
+    /// <param name="unitStat"></param>
+    public CurrentUnitStat(UnitStat unitStat)
+    {
+        UnitStat = unitStat;
+    }
+
+    /// <summary>
+    /// ü�� ���� �Լ�
+    /// ��μ�_230911
+    /// </summary>
+    /// <param name="value">��ġ��</param>
+    public void SettingHp(float value) => Hp = value;
+
+    /// <summary>
+    /// ü�� ȸ�� �Լ�
+    /// ��μ�_230911
+    /// </summary>
+    /// <param name="value">ȸ����</param>
+    public void OnHeal(float value)
+    {
+        Hp += value;
+        
+        if(Hp >= UnitStat.Hp)
+        {
+            Hp = UnitStat.Hp;
+        }
+    }
+
+    /// <summary>
+    /// ������ �ο� �Լ�
+    /// ��μ�_230911
+    /// </summary>
+    /// <param name="value">������</param>
+    public void OnDamaged(float value)
+    {
+        Hp -= value;
+
+        if(Hp <= 0)
+        {
+            Hp = 0;
+        }
+    }
+}
+
 
 public class UnitStat
 {
@@ -83,7 +141,16 @@ public class UnitStat
     /// 임시 생성자
     /// 김민섭_230908
     /// </summary>
-    /// <param name="movementSpeed"></param>
+    public UnitStat(int hp, float movementSpeed)
+    {
+        Hp = hp;
+        MovementSpeed = movementSpeed;
+    }
+  
+    /// <summary>
+    /// 임시 생성자
+    /// 김민섭_230908
+    /// </summary>
     public UnitStat(int indexnumber, string name, string EnglishName, float Hp, float Mp, float Atk, float Defence, float MDefence, float AtkSpeed, float MoveMentSpeed,
                     float HpRecovery, float MpRecovery,float AttackRange, float Growthhp, float Growthmp, float Growthatk, float Growthdefence, float GrowthatkSpeed,
                     float GrowthmoveMentSpeed, float GrowthhpRecovery, float GrowthmpRecovery, float GrowthattackRange)
@@ -110,5 +177,22 @@ public class UnitStat
         this.GrowthhpRecovery = GrowthhpRecovery;
         this.GrowthmpRecovery = GrowthmpRecovery;
         this.GrowthattackRange = GrowthattackRange;
+    }
+
+    /// <summary>
+    /// �ִ� ü�� ���� �Լ�
+    /// ��μ�_230911
+    /// </summary>
+    /// <param name="value">��ġ��</param>
+    public void SettingMaxHp(float value) => Hp = value;
+
+    /// <summary>
+    /// �ִ� ü�� ���� �Լ�
+    /// ��μ�_230911
+    /// </summary>
+    /// <param name="value">������</param>
+    public void OnChangeMaxHp(float value)
+    {
+        Hp += value;
     }
 }
