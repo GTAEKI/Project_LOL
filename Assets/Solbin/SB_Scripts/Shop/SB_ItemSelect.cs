@@ -85,6 +85,11 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (itemImg == null)
         {
             itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
+
+            if (itemImg == null)
+            {
+                itemImg = Resources.Load<Sprite>($"Item Img/Myth/{m_itemProperty.englishName}");
+            }
         }
 
         image.sprite = itemImg;
@@ -127,6 +132,17 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
 
         Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
+
+        if (itemImg == null)
+        {
+            itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
+
+            if (itemImg == null)
+            {
+                itemImg = Resources.Load<Sprite>($"Item Img/Myth/{m_itemProperty.englishName}");
+            }
+        }
+
         image.sprite = itemImg;
         itemName.text = m_itemProperty.name;
 

@@ -65,4 +65,14 @@ public class SB_ItemProperty : MonoBehaviour
         Debug.Assert(itemImg != null);
         image.sprite = itemImg;
     }
+
+    public void ChangeMythImg(string _sprite)
+    {
+        string sprite = _sprite;
+
+        Image image = transform.GetComponent<Image>();
+        Sprite itemImg = Resources.Load<Sprite>($"Item Img/Myth/{sprite}");
+        Debug.Assert(itemImg != null);
+        image.sprite = itemImg;
+    }
 }

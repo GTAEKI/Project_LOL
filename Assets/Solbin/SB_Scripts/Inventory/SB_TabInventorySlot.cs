@@ -47,7 +47,6 @@ public class SB_TabInventorySlot : MonoBehaviour
     {
         itemCounter--;
 
-        Debug.Log(itemCounter);
         Transform firstPlayerItem = firstTeam.transform.GetChild(1).transform.GetChild(4);
 
         firstPlayerItem.GetChild(itemCounter).GetComponent<Image>().sprite = null;
