@@ -10,7 +10,7 @@ public class BushCheck : MonoBehaviour
     {
         if(other.tag == "Bush")
         {
-            Debug.Log("부쉬 들어감요");
+            Debug.Log("In the Bush");
 
             transform.parent.GetComponent<MeshRenderer>().material.SetFloat(floatAlpha, 0.5f);
         }
@@ -20,7 +20,7 @@ public class BushCheck : MonoBehaviour
     {
         if(other.tag == "Bush")
         {
-            Debug.Log("부쉬 나감요");
+            Debug.Log("Out the Bush");
 
             transform.parent.GetComponent<MeshRenderer>().material.SetFloat(floatAlpha, 1f);
         }

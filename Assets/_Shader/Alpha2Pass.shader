@@ -31,7 +31,7 @@ Shader "MinSeob/Alpha2Pass & Silhouette"
         ENDCG
 
             ZWrite Off
-            ZTest Always
+            ZTest GEqual
 
             Stencil
             {
