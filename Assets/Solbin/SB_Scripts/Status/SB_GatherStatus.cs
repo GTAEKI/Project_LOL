@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,12 +18,13 @@ public class SB_GatherStatus : MonoBehaviour
     {
         List<GameObject> itemList = _itemList;
 
+
         for (int i = 0; i < itemList.Count; i++)
         {
             attackDamege += itemList[i].GetComponent<SB_ItemProperty>().attackDamage;
             attackSpeed += itemList[i].GetComponent<SB_ItemProperty>().attackSpeed;
             armor += itemList[i].GetComponent<SB_ItemProperty>().armor;
-            magicResistance  += itemList[i].GetComponent<SB_ItemProperty>().magicResistance;
+            magicResistance += itemList[i].GetComponent<SB_ItemProperty>().magicResistance;
             health += itemList[i].GetComponent<SB_ItemProperty>().health;
             abilityHaste += itemList[i].GetComponent<SB_ItemProperty>().abilityHaste;
             lifeSteal += itemList[i].GetComponent<SB_ItemProperty>().lifeSteal;
@@ -34,4 +34,3 @@ public class SB_GatherStatus : MonoBehaviour
         }
     }
 }
-

@@ -23,7 +23,7 @@ public class SB_ItemDataReader : MonoBehaviour
     /// </summary>
     void Start()
     {
-        string itemFilePath = "Assets/Solbin/SB_csv/itemInfo.csv";
+        string itemFilePath = "Assets/Solbin/SB_csv/LegendItemInfo.csv";
 
         if (File.Exists(itemFilePath))
         {
