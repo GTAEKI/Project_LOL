@@ -11,11 +11,13 @@ public class SB_ButtonSystem : MonoBehaviour
     Button m_returnButton;
     GameObject m_item;
     SB_InvenrotySlot invenrotySlot;
+    SB_TabInventorySlot tabInventorySlot;
     SB_Gold gold;
 
     public UnityEvent buyItem;
     public UnityEvent sellItem;
 
+    List<GameObject> buyList = new List<GameObject>(); // 구매한 아이템 리스트
 
     public void Start()
     {
@@ -26,6 +28,7 @@ public class SB_ButtonSystem : MonoBehaviour
         m_returnButton.interactable = false;
 
         invenrotySlot = GameObject.Find("Slot Group").transform.GetComponent<SB_InvenrotySlot>();
+        tabInventorySlot = GameObject.Find("TapUI").GetComponent<SB_TabInventorySlot>();
         gold = GameObject.Find("Inven Gold").transform.GetComponent<SB_Gold>();
     }
 
@@ -50,7 +53,11 @@ public class SB_ButtonSystem : MonoBehaviour
     {
         GameObject item = m_item;
 
+        buyList.Add(item);
+
         invenrotySlot.ReceiveItem(item);
+        tabInventorySlot.ReceiveItem(item);
+
         m_buyButton.interactable = false;
         m_item.GetComponent<Button>().interactable = false; // 선택한 아이템 버튼 비활성화
 
@@ -70,9 +77,8 @@ public class SB_ButtonSystem : MonoBehaviour
     public void PressReturn()
     {
         invenrotySlot.ReturnItem();
-
-        sellItem.Invoke();
-
-        ActiveBuyButton(m_item);
+        sellItem.Invoke(); // 골드, Tab 인벤토리
+        ActiveBuyButton(buyList[buyList.Count - 1]);
+        buyList.RemoveAt(buyList.Count - 1); // 마지막 구매 아이템 리스트에서 제거
     }
 }

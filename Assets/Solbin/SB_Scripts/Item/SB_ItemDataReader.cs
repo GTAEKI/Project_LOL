@@ -4,24 +4,26 @@ using UnityEngine;
 using System.IO;
 using static UnityEditor.Progress;
 
+/// <summary>
+/// 아이템의 정보 csv로 읽어와 property에 할당 
+/// </summary>
 public class SB_ItemDataReader : MonoBehaviour
 {
     Transform m_legendContainer;
-    public GameObject m_legendItemPrefab;
+    public GameObject m_itemPrefab;
 
     private void Awake()
     {
         m_legendContainer = GameObject.Find("Container_Legend").transform; // 전설 아이템 목록
-        Debug.Assert(m_legendItemPrefab != null);
+        Debug.Assert(m_itemPrefab != null);
     }
 
+    /// <summary>
+    /// itemInfo csv를 읽고 정보를 분리, 스크립터블 오브젝트에 속성을 할당합니다.
+    /// </summary>
     void Start()
     {
-        /// <summary>
-        /// itemInfo csv를 읽고 정보를 분리, 스크립터블 오브젝트에 속성을 할당합니다.
-        /// </summary>
-
-        string itemFilePath = "Assets/Solbin/SB_csv/itemInfo.csv";
+        string itemFilePath = "Assets/Solbin/SB_csv/LegendItemInfo.csv";
 
         if (File.Exists(itemFilePath))
         {
@@ -32,7 +34,7 @@ public class SB_ItemDataReader : MonoBehaviour
 
             for (int i = 0; i < itemAccount; i++) // 아이템 슬롯 생성
             {
-                newLegendItem[i] = Instantiate(m_legendItemPrefab);
+                newLegendItem[i] = Instantiate(m_itemPrefab);
                 newLegendItem[i].transform.SetParent(m_legendContainer.transform, false);
             }
 
@@ -54,9 +56,16 @@ public class SB_ItemDataReader : MonoBehaviour
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().criticalStrikeChance = int.Parse(value[12]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().movementSpeed = int.Parse(value[13]);
                 newLegendItem[i - 1].GetComponent<SB_ItemProperty>().lethality = int.Parse(value[14]);
-                
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().armorPenetration = int.Parse(value[15]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().magicPenetration = int.Parse(value[16]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().abilityPower = int.Parse(value[17]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().mana = int.Parse(value[18]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().basicHealthRegenaration = int.Parse(value[20]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().basicManaRegenaration = int.Parse(value[21]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().healthAndShieldPower = int.Parse(value[22]);
+
                 // 이미지 삽입을 위함
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeImg(value[3]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeItemImg(value[3]);
             }
         }
         else
