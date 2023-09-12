@@ -1,10 +1,15 @@
 using System;
 using UnityEngine;
 
-public abstract class Unit : MonoBehaviour
+public class Unit : MonoBehaviour
 {
-    protected UnitStat unitStat;     // ���� ���� ������ (������)
-    protected Vector3 targetPos;          // �̵��� ��ġ
+    // ������
+    protected UnitStat unitStat;                    // ���� ���� ������ (������)
+    protected CurrentUnitStat currentUnitStat;      // ���� ���� ������ (���簪)
+    protected Vector3 targetPos;                    // �̵��� ��ġ
+
+    // UI
+    protected UI_UnitHUD unitHUD;       // ���� ü�¹�
 
     [Header("���� ���� ����")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
@@ -26,6 +31,15 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    public CurrentUnitStat CurrentUnitStat
+    {
+        get => currentUnitStat;
+        set
+        {
+            currentUnitStat = value;
+        }
+    }
+
     #endregion
 
     #region ���
@@ -40,7 +54,17 @@ public abstract class Unit : MonoBehaviour
         Init();
     }
 
-    public abstract void Init();
+    /// <summary>
+    /// ���� �ʱ�ȭ �Լ�
+    /// ��μ�_230911
+    /// </summary>
+    public virtual void Init()
+    {
+        currentUnitStat = new CurrentUnitStat(unitStat);
+        currentUnitStat.OnHeal(unitStat.Hp);
+
+        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // ���� HUD ����
+    }
 
     /// <summary>
     /// InputManager Ŭ������ OnUpdate �Լ����� ���Ǵ� �Լ�
