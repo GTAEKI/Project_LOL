@@ -27,12 +27,6 @@ public class SB_InvenrotySlot : MonoBehaviour, IDropHandler
         gatherStatus = transform.parent.GetComponent<SB_GatherStatus>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /// <summary>
     /// 구매한 아이템을 상점에서 전달받아 인벤토리에 배치.
     /// </summary>

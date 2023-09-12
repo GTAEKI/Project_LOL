@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SolBin_Scene.unity
+    guid: 4a19cf44b090a164785cbd21ee6c790e
   m_configObjects: {}

@@ -144,9 +144,9 @@ public class UnitStat
     public UnitStat(int hp, float movementSpeed)
     {
         Hp = hp;
-        MovementSpeed = movementSpeed;
+        MoveMentSpeed = movementSpeed;
     }
-  
+
     /// <summary>
     /// 임시 생성자
     /// 김민섭_230908
