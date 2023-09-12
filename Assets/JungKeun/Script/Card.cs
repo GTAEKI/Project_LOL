@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Strength : MonoBehaviour
+public class Card : MonoBehaviour
 {
     public GameObject[] strength;
     public GameObject RetryNumber;

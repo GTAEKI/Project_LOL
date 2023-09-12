@@ -25,12 +25,7 @@ public class statDataReader : MonoBehaviour
             Debug.Log(lines.Length);
             DataManger.unitStatDictionary = new Dictionary<int, UnitStat>();
 
-/*
-            for (int i = 0; i < statAcount; i++) // 아이템 슬롯 생성
-            {
-                newStat[i] = Instantiate(m_statPrefab);
-                newStat[i].transform.SetParent(m_statData.transform, false);
-            }*/
+
 
             for (int i = 1; i < lines.Length; i++) // 쉼표 분리(헤더 제외) & 스텟 속성 삽입
             {
