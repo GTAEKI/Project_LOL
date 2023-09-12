@@ -553,7 +553,7 @@ GameObject:
   - component: {fileID: 517230859}
   - component: {fileID: 517230858}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: GameView Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1610,7 +1610,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1757734641
 MonoBehaviour:
