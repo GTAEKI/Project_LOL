@@ -25,7 +25,7 @@ public class SB_PopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (m_isPop)
+        if (m_isPop && !SB_ItemSelect.hoverMouse) // 아이템 버튼 위 & 상점 UI 위에 존재하면
             Collapse();
     }
 

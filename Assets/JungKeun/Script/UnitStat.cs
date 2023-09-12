@@ -146,7 +146,7 @@ public class UnitStat
         Hp = hp;
         MoveMentSpeed = movementSpeed;
     }
-  
+
     /// <summary>
     /// ?꾩떆 ?앹꽦??
     /// 源誘쇱꽠_230908

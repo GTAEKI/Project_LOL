@@ -14,8 +14,8 @@ TagManager:
   - UI
   - Obstacle
   - Target
-  - 
-  - 
+  - Fow
+  - Vision
   - Floor
   - Unit
   - Bush

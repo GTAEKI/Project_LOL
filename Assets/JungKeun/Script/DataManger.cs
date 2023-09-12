@@ -4,7 +4,6 @@ using UnityEngine;
 
 public static class DataManger
 {
-    //public static UnitStat unitStat;
     public static Dictionary<int, UnitStat> unitStatDictionary;
 
 }
