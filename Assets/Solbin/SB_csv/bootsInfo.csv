@@ -1,8 +1,8 @@
-﻿Name,EnglishName,MovementSpeed,AbilityHaste,AttackSpeed,MagicPenetration,Armor,Magic Resistance,Tenacity
-신속의 장화,BootsOfSwiftness,60,0,,,,,
-명석함의 아이오니아 장화,LonianBootsOfLucidity,45,20,,,,,
-기동력의 장화,BootsOfMobility,25,0,,,,,
-광전사의 군화,BerserkersGreaves,45,,35,,,,
-마법사의 신발,SorcerersShoes,45,,,18,,,
-판금장화,PlatedSteelcaps,45,,,,20,,
-헤르메스의 발걸음,MercurysTreads,45,,,,,25,30
+﻿Name,EnglishName,MovementSpeed,AbilityHaste,AttackSpeed,MagicPenetration,Armor,MagicResistance,Tenacity
+신속의 장화,BootsOfSwiftness,60,0,0,0,0,0,0
+명석함의 아이오니아 장화,LonianBootsOfLucidity,45,20,0,0,0,0,0
+기동력의 장화,BootsOfMobility,25,0,0,0,0,0,0
+광전사의 군화,BerserkersGreaves,45,0,35,0,0,0,0
+마법사의 신발,SorcerersShoes,45,0,0,18,0,0,0
+판금장화,PlatedSteelcaps,45,0,0,0,20,0,0
+헤르메스의 발걸음,MercurysTreads,45,0,0,0,0,25,30
