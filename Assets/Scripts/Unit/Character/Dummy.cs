@@ -6,7 +6,7 @@ public class Dummy : Unit
 {
     public override void Init()
     {
-        Debug.Log("ÀÌ°Ç Çã¼ö¾Æºñ´Ù.");
+        Debug.Log("ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½Æºï¿½ï¿½.");
 
         unitStat = new UnitStat(10000, 0f);
 
