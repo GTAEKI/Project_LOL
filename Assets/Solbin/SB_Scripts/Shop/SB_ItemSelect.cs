@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
+using static Unity.VisualScripting.Metadata;
 
 public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -42,20 +43,25 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         };
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (hoverMouse)
         {
             RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
-            Vector2 localMousePos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(infoRect.parent as RectTransform, 
-                Input.mousePosition, Camera.main, out localMousePos);
-            infoRect.anchoredPosition = new Vector2(localMousePos.x, localMousePos.y - 50); // 임의 위치보정: -50
+            Vector2 mousePosition = Input.mousePosition;
+            Vector2 windowPosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle
+                (infoRect, mousePosition, Camera.main, out windowPosition);
+
+            infoRect.anchoredPosition = windowPosition;
+
+            Debug.Log(windowPosition);
+            Debug.Log(this.gameObject.name);
         }
         else
         {
-            RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
-            infoRect.anchoredPosition = new Vector2(-1765, -550);
+            //RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
+            //infoRect.anchoredPosition = new Vector2(-1765, -550);
         }
     }
 
