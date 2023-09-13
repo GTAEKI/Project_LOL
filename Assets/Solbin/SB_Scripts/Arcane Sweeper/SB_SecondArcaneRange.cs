@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class SB_SecondArcaneRange : MonoBehaviour
@@ -10,14 +11,21 @@ public class SB_SecondArcaneRange : MonoBehaviour
     void Start()
     {
         secondRange = transform.GetChild(0).gameObject;
+        Debug.Assert(secondRange != null);
     }
 
-    // Update is called once per frame
+    // Update is called once per frame  
     void Update()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = -0.03f;
-
-        secondRange.transform.position = mousePosition;
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        {
+            if (Vector3.Distance(hit.point, transform.position) < 12) // 12는 매직넘버
+            {
+                Vector3 rangePosition = new Vector3(hit.point.x, hit.point.y + 1, hit.point.z);
+                Vector3 localPosition = transform.InverseTransformPoint(rangePosition);
+                secondRange.transform.localPosition = localPosition;
+            }
+        }
     }
 }

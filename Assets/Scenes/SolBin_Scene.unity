@@ -3312,14 +3312,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351231702}
-  m_LocalRotation: {x: 0.45584816, y: -0, z: -0, w: 0.8900576}
-  m_LocalPosition: {x: 0, y: 11.67, z: -8.12}
+  m_LocalRotation: {x: 0.48016217, y: -0, z: -0, w: 0.8771798}
+  m_LocalPosition: {x: 0, y: 20.79, z: -14.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 54.239, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 57.392, y: 0, z: 0}
 --- !u!1 &351726697
 GameObject:
   m_ObjectHideFlags: 0
@@ -4508,7 +4508,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498002374}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -4572,7 +4572,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498002374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.955, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10247,13 +10247,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1260055756}
   - component: {fileID: 1260055757}
+  - component: {fileID: 1260055758}
   m_Layer: 0
-  m_Name: rangeTest_1
+  m_Name: Player Range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1260055756
 Transform:
   m_ObjectHideFlags: 0
@@ -10322,6 +10323,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1260055758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260055755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1be742bc5c7ba644a61485bb48115cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1269448008
 GameObject:
   m_ObjectHideFlags: 0
@@ -14808,8 +14821,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 240456160}
   m_HandleRect: {fileID: 240456159}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -17614,7 +17627,7 @@ GameObject:
   - component: {fileID: 1989419345}
   - component: {fileID: 1989419346}
   m_Layer: 0
-  m_Name: rangeTest_2
+  m_Name: Item Range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17628,8 +17641,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1989419344}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.03}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.6, y: 0.60000026, z: 0.60000026}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1260055756}
@@ -18954,6 +18967,13 @@ MonoBehaviour:
   criticalStrikeChance: 0
   movementSpeed: 0
   lethality: 0
+  armorPenetration: 0
+  magicPenetration: 0
+  abilityPower: 0
+  mana: 0
+  basicHealthRegenaration: 0
+  basicManaRegenaration: 0
+  healthAndShieldPower: 0
 --- !u!114 &165801983195569454
 MonoBehaviour:
   m_ObjectHideFlags: 0
