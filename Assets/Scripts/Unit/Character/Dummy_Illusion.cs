@@ -13,15 +13,21 @@ public class Dummy_Illusion : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        meshRenderer.materials[0].color = Color.red;
-        IsPossible = false;
+        if (other.tag != "Bush")
+        {
+            meshRenderer.materials[0].color = Color.red;
+            IsPossible = false;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        meshRenderer.materials[0].color = Color.green;
-        IsPossible = true;
+        if (other.tag != "Bush")
+        {
+            meshRenderer.materials[0].color = Color.green;
+            IsPossible = true;
+        }
     }
 }
