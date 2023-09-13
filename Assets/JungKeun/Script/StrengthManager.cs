@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,12 +32,15 @@ public class StrengthManager : MonoBehaviour
 
     public Button[] myButton;
 
+    private Strength strengthes;
+
     public void Start()
     {
+
         myButton[0].onClick.AddListener(() => clickCard(myButton[0].transform));
         myButton[1].onClick.AddListener(() => clickCard(myButton[1].transform));
         myButton[2].onClick.AddListener(() => clickCard(myButton[2].transform));
-       
+
 
 
         // 스왑을 500번 돌려
@@ -64,7 +66,7 @@ public class StrengthManager : MonoBehaviour
 
 
     }
-   
+
 
 
     public void reroll()
@@ -207,17 +209,21 @@ public class StrengthManager : MonoBehaviour
 
     public void clickCard(Transform clickedTransform)
     {
-        GameObject clickedCard= GetComponent<GameObject>();
-        //Debug.Log(clickedCard.transform.GetChild(1).GetComponent<TMP_Text>());
+        GameObject clickedCard = GetComponent<GameObject>();
+
 
         if (turn == 0)
         {
             StrengthCase[0].gameObject.GetComponent<Image>().sprite = clickedTransform.transform.GetChild(0).GetComponent<Image>().sprite;
             explanation[0].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = clickedTransform.transform.GetChild(1).GetComponent<TMP_Text>().text;
             explanation[0].transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = clickedTransform.transform.GetChild(2).GetComponent<TMP_Text>().text;
+
+
+
             strengthcanvas.gameObject.SetActive(false);
+
         }
-        else if(turn ==1)
+        else if (turn == 1)
         {
             StrengthCase[1].gameObject.GetComponent<Image>().sprite = clickedTransform.transform.GetChild(0).GetComponent<Image>().sprite;
             explanation[1].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = clickedTransform.transform.GetChild(1).GetComponent<TMP_Text>().text;
@@ -240,6 +246,71 @@ public class StrengthManager : MonoBehaviour
             explanation[3].transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = clickedTransform.transform.GetChild(2).GetComponent<TMP_Text>().text;
             strengthcanvas.gameObject.SetActive(false);
 
+        }
+
+        for (int i = 0; i < StrengthCase.Length; i++)
+        {
+            if (StrengthCase[i] != null)
+            {
+
+             
+                if (StrengthCase[i].gameObject.GetComponent<Image>().name == "evilspirit")
+                {
+                    strengthes.Ap += 100;
+                }
+
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "proficiency")
+                {
+                    strengthes.AttackSpeed += 100;
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "mindtransfer")
+                {
+                    strengthes.Hp += strengthes.Mp;
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "massivestrength")
+                {
+                    strengthes.atkper += 15;
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "guillotine")
+                {
+                    strengthes.atk += 25;
+                    strengthes.SkillBoost += 10;
+                    strengthes.ArmorPenetration += 15;
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "threadneedle")
+                {
+                    strengthes.ArmorPenetrationper += 25;
+                    strengthes.MagicPenetrationper += 25;
+
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "iteration")
+                {
+                    strengthes.SkillBoost += 60;
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "fatalattack")
+                {
+                    strengthes.CriticalChance += 40;
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "heavenlybody")
+                {
+                    strengthes.Hp += 1000;
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "atrocities")
+                {
+                    strengthes.Apper += 15;
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "continuation")
+                {
+                    strengthes.MovementSpeed += (int)(strengthes.SkillBoost * 1.5);
+                }
+                else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "mysteriousFist")
+                {
+                    strengthes.atk += 100;
+                    strengthes.AttackSpeed += 15;
+                }
+
+
+            }
         }
 
     }

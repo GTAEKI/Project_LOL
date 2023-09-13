@@ -12,6 +12,7 @@ public class Strength : MonoBehaviour
     public int atkper;
     public int atk;
     public int Hp;
+    public int Mp;
     public int SkillBoost;
     public int CriticalChance;
     public int MovementSpeed;
@@ -19,5 +20,7 @@ public class Strength : MonoBehaviour
     public int ArmorPenetrationper;
     public int MagicPenetration;
     public int MagicPenetrationper;
+
+
 
 }

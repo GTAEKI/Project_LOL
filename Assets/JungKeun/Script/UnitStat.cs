@@ -69,7 +69,6 @@ public class UnitStat
     //?몃뜳??踰덊샇
     public static int PlayerCharacterId = -1;
 
-
     public int indexnumber { get; private set; }
     //梨뷀뵾???쒓??대쫫
     public string name { get; private set; }
