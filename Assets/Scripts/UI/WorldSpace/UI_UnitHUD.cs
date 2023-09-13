@@ -22,11 +22,11 @@ public class UI_UnitHUD : UI_Base
     private static readonly int floatWidth = Shader.PropertyToID(WIDTH);
     private static readonly int floatThickness = Shader.PropertyToID(THICKNESS);
 
-    private float hpShieldRatio;        // ½Çµå Ã¼·Â ºñÀ²
+    private float hpShieldRatio;        // ì‹¤ë“œ ì²´ë ¥ ë¹„ìœ¨
     private float rectWidth = 100f;
     private float thickness = 2f;
 
-    #region »ó¼ö
+    #region ìƒìˆ˜
 
     private const string STEP = "_Steps";
     private const string RATIO = "_HSRatio";
@@ -35,7 +35,7 @@ public class UI_UnitHUD : UI_Base
 
     #endregion
 
-    #region Å×½ºÆ® º¯¼ö
+    #region í…ŒìŠ¤íŠ¸ ë³€ìˆ˜
 
     private float sp = 0f;
     private float speed = 3f;
@@ -53,8 +53,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// ½¦ÀÌ´õ ¸ÓÆ¼¸®¾ó »ı¼º ÇÔ¼ö
-    /// ±è¹Î¼·_230911
+    /// ì‰ì´ë” ë¨¸í‹°ë¦¬ì–¼ ìƒì„± í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230911
     /// </summary>
     private void CreateMaterial()
     {
@@ -68,18 +68,18 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// ÇöÀç gameview Ä«¸Ş¶ó¿¡ ¸ÂÃç¼­ À§Ä¡¿Í °¢µµ¸¦ °è»êÇÑ´Ù.
-    /// ±è¹Î¼·_230911
+    /// í˜„ì¬ gameview ì¹´ë©”ë¼ì— ë§ì¶°ì„œ ìœ„ì¹˜ì™€ ê°ë„ë¥¼ ê³„ì‚°í•œë‹¤.
+    /// ê¹€ë¯¼ì„­_230911
     /// </summary>
     private void UpdateTransformHUD()
     {
-        transform.position = transform.parent.position + Vector3.up;
+        transform.position = transform.parent.position + Vector3.up * 2f;
         transform.rotation = gameViewCamera.transform.rotation;
     }
 
     /// <summary>
-    /// HUD ¼öÄ¡ °è»ê ÇÔ¼ö
-    /// ±è¹Î¼·_230911
+    /// HUD ìˆ˜ì¹˜ ê³„ì‚° í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230911
     /// </summary>
     private void UpdateValueHUD()
     {
@@ -90,11 +90,11 @@ public class UI_UnitHUD : UI_Base
 
         float step;
 
-        // ½¯µå°¡ Á¸Àç ÇÒ ¶§
+        // ì‰´ë“œê°€ ì¡´ì¬ í•  ë•Œ
         if (sp > 0)
         {
             if (unit.CurrentUnitStat.Hp + sp > unit.CurrentUnitStat.UnitStat.Hp)
-            {   // ÇöÀç Ã¼·Â + ½¯µå > ÃÖ´ë Ã¼·Â
+            {   // í˜„ì¬ ì²´ë ¥ + ì‰´ë“œ > ìµœëŒ€ ì²´ë ¥
                 hpShieldRatio = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
                 GetImage((int)Images.Img_Mana).fillAmount = 1f;
                 step = unit.CurrentUnitStat.Hp / 300f;
@@ -123,7 +123,7 @@ public class UI_UnitHUD : UI_Base
         GetImage((int)Images.Img_Separator).material.SetFloat(floatThickness, thickness);
     }
 
-    #region Å×½ºÆ® ÄÚµå
+    #region í…ŒìŠ¤íŠ¸ ì½”ë“œ
 
     private IEnumerator CoroutineTest()
     {
