@@ -21,12 +21,4 @@ public class CameraController : MonoBehaviour
             transform.LookAt(player.transform);
         }
     }
-
-    public void SetQuarterView(Vector3 _delta)
-    {
-        mode = Define.CameraMode.QuaterView;
-        delta = _delta;
-    }
-
-    public void SetPlayer(GameObject _player) => player = _player;
 }

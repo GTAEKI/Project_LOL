@@ -22,11 +22,11 @@ public class UI_UnitHUD : UI_Base
     private static readonly int floatWidth = Shader.PropertyToID(WIDTH);
     private static readonly int floatThickness = Shader.PropertyToID(THICKNESS);
 
-    private float hpShieldRatio;        // 실드 체력 비율
+    private float hpShieldRatio;        // ?ㅻ뱶 泥대젰 鍮꾩쑉
     private float rectWidth = 100f;
     private float thickness = 2f;
 
-    #region 상수
+    #region ?곸닔
 
     private const string STEP = "_Steps";
     private const string RATIO = "_HSRatio";
@@ -35,7 +35,7 @@ public class UI_UnitHUD : UI_Base
 
     #endregion
 
-    #region 테스트 변수
+    #region ?뚯뒪??蹂??
 
     private float sp = 0f;
     private float speed = 3f;
@@ -53,8 +53,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// 쉐이더 머티리얼 생성 함수
-    /// 김민섭_230911
+    /// ?먯씠??癒명떚由ъ뼹 ?앹꽦 ?⑥닔
+    /// 源誘쇱꽠_230911
     /// </summary>
     private void CreateMaterial()
     {
@@ -68,8 +68,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// 현재 gameview 카메라에 맞춰서 위치와 각도를 계산한다.
-    /// 김민섭_230911
+    /// ?꾩옱 gameview 移대찓?쇱뿉 留욎떠???꾩튂? 媛곷룄瑜?怨꾩궛?쒕떎.
+    /// 源誘쇱꽠_230911
     /// </summary>
     private void UpdateTransformHUD()
     {
@@ -78,8 +78,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// HUD 수치 계산 함수
-    /// 김민섭_230911
+    /// HUD ?섏튂 怨꾩궛 ?⑥닔
+    /// 源誘쇱꽠_230911
     /// </summary>
     private void UpdateValueHUD()
     {
@@ -90,11 +90,11 @@ public class UI_UnitHUD : UI_Base
 
         float step;
 
-        // 쉴드가 존재 할 때
+        // ?대뱶媛 議댁옱 ????
         if (sp > 0)
         {
             if (unit.CurrentUnitStat.Hp + sp > unit.CurrentUnitStat.UnitStat.Hp)
-            {   // 현재 체력 + 쉴드 > 최대 체력
+            {   // ?꾩옱 泥대젰 + ?대뱶 > 理쒕? 泥대젰
                 hpShieldRatio = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
                 GetImage((int)Images.Img_Mana).fillAmount = 1f;
                 step = unit.CurrentUnitStat.Hp / 300f;
@@ -123,7 +123,7 @@ public class UI_UnitHUD : UI_Base
         GetImage((int)Images.Img_Separator).material.SetFloat(floatThickness, thickness);
     }
 
-    #region 테스트 코드
+    #region ?뚯뒪??肄붾뱶
 
     private IEnumerator CoroutineTest()
     {

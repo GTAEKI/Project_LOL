@@ -15,16 +15,16 @@ public class UI_DummyController : UI_Popup
         Btn_Exit
     }
 
-    private GameObject create_dummy_illusion;               // ¼³Ä¡ À§Ä¡ »ı¼º ´õ¹Ì
+    private GameObject create_dummy_illusion;               // ì„¤ì¹˜ ìœ„ì¹˜ ìƒì„± ë”ë¯¸
     private Dummy_Illusion dummy_illusion;          
 
-    public bool IsCreate { private set; get; }      // »ı¼º È°¼ºÈ­ Ã¼Å©
+    public bool IsCreate { private set; get; }      // ìƒì„± í™œì„±í™” ì²´í¬
 
-    private const float RAY_DISTANCE = 100f;     // ·¹ÀÌ »çÁ¤°Å¸®
+    private const float RAY_DISTANCE = 100f;     // ë ˆì´ ì‚¬ì •ê±°ë¦¬
 
     /// <summary>
-    /// ÇØ´ç ÆË¾÷ÀÌ »ı¼ºµÉ ¶§, ÃÊ±âÈ­ ÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230907
+    /// í•´ë‹¹ íŒì—…ì´ ìƒì„±ë  ë•Œ, ì´ˆê¸°í™” í•˜ëŠ” í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230907
     /// </summary>
     public override void Init()
     {
@@ -36,44 +36,44 @@ public class UI_DummyController : UI_Popup
 
         create_dummy_illusion.SetActive(false);
 
-        // UI ¼¼ÆÃ
-        Bind<Button>(typeof(Buttons));                    // Button Å¸ÀÔÀÇ UIµéÀ» ¹ÙÀÎµù
+        // UI ì„¸íŒ…
+        Bind<Button>(typeof(Buttons));                    // Button íƒ€ì…ì˜ UIë“¤ì„ ë°”ì¸ë”©
 
-        // ¹öÆ° ÀÌº¥Æ® ¼¼ÆÃ
-        BindEvent(GetButton((int)Buttons.Btn_CreateDummy).gameObject, OnCreateDummy);       // ´õ¹Ì »ı¼º ¹öÆ° ÀÌº¥Æ® ºÎ¿©
-        BindEvent(GetButton((int)Buttons.Btn_RemoveDummy).gameObject, OnRemoveDummy);       // ´õ¹Ì Á¦°Å ¹öÆ° ÀÌº¥Æ® ºÎ¿©
-        BindEvent(GetButton((int)Buttons.Btn_Exit).gameObject, OnExit);                     // ÆË¾÷ ³ª°¡±â ¹öÆ° ÀÌº¥Æ® ºÎ¿©
+        // ë²„íŠ¼ ì´ë²¤íŠ¸ ì„¸íŒ…
+        BindEvent(GetButton((int)Buttons.Btn_CreateDummy).gameObject, OnCreateDummy);       // ë”ë¯¸ ìƒì„± ë²„íŠ¼ ì´ë²¤íŠ¸ ë¶€ì—¬
+        BindEvent(GetButton((int)Buttons.Btn_RemoveDummy).gameObject, OnRemoveDummy);       // ë”ë¯¸ ì œê±° ë²„íŠ¼ ì´ë²¤íŠ¸ ë¶€ì—¬
+        BindEvent(GetButton((int)Buttons.Btn_Exit).gameObject, OnExit);                     // íŒì—… ë‚˜ê°€ê¸° ë²„íŠ¼ ì´ë²¤íŠ¸ ë¶€ì—¬
     }
 
-    #region ¹öÆ° ÀÌº¥Æ®
+    #region ë²„íŠ¼ ì´ë²¤íŠ¸
 
     /// <summary>
-    /// ´õ¹Ì »ı¼º È°¼ºÈ­ Ã³¸® ¹öÆ° ÀÌº¥Æ® ÇÔ¼ö
-    /// ±è¹Î¼·_230907
+    /// ë”ë¯¸ ìƒì„± í™œì„±í™” ì²˜ë¦¬ ë²„íŠ¼ ì´ë²¤íŠ¸ í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230907
     /// </summary>
-    /// <param name="data">Å¬¸¯ ÀÌº¥Æ® µ¥ÀÌÅÍ</param>
+    /// <param name="data">í´ë¦­ ì´ë²¤íŠ¸ ë°ì´í„°</param>
     private void OnCreateDummy(PointerEventData data)
     {
-        Debug.Log("´õ¹Ì »ı¼º È°¼ºÈ­!");
+        Debug.Log("ë”ë¯¸ ìƒì„± í™œì„±í™”!");
         IsCreate = true;
         create_dummy_illusion?.SetActive(true);
     }
 
     /// <summary>
-    /// ´õ¹Ì Á¦°Å È°¼ºÈ­ Ã³¸® ¹öÆ° ÀÌº¥Æ® ÇÔ¼ö
-    /// ±è¹Î¼·_230907
+    /// ë”ë¯¸ ì œê±° í™œì„±í™” ì²˜ë¦¬ ë²„íŠ¼ ì´ë²¤íŠ¸ í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230907
     /// </summary>
-    /// <param name="data">Å¬¸¯ ÀÌº¥Æ® µ¥ÀÌÅÍ</param>
+    /// <param name="data">í´ë¦­ ì´ë²¤íŠ¸ ë°ì´í„°</param>
     private void OnRemoveDummy(PointerEventData data)
     {
-        Debug.Log("´õ¹Ì »ı¼º ºñÈ°¼ºÈ­!");
+        Debug.Log("ë”ë¯¸ ìƒì„± ë¹„í™œì„±í™”!");
         IsCreate = false;
         create_dummy_illusion?.SetActive(false);
     }
 
     /// <summary>
-    /// ÆË¾÷ ³ª°¡±â ¹öÆ° ÀÌº¥Æ® ÇÔ¼ö
-    /// ±è¹Î¼·_230907
+    /// íŒì—… ë‚˜ê°€ê¸° ë²„íŠ¼ ì´ë²¤íŠ¸ í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230907
     /// </summary>
     /// <param name="data"></param>
     private void OnExit(PointerEventData data) => ClosePopupUI();
@@ -82,14 +82,14 @@ public class UI_DummyController : UI_Popup
 
     private void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;      // UI ÅÍÄ¡ ¹æÁö
+        if (EventSystem.current.IsPointerOverGameObject()) return;      // UI í„°ì¹˜ ë°©ì§€
 
         if(IsCreate && create_dummy_illusion != null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor", "Bush")))
             {
                 Vector3 _location = hit.point;
                 create_dummy_illusion.transform.position = _location;
@@ -104,15 +104,15 @@ public class UI_DummyController : UI_Popup
             RaycastHit hit;
 
             if(IsCreate)
-            {   // ´õ¹Ì »ı¼º
-                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
+            {   // ë”ë¯¸ ìƒì„±
+                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor", "Bush")))
                 {
                     GameObject dummy = Managers.Resource.Instantiate("Unit/Dummy", hit.point, Quaternion.identity);
                     dummy.transform.position = new Vector3(dummy.transform.position.x, dummy.transform.localScale.y, dummy.transform.position.z);
                 }
             }
             else
-            {   // ´õ¹Ì Á¦°Å
+            {   // ë”ë¯¸ ì œê±°
                 if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
                 {
                     Dummy dummy = hit.transform.GetComponent<Dummy>();
