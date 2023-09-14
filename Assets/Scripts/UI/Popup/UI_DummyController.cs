@@ -15,16 +15,16 @@ public class UI_DummyController : UI_Popup
         Btn_Exit
     }
 
-    private GameObject create_dummy_illusion;               // 설치 위치 생성 더미
+    private GameObject create_dummy_illusion;               // ?ㅼ튂 ?꾩튂 ?앹꽦 ?붾?
     private Dummy_Illusion dummy_illusion;          
 
-    public bool IsCreate { private set; get; }      // 생성 활성화 체크
+    public bool IsCreate { private set; get; }      // ?앹꽦 ?쒖꽦??泥댄겕
 
-    private const float RAY_DISTANCE = 100f;     // 레이 사정거리
+    private const float RAY_DISTANCE = 100f;     // ?덉씠 ?ъ젙嫄곕━
 
     /// <summary>
-    /// 해당 팝업이 생성될 때, 초기화 하는 함수
-    /// 김민섭_230907
+    /// ?대떦 ?앹뾽???앹꽦???? 珥덇린???섎뒗 ?⑥닔
+    /// 源誘쇱꽠_230907
     /// </summary>
     public override void Init()
     {
@@ -36,44 +36,44 @@ public class UI_DummyController : UI_Popup
 
         create_dummy_illusion.SetActive(false);
 
-        // UI 세팅
-        Bind<Button>(typeof(Buttons));                    // Button 타입의 UI들을 바인딩
+        // UI ?명똿
+        Bind<Button>(typeof(Buttons));                    // Button ??낆쓽 UI?ㅼ쓣 諛붿씤??
 
-        // 버튼 이벤트 세팅
-        BindEvent(GetButton((int)Buttons.Btn_CreateDummy).gameObject, OnCreateDummy);       // 더미 생성 버튼 이벤트 부여
-        BindEvent(GetButton((int)Buttons.Btn_RemoveDummy).gameObject, OnRemoveDummy);       // 더미 제거 버튼 이벤트 부여
-        BindEvent(GetButton((int)Buttons.Btn_Exit).gameObject, OnExit);                     // 팝업 나가기 버튼 이벤트 부여
+        // 踰꾪듉 ?대깽???명똿
+        BindEvent(GetButton((int)Buttons.Btn_CreateDummy).gameObject, OnCreateDummy);       // ?붾? ?앹꽦 踰꾪듉 ?대깽??遺??
+        BindEvent(GetButton((int)Buttons.Btn_RemoveDummy).gameObject, OnRemoveDummy);       // ?붾? ?쒓굅 踰꾪듉 ?대깽??遺??
+        BindEvent(GetButton((int)Buttons.Btn_Exit).gameObject, OnExit);                     // ?앹뾽 ?섍?湲?踰꾪듉 ?대깽??遺??
     }
 
-    #region 버튼 이벤트
+    #region 踰꾪듉 ?대깽??
 
     /// <summary>
-    /// 더미 생성 활성화 처리 버튼 이벤트 함수
-    /// 김민섭_230907
+    /// ?붾? ?앹꽦 ?쒖꽦??泥섎━ 踰꾪듉 ?대깽???⑥닔
+    /// 源誘쇱꽠_230907
     /// </summary>
-    /// <param name="data">클릭 이벤트 데이터</param>
+    /// <param name="data">?대┃ ?대깽???곗씠??/param>
     private void OnCreateDummy(PointerEventData data)
     {
-        Debug.Log("더미 생성 활성화!");
+        Debug.Log("?붾? ?앹꽦 ?쒖꽦??");
         IsCreate = true;
         create_dummy_illusion?.SetActive(true);
     }
 
     /// <summary>
-    /// 더미 제거 활성화 처리 버튼 이벤트 함수
-    /// 김민섭_230907
+    /// ?붾? ?쒓굅 ?쒖꽦??泥섎━ 踰꾪듉 ?대깽???⑥닔
+    /// 源誘쇱꽠_230907
     /// </summary>
-    /// <param name="data">클릭 이벤트 데이터</param>
+    /// <param name="data">?대┃ ?대깽???곗씠??/param>
     private void OnRemoveDummy(PointerEventData data)
     {
-        Debug.Log("더미 생성 비활성화!");
+        Debug.Log("?붾? ?앹꽦 鍮꾪솢?깊솕!");
         IsCreate = false;
         create_dummy_illusion?.SetActive(false);
     }
 
     /// <summary>
-    /// 팝업 나가기 버튼 이벤트 함수
-    /// 김민섭_230907
+    /// ?앹뾽 ?섍?湲?踰꾪듉 ?대깽???⑥닔
+    /// 源誘쇱꽠_230907
     /// </summary>
     /// <param name="data"></param>
     private void OnExit(PointerEventData data) => ClosePopupUI();
@@ -82,7 +82,7 @@ public class UI_DummyController : UI_Popup
 
     private void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;      // UI 터치 방지
+        if (EventSystem.current.IsPointerOverGameObject()) return;      // UI ?곗튂 諛⑹?
 
         if(IsCreate && create_dummy_illusion != null)
         {
@@ -104,7 +104,7 @@ public class UI_DummyController : UI_Popup
             RaycastHit hit;
 
             if(IsCreate)
-            {   // 더미 생성
+            {   // ?붾? ?앹꽦
                 if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor", "Bush")))
                 {
                     GameObject dummy = Managers.Resource.Instantiate("Unit/Dummy", hit.point, Quaternion.identity);
@@ -112,7 +112,7 @@ public class UI_DummyController : UI_Popup
                 }
             }
             else
-            {   // 더미 제거
+            {   // ?붾? ?쒓굅
                 if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
                 {
                     Dummy dummy = hit.transform.GetComponent<Dummy>();

@@ -16,7 +16,7 @@ public class BushCheck : MonoBehaviour
 
             Camera.main.cullingMask = ~(1 << LayerMask.GetMask("Unit_HUD"));
 
-            // TODO: 팀에 따라 레이어 처리 
+            // TODO: ????곕씪 ?덉씠??泥섎━ 
             Camera.main.cullingMask = ~(1 << LayerMask.NameToLayer("Unit_Blue"));
         }
     }
@@ -31,7 +31,7 @@ public class BushCheck : MonoBehaviour
 
             Camera.main.cullingMask |= 1 << LayerMask.GetMask("Unit_HUD");
 
-            // TODO: 팀에 따라 레이어 처리
+            // TODO: ????곕씪 ?덉씠??泥섎━
             Camera.main.cullingMask |= 1 << LayerMask.NameToLayer("Unit_Blue");
         }
     }
