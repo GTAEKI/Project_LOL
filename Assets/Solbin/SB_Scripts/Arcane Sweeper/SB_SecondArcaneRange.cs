@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
+/// <summary>
+/// 아이템(비전 탐지기) 효과 사정거리
+/// </summary>
+
 public class SB_SecondArcaneRange : MonoBehaviour
 {
     GameObject secondRange; // 비전탐지기 영향 범위 오브젝트

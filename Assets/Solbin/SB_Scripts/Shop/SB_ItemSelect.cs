@@ -45,23 +45,10 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     void Update()
     {
-        if (hoverMouse)
+        if (!hoverMouse)
         {
             RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
-            Vector2 mousePosition = Input.mousePosition;
-            Vector2 windowPosition;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle
-                (infoRect, mousePosition, Camera.main, out windowPosition);
-
-            infoRect.anchoredPosition = windowPosition;
-
-            Debug.Log(windowPosition);
-            Debug.Log(this.gameObject.name);
-        }
-        else
-        {
-            //RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
-            //infoRect.anchoredPosition = new Vector2(-1765, -550);
+            infoRect.anchoredPosition = new Vector2(-1765, -550);
         }
     }
 
@@ -71,9 +58,22 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <param name="eventData">입력받기</param>
     public void OnPointerEnter(PointerEventData eventData)
     {
+        ///<point> 제대로 작동하지 않음.
+
         PrintInfoText();
 
         hoverMouse = true;
+
+        RectTransform infoRect = m_smallItemInfo.transform.GetComponent<RectTransform>();
+
+        Vector3 mousePosition = Input.mousePosition;
+        Vector2 canvasLocalPosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle
+            (m_smallItemInfo.transform.parent as RectTransform, mousePosition, Camera.main, out canvasLocalPosition);
+        canvasLocalPosition.y -= 60;
+
+        // UI 요소의 위치를 설정합니다.
+        infoRect.localPosition = canvasLocalPosition;
     }
 
     /// <summary>
