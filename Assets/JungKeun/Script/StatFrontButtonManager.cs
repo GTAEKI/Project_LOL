@@ -30,8 +30,8 @@ public class StatFrontButtonManager : MonoBehaviour
                 otherstatsystem.gameObject.SetActive(true);
                 strengthstatsystem.gameObject.SetActive(true);
 
-                othertransform.localPosition += Vector3.up * othertransform.localPosition.y;
-                strengthtransform.localPosition += Vector3.right * -strengthtransform.localPosition.x;
+                othertransform.localPosition += Vector3.up * 100;
+                strengthtransform.localPosition += Vector3.right * -140;
             }
             if (Nochat == false && Input.GetKeyUp(KeyCode.C))
             {//x는 140 y는 100
@@ -39,8 +39,8 @@ public class StatFrontButtonManager : MonoBehaviour
                 otherstatsystem.gameObject.SetActive(false);
                 strengthstatsystem.gameObject.SetActive(false);
 
-                othertransform.localPosition += Vector3.up * -othertransform.localPosition.y;
-                strengthtransform.localPosition += Vector3.right * strengthtransform.localPosition.x;
+                othertransform.localPosition += Vector3.up * -100;
+                strengthtransform.localPosition += Vector3.right * 140;
             }
 
         }
@@ -52,8 +52,8 @@ public class StatFrontButtonManager : MonoBehaviour
                 otherstatsystem.gameObject.SetActive(true);
                 strengthstatsystem.gameObject.SetActive(true);
 
-                othertransform.localPosition += Vector3.up * othertransform.localPosition.y;
-                strengthtransform.localPosition += Vector3.right * -strengthtransform.localPosition.x;
+                othertransform.localPosition += Vector3.up * 100;
+                strengthtransform.localPosition += Vector3.right * -140;
             }
             if (Nochat == false && Input.GetKeyUp(KeyCode.C))
             {//x는 140 y는 100
@@ -61,8 +61,8 @@ public class StatFrontButtonManager : MonoBehaviour
                 otherstatsystem.gameObject.SetActive(true);
                 strengthstatsystem.gameObject.SetActive(false);
 
-                othertransform.localPosition += Vector3.up * -othertransform.localPosition.y;
-                strengthtransform.localPosition += Vector3.right * strengthtransform.localPosition.x;
+                othertransform.localPosition += Vector3.up * 100;
+                strengthtransform.localPosition += Vector3.right * maintransform.localPosition.x;
             }
         }
         else if (StrengthOn == true)
@@ -73,8 +73,8 @@ public class StatFrontButtonManager : MonoBehaviour
                 otherstatsystem.gameObject.SetActive(true);
                 strengthstatsystem.gameObject.SetActive(true);
 
-                othertransform.localPosition += Vector3.up * othertransform.localPosition.y;
-                strengthtransform.localPosition += Vector3.right * -strengthtransform.localPosition.x;
+                othertransform.localPosition += Vector3.up * 100;
+                strengthtransform.localPosition += Vector3.right * -maintransform.localPosition.x;
             }
             if (Nochat == false && Input.GetKeyUp(KeyCode.C))
             {//x는 140 y는 100
@@ -82,7 +82,7 @@ public class StatFrontButtonManager : MonoBehaviour
                 otherstatsystem.gameObject.SetActive(false);
                 strengthstatsystem.gameObject.SetActive(true);
 
-                othertransform.localPosition += Vector3.up * -othertransform.localPosition.y;
+                othertransform.localPosition += Vector3.up * -100;
                 strengthtransform.localPosition += Vector3.right * strengthtransform.localPosition.x;
             }
         }
