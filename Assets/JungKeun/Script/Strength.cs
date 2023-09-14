@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class Strength : MonoBehaviour
 {
+    
     public int intdexNumber; // 0: 전설, 1: 신화
     public string name; // 아이템 이름
     public string englishName; // 이미지 매칭 - 영문명
@@ -20,5 +21,4 @@ public class Strength : MonoBehaviour
     public int ArmorPenetrationper;
     public int MagicPenetration;
     public int MagicPenetrationper;
-
 }
