@@ -12,7 +12,7 @@ public class SB_UseArcaneSweeper : MonoBehaviour
     GameObject arcaneSweeper; // 비전 탐지기
     GameObject itemRange; // 아이템 효과 범위
 
-    UnityEvent activeArcaneSweeper;
+    public UnityEvent activeArcaneSweeper;
 
     // Start is called before the first frame update
     void Start()

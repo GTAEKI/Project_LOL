@@ -20,17 +20,14 @@ public class SB_FirstArcaneRange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!activeFalse)
-        {
-            if (Input.GetKey(KeyCode.Alpha4)) // 범위 활성화
-                firstRange.SetActive(true);
-            else
-                firstRange.SetActive(false);
-        }
+        if (Input.GetKey(KeyCode.Alpha4)) // 범위 활성화
+            firstRange.SetActive(true);
+        else
+            firstRange.SetActive(false);
     }
 
 
-    void ActiveFalse()
+    public void ActiveFalse()
     {
         activeFalse = true;
     }
