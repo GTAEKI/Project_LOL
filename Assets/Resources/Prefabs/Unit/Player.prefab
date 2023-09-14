@@ -105,9 +105,7 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  visibleTargets:
-  - {fileID: 0}
-  - {fileID: 0}
+  visibleTargets: []
   meshResolution: 16
   edgeResolveIterations: 1
   edgeDstThreshold: 0
