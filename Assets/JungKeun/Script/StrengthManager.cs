@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class StrengthManager : MonoBehaviour
 {
+    //Hello jungKun
     //몇번째 증강인지?
     public int turn = 0;
     //선택할 카드 3개
