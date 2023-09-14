@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4470002098374403351}
   - component: {fileID: 9119059145200174730}
   - component: {fileID: 3496330109615295855}
-  m_Layer: 5
+  m_Layer: 16
   m_Name: Img_Damaged
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 2641311108002731439}
   - component: {fileID: 2641311108002731436}
   - component: {fileID: 999255736083611951}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: UI_UnitHUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ RectTransform:
   m_GameObject: {fileID: 2641311108002731434}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7128445586811357361}
@@ -190,13 +190,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fba5c91600dd7743a7e6e7c27737cd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1000
-  maxHp: 1000
-  sp: 0
-  speed: 3
-  hpShieldRatio: 0
-  RectWidth: 100
-  Thickness: 2
 --- !u!1 &3474313658813353744
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +201,7 @@ GameObject:
   - component: {fileID: 7685451322398836538}
   - component: {fileID: 2554542051381425671}
   - component: {fileID: 4308277350491375992}
-  m_Layer: 5
+  m_Layer: 16
   m_Name: Img_Separator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +277,7 @@ GameObject:
   - component: {fileID: 5816848215003870791}
   - component: {fileID: 1603070602450854524}
   - component: {fileID: 3176313527782541848}
-  m_Layer: 5
+  m_Layer: 16
   m_Name: ManaBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -361,7 +354,7 @@ GameObject:
   - component: {fileID: 5335731492651305077}
   - component: {fileID: 5352704150328841713}
   - component: {fileID: 3793417974870163533}
-  m_Layer: 5
+  m_Layer: 16
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -441,7 +434,7 @@ GameObject:
   - component: {fileID: 7233816570906337294}
   - component: {fileID: 5267685107758360524}
   - component: {fileID: 5618524108970896585}
-  m_Layer: 5
+  m_Layer: 16
   m_Name: Img_Hp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -517,7 +510,7 @@ GameObject:
   - component: {fileID: 7524018133382298779}
   - component: {fileID: 2386759215460329844}
   - component: {fileID: 6684912251560265441}
-  m_Layer: 5
+  m_Layer: 16
   m_Name: Img_Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,7 +584,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7128445586811357361}
-  m_Layer: 5
+  m_Layer: 16
   m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -631,7 +624,7 @@ GameObject:
   - component: {fileID: 7622208933545819726}
   - component: {fileID: 1191174404266518391}
   - component: {fileID: 7705857491132111697}
-  m_Layer: 5
+  m_Layer: 16
   m_Name: Img_Mana
   m_TagString: Untagged
   m_Icon: {fileID: 0}

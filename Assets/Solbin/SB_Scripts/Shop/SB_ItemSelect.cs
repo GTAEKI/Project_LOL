@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
+using static Unity.VisualScripting.Metadata;
 
 public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -42,17 +43,9 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         };
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (hoverMouse)
-        {
-            RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
-            Vector2 localMousePos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(infoRect.parent as RectTransform, 
-                Input.mousePosition, Camera.main, out localMousePos);
-            infoRect.anchoredPosition = new Vector2(localMousePos.x, localMousePos.y - 50); // 임의 위치보정: -50
-        }
-        else
+        if (!hoverMouse)
         {
             RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
             infoRect.anchoredPosition = new Vector2(-1765, -550);
@@ -65,9 +58,22 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <param name="eventData">입력받기</param>
     public void OnPointerEnter(PointerEventData eventData)
     {
+        ///<point> 제대로 작동하지 않음.
+
         PrintInfoText();
 
         hoverMouse = true;
+
+        RectTransform infoRect = m_smallItemInfo.transform.GetComponent<RectTransform>();
+
+        Vector3 mousePosition = Input.mousePosition;
+        Vector2 canvasLocalPosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle
+            (m_smallItemInfo.transform.parent as RectTransform, mousePosition, Camera.main, out canvasLocalPosition);
+        canvasLocalPosition.y -= 60;
+
+        // UI 요소의 위치를 설정합니다.
+        infoRect.localPosition = canvasLocalPosition;
     }
 
     /// <summary>
@@ -85,6 +91,11 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (itemImg == null)
         {
             itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
+
+            if (itemImg == null)
+            {
+                itemImg = Resources.Load<Sprite>($"Item Img/Myth/{m_itemProperty.englishName}");
+            }
         }
 
         image.sprite = itemImg;
@@ -127,6 +138,17 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
 
         Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
+
+        if (itemImg == null)
+        {
+            itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
+
+            if (itemImg == null)
+            {
+                itemImg = Resources.Load<Sprite>($"Item Img/Myth/{m_itemProperty.englishName}");
+            }
+        }
+
         image.sprite = itemImg;
         itemName.text = m_itemProperty.name;
 

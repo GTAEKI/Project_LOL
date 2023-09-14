@@ -11,7 +11,7 @@ public class ClickCard : MonoBehaviour
     private Sprite Image;
     private TMP_Text ChooseCardName;
     private TMP_Text ChooseCardDetail;
-    Strength strengthclass;
+    StrengthManager strengthclass;
 
     private void Start()
     {

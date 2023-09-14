@@ -1,6 +1,6 @@
 /// <summary>
-/// ±âÅ¸ °ªµéÀ» ¸ğ¾Æ ³õÀº Å¬·¡½º
-/// ±è¹Î¼·_230906
+/// ç–«ê¿¸í€¬? æ¶ì…?è«­??ç­Œë¤´ë«é‡‰??è¹‚? ??Â€???
+/// ç¹¹ë¨ƒÂ€æ²ƒì„ëˆ˜è‹‘?230906
 /// </summary>
 public class Define
 {
@@ -31,17 +31,39 @@ public class Define
         Click
     }
 
+    /// <summary>
+    /// Camera Mode enum
+    /// KimMinSeob_230913
+    /// </summary>
     public enum CameraMode
     {
         QuaterView
     }
 
     /// <summary>
-    /// À¯´Ö »óÅÂ enum
-    /// ±è¹Î¼·_230907
+    /// Unit's State enum
+    /// KimMinSeob_230907
     /// </summary>
     public enum UnitState
     {
         NONE, IDLE, MOVE
-    }   // ±âº», ÀÌµ¿
+    }
+
+    /// <summary>
+    /// Game Team enum
+    /// KimMinSeob_230913
+    /// </summary>
+    public enum GameTeam
+    {
+        BLUE, RED
+    }
+
+    #region Unit Name Enum
+
+    public enum UnitName
+    {
+        Dummy_Puppet
+    }
+
+    #endregion
 }

@@ -1,10 +1,27 @@
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Strength : MonoBehaviour
 {
+    public int intdexNumber; // 0: 전설, 1: 신화
+    public string name; // 아이템 이름
+    public string englishName; // 이미지 매칭 - 영문명
+    public int Apper;
+    public int Ap;
+    public float AttackSpeed;
+    public int atkper;
+    public int atk;
+    public int Hp;
+    public int Mp;
+    public int SkillBoost;
+    public int CriticalChance;
+    public int MovementSpeed;
+    public int ArmorPenetration;
+    public int ArmorPenetrationper;
+    public int MagicPenetration;
+    public int MagicPenetrationper;
+    
+    //Hello jungkeun
     //몇번째 증강인지?
     public int turn = 0;
     //선택할 카드 3개
@@ -31,244 +48,6 @@ public class Strength : MonoBehaviour
     Dictionary<int, string> strengthName;
     Dictionary<int, string> strengthDetail;
 
-    public void Start()
-    {
-
-        
-
-        // 스왑을 500번 돌려
-        for (int i = 0; i < 500; i++)
-        {
-            Swap();
-        }
-
-        for (int a = 0; a < 3; a++)
-        {
-
-            card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a]];
-            card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a]];
-            card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a]];
-            
-        }
-
-        RetryNumber.GetComponent<Text>().text = "2";
-
-       
 
 
-    }
-
-    void OnEnable()
-    {
-        if (turn == 1)
-        {
-            // 스왑을 500번 돌려
-            for (int i = 0; i < 500; i++)
-            {
-                Swap();
-            }
-
-            for (int a = 0; a < 3; a++)
-            {
-                if (a != clickedcardnumber[0])
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a]];
-                    clickedcardnumber[1] = cardNum[a];
-
-                }
-            }
-            RetryNumber.GetComponent<Text>().text = "2";
-
-            rerollchance++;
-        }
-        if (turn == 2)
-        {
-            // 스왑을 500번 돌려
-            for (int i = 0; i < 500; i++)
-            {
-                Swap();
-            }
-
-            for (int a = 0; a < 3; a++)
-            {
-                if (a != clickedcardnumber[0])
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a]];
-                    clickedcardnumber[2] = cardNum[a];
-
-                }
-            }
-            RetryNumber.GetComponent<Text>().text = "2";
-
-            rerollchance++;
-        }
-        if (turn == 3)
-        {
-            // 스왑을 500번 돌려
-            for (int i = 0; i < 500; i++)
-            {
-                Swap();
-            }
-
-            for (int a = 0; a < 3; a++)
-            {
-                if (a != clickedcardnumber[0])
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a]];
-                    clickedcardnumber[3] = cardNum[a];
-
-                }
-            }
-            RetryNumber.GetComponent<Text>().text = "2";
-
-            rerollchance++;
-        }
-
-    }
-
-
-
-
-    public void reroll()
-    {
-        if(turn ==0)
-        {
-            if (rerollchance == 1)
-            {
-                for (int a = 0; a < 3; a++)
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a + 3]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a + 3]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a + 3]];
-                    clickedcardnumber[0] = cardNum[a+3];
-
-                }
-                RetryNumber.GetComponent<Text>().text = "1";
-                rerollchance++;
-            }
-
-            else if (rerollchance == 2)
-            {
-                for (int a = 0; a < 3; a++)
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a + 6]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a + 6]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a + 6]];
-                    clickedcardnumber[0] = cardNum[a + 6];
-
-                }
-                RetryNumber.GetComponent<Text>().text = "0";
-                rerollchance++;
-            }
-        }
-
-        if (turn == 1)
-        {
-            if (rerollchance == 1)
-            {
-                for (int a = 0; a < 3; a++)
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a + 3]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a + 3]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a + 3]];
-                    clickedcardnumber[1] = cardNum[a + 3];
-
-                }
-                RetryNumber.GetComponent<Text>().text = "1";
-                rerollchance++;
-            }
-
-            else if (rerollchance == 2)
-            {
-                for (int a = 0; a < 3; a++)
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a + 6]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a + 6]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a + 6]];
-                    clickedcardnumber[1] = cardNum[a + 6];
-
-                }
-                RetryNumber.GetComponent<Text>().text = "0";
-                rerollchance++;
-            }
-        }
-        else if (turn == 2)
-        {
-            if (rerollchance == 1)
-            {
-                for (int a = 0; a < 3; a++)
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a + 3]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a + 3]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a + 3]];
-                    clickedcardnumber[2] = cardNum[a + 3];
-
-                }
-                RetryNumber.GetComponent<Text>().text = "1";
-                rerollchance++;
-            }
-
-            else if (rerollchance == 2)
-            {
-                for (int a = 0; a < 3; a++)
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a + 6]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a + 6]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a + 6]];
-                    clickedcardnumber[2] = cardNum[a + 6];
-
-                }
-                RetryNumber.GetComponent<Text>().text = "0";
-                rerollchance++;
-            }
-        }
-        else if (turn == 3)
-        {
-            if (rerollchance == 1)
-            {
-                for (int a = 0; a < 3; a++)
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a + 3]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a + 3]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a + 3]];
-                    clickedcardnumber[3] = cardNum[a + 3];
-
-                }
-                RetryNumber.GetComponent<Text>().text = "1";
-                rerollchance++;
-            }
-
-            else if (rerollchance == 2)
-            {
-                for (int a = 0; a < 3; a++)
-                {
-                    card[a].transform.GetChild(0).GetComponent<Image>().sprite = strength[cardNum[a + 6]];
-                    card[a].transform.GetChild(1).GetComponent<TMP_Text>().text = Name[cardNum[a + 6]];
-                    card[a].transform.GetChild(2).GetComponent<TMP_Text>().text = Detail[cardNum[a + 6]];
-                    clickedcardnumber[3] = cardNum[a + 6];
-
-                }
-                RetryNumber.GetComponent<Text>().text = "0";
-                rerollchance++;
-            }
-        }
-        else { return; }
-    }
-
-    // 스왑으로 짜
-    public void Swap()
-    {
-        int ranIndex1 = Random.Range(0, 10);
-        int ranIndex2 = Random.Range(0, 10);
-
-        int _temp = cardNum[ranIndex1];
-        cardNum[ranIndex1] = cardNum[ranIndex2];
-        cardNum[ranIndex2] = _temp;
-    }
 }
