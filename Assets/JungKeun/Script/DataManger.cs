@@ -5,5 +5,4 @@ using UnityEngine;
 public static class DataManger
 {
     public static Dictionary<int, UnitStat> unitStatDictionary;
-
 }
