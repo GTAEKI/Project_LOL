@@ -33,12 +33,8 @@ public class SB_ItemProperty : MonoBehaviour
 
     public int tenacity; // 장화: 강인함
 
-    // 방어구 관통력, 마법 관통력, 주문력, 마나, 쿨타임, 기본체력재생, 기본 마나 재생, 체력 회복 및 보호막
-    // armorPenetration, 
-
     public int gold = 3000; // 아이템 가격 (통일)
     
-        
     /// <summary>
     /// 아이템 이미지 교체를 위한 메서드입니다.
     /// </summary>
@@ -62,6 +58,16 @@ public class SB_ItemProperty : MonoBehaviour
 
         Image image = transform.GetComponent<Image>();
         Sprite itemImg = Resources.Load<Sprite>($"Item Img/Boots/{sprite}");
+        Debug.Assert(itemImg != null);
+        image.sprite = itemImg;
+    }
+
+    public void ChangeMythImg(string _sprite)
+    {
+        string sprite = _sprite;
+
+        Image image = transform.GetComponent<Image>();
+        Sprite itemImg = Resources.Load<Sprite>($"Item Img/Myth/{sprite}");
         Debug.Assert(itemImg != null);
         image.sprite = itemImg;
     }
