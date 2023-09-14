@@ -16,7 +16,7 @@ public class SB_Gold : MonoBehaviour
     void Start()
     {
         m_goldText = GetComponent<TMP_Text>();
-        m_gold = 15000; // 임시값
+        m_gold = 100000; // 임시값
         m_goldText.text = m_gold.ToString();
     }
 

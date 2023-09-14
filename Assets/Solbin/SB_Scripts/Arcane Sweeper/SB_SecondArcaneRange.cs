@@ -22,7 +22,8 @@ public class SB_SecondArcaneRange : MonoBehaviour
     void Update()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit) &&
+            !SB_UseArcaneSweeper.arcaneUsed)
         {
             if (Vector3.Distance(hit.point, transform.position) < 12) // 12는 매직넘버
             {
