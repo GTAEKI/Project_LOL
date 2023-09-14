@@ -42,6 +42,9 @@ public class SB_InvenrotySlot : MonoBehaviour, IDropHandler
         m_items[m_items.Count - 1].transform.SetParent(itemContainer.transform, false); // 위치 수정
         m_items[m_items.Count - 1].transform.SetSiblingIndex(m_items.Count - 1);
 
+        m_items[m_items.Count - 1].transform.GetComponent<SB_ShopItemSelect>().enabled = false; // 상점 클릭 비활성
+        m_items[m_items.Count - 1].transform.GetComponent<SB_InvertoryItemSelect>().enabled = true; // 인벤토리 클릭 활성
+
         m_slots[m_items.Count - 1].SetActive(false); // 원 슬롯 비활성화
 
         gatherStatus.AllItemStatus(m_items);
