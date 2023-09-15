@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-//using static UnityEditor.Progress;
 
 /// <summary>
 /// 아이템의 정보 csv로 읽어와 property에 할당 
