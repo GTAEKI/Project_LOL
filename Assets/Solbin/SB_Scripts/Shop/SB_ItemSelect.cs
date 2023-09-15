@@ -142,6 +142,9 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             Image image = m_largeItemInfo.transform.GetChild(0).GetComponent<Image>();
             TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
+            Color color = image.color;
+            color.a = 1;
+            image.color = color;
 
             Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
 
