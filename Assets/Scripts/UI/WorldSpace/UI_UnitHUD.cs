@@ -29,8 +29,6 @@ public class UI_UnitHUD : UI_Base
 
     private Collider col;
 
-    private TextMeshProUGUI testtext;
-
     #region ?怨몃땾
 
     private const string STEP = "_Steps";
@@ -67,10 +65,6 @@ public class UI_UnitHUD : UI_Base
     private void CreateMaterial()
     {
         GetImage((int)Images.Img_Separator).material = new Material(Shader.Find("MinSeob/UI/HUD"));
-
-
-        testtext = GameObject.Find("Text_Test").GetComponent<TextMeshProUGUI>();
-        testtext.text = GetImage((int)Images.Img_Separator).material.name;
     }
 
     private void Update()
