@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class SB_FirstArcaneRange : MonoBehaviour
     SpriteRenderer firstSprite; // 첫번째 감지 범위
     SpriteRenderer secondSprite; // 두번째 감지 범위
 
-    bool firstLimit = true;
+    bool firstLimit = false;
 
     SB_ArcaneCoolTime arcaneCoolTime = new SB_ArcaneCoolTime(); // 첫 쿨타임 30초
 
@@ -26,6 +27,9 @@ public class SB_FirstArcaneRange : MonoBehaviour
         secondSprite = secondRange.GetComponent<SpriteRenderer>();
         arcaneCoolTime = GameObject.Find("Cool Time").transform.GetComponent<SB_ArcaneCoolTime>();
 
+        firstSprite.enabled = false;
+        secondSprite.enabled = false;
+
         //arcaneCoolTime.StartCoolTime();
         //StartCoroutine(StartLimit());
     }
@@ -37,13 +41,13 @@ public class SB_FirstArcaneRange : MonoBehaviour
     IEnumerator StartLimit()
     {
         yield return new WaitForSeconds(30);
-        firstLimit = false;
+        firstLimit = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        firstLimit = true;
+        firstLimit = false;
 
         if (!firstLimit) // 첫 제한 30초 후
         {
@@ -52,12 +56,15 @@ public class SB_FirstArcaneRange : MonoBehaviour
                 firstSprite.enabled = true;
                 secondSprite.enabled = true;
             }
-            // 활성화 이후는 오른쪽 마우스 버튼을 눌러야 취소 
-            //else
-            //{
-            //    firstSprite.enabled = false;
-            //    secondSprite.enabled = false;
-            //}
         }
+    }
+
+    /// <summary>
+    /// 비전 탐지기 작동 시 쿨타임 끝날 때까지 작동 중지
+    /// </summary>
+    public void RunArcane()
+    {
+        firstSprite.enabled = false;
+        secondSprite.enabled = false;
     }
 }

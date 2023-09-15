@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 
 /// <summary>
@@ -10,12 +10,13 @@ using UnityEngine;
 public class SB_SecondArcaneRange : MonoBehaviour
 {
     GameObject secondRange; // 비전탐지기 영향 범위 오브젝트
+    GameObject arcaneSweeper; // 비전탐지기
 
     // Start is called before the first frame update
     void Start()
     {
         secondRange = transform.GetChild(0).gameObject;
-        Debug.Assert(secondRange != null);
+        arcaneSweeper = secondRange.transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame  
@@ -30,6 +31,7 @@ public class SB_SecondArcaneRange : MonoBehaviour
                 Vector3 rangePosition = new Vector3(hit.point.x, hit.point.y + 1, hit.point.z);
                 Vector3 localPosition = transform.InverseTransformPoint(rangePosition);
                 secondRange.transform.localPosition = localPosition;
+                //arcaneSweeper.transform.localPosition = rangePosition;
             }
         }
     }

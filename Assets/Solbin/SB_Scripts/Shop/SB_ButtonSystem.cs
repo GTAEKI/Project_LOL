@@ -43,11 +43,6 @@ public class SB_ButtonSystem : MonoBehaviour
         popupContent = GameObject.Find("Side Shop_Down");
     }
 
-    private void Update()
-    {
-        Debug.Log(buyList.Count);
-    }
-
     /// <summary>
     /// 아이템 선택 시 구매버튼 활성화. 선택한 아이템을 멤버변수에 전달함.
     /// </summary>

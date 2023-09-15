@@ -12,6 +12,8 @@ public class SB_ArcaneCoolTime : MonoBehaviour
     {
         coolTime = transform.GetComponent<TMP_Text>();
         Debug.Assert(coolTime != null);
+
+        // 쿨타임 추가 
     }
 
     public void StartCoolTime()
