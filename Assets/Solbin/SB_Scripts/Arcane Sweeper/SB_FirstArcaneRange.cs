@@ -56,14 +56,11 @@ public class SB_FirstArcaneRange : MonoBehaviour
                 firstSprite.enabled = true;
                 secondSprite.enabled = true;
             }
-<<<<<<< HEAD
-=======
             //else
             //{
             //    firstSprite.enabled = false;
             //    secondSprite.enabled = false;
             //}
->>>>>>> parent of 006060d (Chore Shop)
         }
     }
 
