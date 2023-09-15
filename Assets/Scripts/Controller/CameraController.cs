@@ -4,21 +4,79 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private Define.CameraMode mode = Define.CameraMode.QuaterView;
-    [SerializeField] private Vector3 delta;       // 카메라와 플레이어의 거리
-    [SerializeField] private GameObject player;
+    private GameObject player;                  // target
+    private bool isFollow = true;               // Camera Follow Player
+    private float camSpeed = 20f;               // Camera movementSpeed
+    private float screenSizeThickness = 10;     // Screen Side
+    private float camFOV;                       // Camera Field of View
+    private float zoomSpeed = 10f;              // Zoom speed
+    private float mouseScrollInput;             // Mouse Scroll Input
+    private  Vector3 delta;
 
     private void Start()
     {
-        delta = new Vector3(0, 9, -6.5f);
+        player = GameObject.FindWithTag("Player");
+        delta = new Vector3(0, 15, -9f); //230914 배경택 값 수정
+
+        camFOV = GetComponent<Camera>().fieldOfView;        
+        transform.position = player.transform.position + delta;
     }
 
     private void LateUpdate()
     {
-        if (mode == Define.CameraMode.QuaterView)
+        if(Input.GetKeyDown(KeyCode.Y))
         {
-            transform.position = player.transform.position + delta;
+            if (!isFollow) isFollow = true;
+            else isFollow = false;
+        }
+
+        Vector3 pos = transform.position;
+
+        if(isFollow)
+        {   // Follow Target Player
+            pos = player.transform.position + delta;
             transform.LookAt(player.transform);
         }
+
+        if(!isFollow)
+        {   // Not Follow Target Player
+            if(Input.GetKey(KeyCode.Space))
+            {   // Holding Player Position
+                pos = player.transform.position + delta;
+                transform.LookAt(player.transform);
+            }
+
+            if(Input.mousePosition.y >= Screen.height - screenSizeThickness)
+            {   // Check to Screen Side Thickness
+                pos.x += camSpeed * Time.deltaTime;
+                pos.z += camSpeed * Time.deltaTime;
+            }
+
+            if(Input.mousePosition.y <= screenSizeThickness)
+            {
+                pos.x -= camSpeed * Time.deltaTime;
+                pos.z -= camSpeed * Time.deltaTime;
+            }
+
+            if (Input.mousePosition.x >= Screen.width - screenSizeThickness)
+            {
+                pos.x += camSpeed * Time.deltaTime;
+                pos.z -= camSpeed * Time.deltaTime;
+            }
+
+            if (Input.mousePosition.x <= screenSizeThickness)
+            {
+                pos.x -= camSpeed * Time.deltaTime;
+                pos.z += camSpeed * Time.deltaTime;
+            }
+        }
+
+        transform.position = pos;
+
+        // Zoom In
+        mouseScrollInput = Input.GetAxis("Mouse ScrollWheel");
+        camFOV -= mouseScrollInput * zoomSpeed;
+        camFOV = Mathf.Clamp(camFOV, 30, 60);
+        GetComponent<Camera>().fieldOfView = Mathf.Lerp(gameObject.GetComponent<Camera>().fieldOfView, camFOV, zoomSpeed);
     }
 }

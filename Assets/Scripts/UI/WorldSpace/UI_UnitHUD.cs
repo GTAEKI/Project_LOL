@@ -22,11 +22,11 @@ public class UI_UnitHUD : UI_Base
     private static readonly int floatWidth = Shader.PropertyToID(WIDTH);
     private static readonly int floatThickness = Shader.PropertyToID(THICKNESS);
 
-    private float hpShieldRatio;        // ?ㅻ뱶 泥대젰 鍮꾩쑉
+    private float hpShieldRatio;        // ??삳굡 筌ｋ?????쑴??
     private float rectWidth = 100f;
     private float thickness = 2f;
 
-    #region ?곸닔
+    #region ?怨몃땾
 
     private const string STEP = "_Steps";
     private const string RATIO = "_HSRatio";
@@ -35,7 +35,7 @@ public class UI_UnitHUD : UI_Base
 
     #endregion
 
-    #region ?뚯뒪??蹂??
+    #region ???뮞??癰궰??
 
     private float sp = 0f;
     private float speed = 3f;
@@ -50,11 +50,12 @@ public class UI_UnitHUD : UI_Base
         unit = transform.parent.GetComponent<Unit>();
 
         CreateMaterial();
+        //StartCoroutine(CoroutineTest());
     }
 
     /// <summary>
-    /// ?먯씠??癒명떚由ъ뼹 ?앹꽦 ?⑥닔
-    /// 源誘쇱꽠_230911
+    /// ?癒?뵠???믩챸?싩뵳?堉???밴쉐 ??λ땾
+    /// 繹먃沃섏눘苑?230911
     /// </summary>
     private void CreateMaterial()
     {
@@ -68,8 +69,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// ?꾩옱 gameview 移대찓?쇱뿉 留욎떠???꾩튂? 媛곷룄瑜?怨꾩궛?쒕떎.
-    /// 源誘쇱꽠_230911
+    /// ?袁⑹삺 gameview 燁삳?李??깅퓠 筌띿쉸????袁⑺뒄?? 揶쏄낮猷꾤몴??④쑴沅??뺣뼄.
+    /// 繹먃沃섏눘苑?230911
     /// </summary>
     private void UpdateTransformHUD()
     {
@@ -78,8 +79,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// HUD ?섏튂 怨꾩궛 ?⑥닔
-    /// 源誘쇱꽠_230911
+    /// HUD ??륂뒄 ?④쑴沅???λ땾
+    /// 繹먃沃섏눘苑?230911
     /// </summary>
     private void UpdateValueHUD()
     {
@@ -90,11 +91,11 @@ public class UI_UnitHUD : UI_Base
 
         float step;
 
-        // ?대뱶媛 議댁옱 ????
+        // ??諭뜹첎? 鈺곕똻??????
         if (sp > 0)
         {
             if (unit.CurrentUnitStat.Hp + sp > unit.CurrentUnitStat.UnitStat.Hp)
-            {   // ?꾩옱 泥대젰 + ?대뱶 > 理쒕? 泥대젰
+            {   // ?袁⑹삺 筌ｋ???+ ??諭?> 筌ㅼ뮆? 筌ｋ???
                 hpShieldRatio = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
                 GetImage((int)Images.Img_Mana).fillAmount = 1f;
                 step = unit.CurrentUnitStat.Hp / 300f;
@@ -123,7 +124,7 @@ public class UI_UnitHUD : UI_Base
         GetImage((int)Images.Img_Separator).material.SetFloat(floatThickness, thickness);
     }
 
-    #region ?뚯뒪??肄붾뱶
+    #region ???뮞???꾨뗀諭?
 
     private IEnumerator CoroutineTest()
     {
@@ -157,7 +158,7 @@ public class UI_UnitHUD : UI_Base
             yield return new WaitForSeconds(1f);
         }
 
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
 
     #endregion

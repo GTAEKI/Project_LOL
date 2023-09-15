@@ -133,6 +133,10 @@ public class GameManager : MonoBehaviour
     private List<GameObject> healFlowers; // 체력꽃 저장
     private List<GameObject> jumpFlowers; // 점프꽃 저장
 
+    // 게임 플레이어
+    public GameObject playerPrefab;
+    private GameObject myPlayer;
+
     private void Awake()
     {
         //게임매니저 싱글톤_230906 배경택
@@ -166,6 +170,8 @@ public class GameManager : MonoBehaviour
         team2HP = TEAM_HP_20;
         team3HP = TEAM_HP_20;
         team4HP = TEAM_HP_20;
+
+        myPlayer = Instantiate(playerPrefab, waitAreaResPoint[0].transform.position, Quaternion.identity);
         #endregion
     }
 
@@ -417,26 +423,26 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void MoveToBattleArea1()
     {
-        cameraWaitArea.gameObject.SetActive(false);
-        cameraBattleArea2.gameObject.SetActive(false);
-        cameraBattleArea1.gameObject.SetActive(true);
-        //TODO 캐릭터 이동
+        //cameraWaitArea.gameObject.SetActive(false);
+        //cameraBattleArea2.gameObject.SetActive(false);
+        //cameraBattleArea1.gameObject.SetActive(true);
+        ////TODO 캐릭터 이동
     }
 
     public void MoveToBattlArea2()
     {
-        cameraWaitArea.gameObject.SetActive(false);
-        cameraBattleArea1.gameObject.SetActive(false);
-        cameraBattleArea2.gameObject.SetActive(true);
-        //TODO 캐릭터 이동
+        //cameraWaitArea.gameObject.SetActive(false);
+        //cameraBattleArea1.gameObject.SetActive(false);
+        //cameraBattleArea2.gameObject.SetActive(true);
+        ////TODO 캐릭터 이동
     }
 
     public void ReturnWaitArea()
     {
-        cameraBattleArea1.gameObject.SetActive(false);
-        cameraBattleArea2.gameObject.SetActive(false);
-        cameraWaitArea.gameObject.SetActive(true);
-        //TODO 캐릭터 이동
+        //cameraBattleArea1.gameObject.SetActive(false);
+        //cameraBattleArea2.gameObject.SetActive(false);
+        //cameraWaitArea.gameObject.SetActive(true);
+        ////TODO 캐릭터 이동
     }
     #endregion
 

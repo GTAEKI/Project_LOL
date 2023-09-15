@@ -1,6 +1,6 @@
 /// <summary>
-/// 湲고? 媛믩뱾??紐⑥븘 ?볦? ?대옒??
-/// 源誘쇱꽠_230906
+/// 疫꿸퀬? 揶쏅?諭??筌뤴뫁釉??蹂? ?????
+/// 繹먃沃섏눘苑?230906
 /// </summary>
 public class Define
 {
@@ -57,4 +57,13 @@ public class Define
     {
         BLUE, RED
     }
+
+    #region Unit Name Enum
+
+    public enum UnitName
+    {
+        Dummy_Puppet
+    }
+
+    #endregion
 }
