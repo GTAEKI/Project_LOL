@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class SB_PopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private bool m_isPop = false;
+    bool m_isPop = false;
     private RectTransform m_popupTransform;
 
     void Start()

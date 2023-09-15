@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class SB_CallShop : MonoBehaviour
 {
-    private bool m_isShop = false;
+    public static bool m_isShop = false;
     private RectTransform m_shopTransform;
 
     // Start is called before the first frame update

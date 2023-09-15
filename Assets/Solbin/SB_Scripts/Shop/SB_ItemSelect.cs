@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
+using static UnityEditor.Progress;
 
 public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -14,6 +15,8 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     SB_ItemProperty m_itemProperty;
     Button m_buyButton;
     SB_ButtonSystem m_buttonSystem;
+
+    Camera UICamera;
 
     public static bool hoverMouse = false;
 
@@ -26,6 +29,8 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         m_smallItemInfo = GameObject.Find("Item Info"); // 작은 화면 설명창
         m_itemProperty = transform.GetComponent<SB_ItemProperty>();
         m_buttonSystem = GameObject.Find("Buttons").transform.GetComponent<SB_ButtonSystem>();
+
+        UICamera = GameObject.Find("UI Camera").transform.GetComponent<Camera>();
 
         itemProperties = new (string, int)[] // 아이템 속성과 설명 튜플 배열
         {
@@ -68,8 +73,8 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         Vector3 mousePosition = Input.mousePosition;
         Vector2 canvasLocalPosition;
         RectTransformUtility.ScreenPointToLocalPointInRectangle
-            (m_smallItemInfo.transform.parent as RectTransform, mousePosition, Camera.main, out canvasLocalPosition);
-        canvasLocalPosition.y -= 60;
+            (m_smallItemInfo.transform.parent as RectTransform, mousePosition, UICamera, out canvasLocalPosition);
+        canvasLocalPosition.y -= 50;
 
         // UI 요소의 위치를 설정합니다.
         infoRect.localPosition = canvasLocalPosition;
@@ -133,24 +138,31 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <param name="eventData">입력받기</param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        Image image = m_largeItemInfo.transform.GetChild(0).GetComponent <Image>();
-        TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
-
-        Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
-
-        if (itemImg == null)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
+            Image image = m_largeItemInfo.transform.GetChild(0).GetComponent<Image>();
+            TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
+
+            Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
 
             if (itemImg == null)
             {
-                itemImg = Resources.Load<Sprite>($"Item Img/Myth/{m_itemProperty.englishName}");
+                itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
+
+                if (itemImg == null)
+                {
+                    itemImg = Resources.Load<Sprite>($"Item Img/Myth/{m_itemProperty.englishName}");
+                }
             }
+
+            image.sprite = itemImg;
+            itemName.text = m_itemProperty.name;
+
+            m_buttonSystem.ActiveBuyButton(gameObject);
         }
-
-        image.sprite = itemImg;
-        itemName.text = m_itemProperty.name;
-
-        m_buttonSystem.ActiveBuyButton(gameObject);
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            m_buttonSystem.ClickRightButton(gameObject);
+        }
     }
 }
