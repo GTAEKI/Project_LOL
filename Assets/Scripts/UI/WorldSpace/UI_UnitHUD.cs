@@ -158,7 +158,7 @@ public class UI_UnitHUD : UI_Base
             yield return new WaitForSeconds(1f);
         }
 
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
 
     #endregion
