@@ -66,7 +66,8 @@ public class SetStatUIManager : MonoBehaviour
 
             //스텟창에 공격력수치
             //{0} 공격력수치 = (기본공격력 + 성장공격력*Level) + 아이템공격력 + 증강공격력
-            atkSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + itemStatus.attackDamege  /*+strengthStatus.atk*/);
+            atkSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Atk + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
+                                              + itemStatus.attackDamege  /*+strengthStatus.atk*/);
             //공격력 설명창
             atk.text = string.Format("현재 공격력 : {0} (기본 {1} + 추가 {2})\r\n기본 공격 시  {3} 의 물리 피해를 입힙니다."
                 ,//{0} 총 공격력 = (기본공격력 + 성장공격력*Level) + 아이템공격력 + 증강공격력
@@ -81,42 +82,66 @@ public class SetStatUIManager : MonoBehaviour
 
             //2.
             //스텟창에 방어력수치
-            //{0} 방어력수치 = (기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력) + ((앞에꺼)*아이템방어력퍼센트) + ((앞에꺼) * 증강벙어력퍼센트)
-            defSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level) + itemStatus.armor /*+strengthStatus.def*/);
+            //{0} 방어력수치 = (기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력)
+            defSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                                              + itemStatus.armor /*+strengthStatus.def*/);
             //방어력 설명창
-            def.text = string.Format("현재 방어력: {0}(기본 {1} + 추가 {2})\r\n물리 피해를 {3}%만큼 덜 받습니다."
-                ,//{0} 총 방어력 = (기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력) + ((앞에꺼)*아이템방어력퍼센트) + ((앞에꺼) * 증강벙어력퍼센트)
-                DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level) + itemStatus.armor//+ strengthStatus.atk
-                ,//{1} 기본방어력 = (기본공격력 + 성장공격력*Level)
-                DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
-                ,//{2} 추가방어력 = 아이템방어력 + 증강방어력 + (((기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력))*아이템방어력퍼센트) + (((기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력)) * 증강벙어력퍼센트)
-                itemStatus.armor//+ strengthStatus.atk
-                ,/*{3} 물리피해 감소량 = %%방어력이 0보다 높으면%% 100 - 100/(100+(기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력) + ((앞에꺼)*아이템방어력퍼센트) + ((앞에꺼) * 증강벙어력퍼센트)
-                                      %%방어력이 0보다 낮으면%%  100 -(2-100/(100+(기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력) + ((앞에꺼)*아이템방어력퍼센트) + ((앞에꺼) * 증강벙어력퍼센트)
+            if (DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                                   + itemStatus.armor/*+ strengthStatus.atk*/ > 0)
+            {
+                def.text = string.Format("현재 방어력: {0}(기본 {1} + 추가 {2})\r\n물리 피해를 {3}%만큼 덜 받습니다."
+                    ,//{0} 총 방어력 = (기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력) 
+                                         DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                                       + itemStatus.armor//+ strengthStatus.atk
+                    ,//{1} 기본방어력 = (기본공격력 + 성장공격력*Level)
+                                         DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                    ,//{2} 추가방어력 = 아이템방어력 + 증강방어력
+                                         itemStatus.armor//+ strengthStatus.atk
+                    ,//{3} 물리피해 감소량 = %%방어력이 0보다 높으면%%  100-(10000/(100+(기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력))
+                                      
+                    (int)(100-(10000/(100 +((DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                                   + itemStatus.armor/*+ strengthStatus.atk*/)))))
+                    );
+
+            }
+            else if(DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                                   + itemStatus.armor/*+ strengthStatus.atk*/ < 0)
+            {
+                def.text = string.Format("현재 방어력: {0}(기본 {1} + 추가 {2})\r\n물리 피해를 {3}%만큼 덜 받습니다."
+                   ,//{0} 총 방어력 = (기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력) 
+                                        DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                                      + itemStatus.armor//+ strengthStatus.atk
+                   ,//{1} 기본방어력 = (기본공격력 + 성장공격력*Level)
+                                        DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                   ,//{2} 추가방어력 = 아이템방어력 + 증강방어력
+                                        itemStatus.armor//+ strengthStatus.atk
+                   ,/*{3} 물리피해 감소량 = %%방어력이 0보다 낮으면%%  100-(2-(10000/(100+(기본방어력 + 성장방어력*Level + 아이템방어력 + 증강방어력)))))
                 */
-                100 - 100 / (100 + DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level))
-                );
+                
+                   (int)(100-(2-(10000 / (100 + DataManger.unitStatDictionary[1].Defence + (DataManger.unitStatDictionary[1].Growthdefence * DataManger.unitStatDictionary[1].Level)
+                                   + itemStatus.armor/*+ strengthStatus.armor*/))))
+                   );
+
+            }
 
             //3.
             //스텟창 공격속도수치
-            //{0} 공격속도 수치 = (기본공격속도 + 성장공격속도*Level) + (기본공격속도 + 성장공격속도*Level)*아이템 공격속도 + (기본공격속도 + 성장공격속도*Level)*증강 공격속도
-            atkspeedSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].AtkSpeed + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
-                                                   + DataManger.unitStatDictionary[1].AtkSpeed + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) * itemStatus.attackDamege);
+            //{0} 공격속도 수치 = 기본공격속도 +  (기본공격속도 * ((성장공격속도*Level) + 아이템 공격속도 + 증강 공격속도)
+            atkspeedSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].AtkSpeed
+                                                   + (DataManger.unitStatDictionary[1].AtkSpeed * 0.01 *((DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) 
+                                                   + itemStatus.attackSpeed
+                                                   /*+ strengthStatus.attackSpeed */
+                                                   )));
             //+ DataManger.unitStatDictionary[1].AtkSpeed + (DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) * strengthStatus.attackDamege);
             //공격속도 설명창
-            atkspeed.text = string.Format("추가 공격 속도: {0} %\r\n현재 초당 공격 횟수: {1}\r\n공격 속도 계수 : {2}"
-              ,//{0} 추가공격속도:(성장공격속도 * level) + (기본공격속도 + 성장공격속도 * Level) * 아이템 공격속도 + (기본공격속도 + 성장공격속도 * Level) * 증강 공격속도
+            atkspeed.text = string.Format("추가 공격 속도: {0:0.##} %\r\n현재 초당 공격 횟수: {1:##}\r\n공격 속도 계수 : {2}"
 
-              (DataManger.unitStatDictionary[1].GrowthatkSpeed * DataManger.unitStatDictionary[1].Level) +
-              ((DataManger.unitStatDictionary[1].AtkSpeed + DataManger.unitStatDictionary[1].GrowthatkSpeed * DataManger.unitStatDictionary[1].Level) * itemStatus.attackSpeed)
-              //+((DataManger.unitStatDictionary[1].AtkSpeed+ DataManger.unitStatDictionary[1].GrowthatkSpeed * DataManger.unitStatDictionary[1].Level) * strengthStatus.atkspeed)
+              ,//{0} 추가공격속도:(기본공격속도 * ((성장공격속도*Level) + 아이템 공격속도 + 증강 공격속도)
+              (DataManger.unitStatDictionary[1].AtkSpeed * ((DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level) + itemStatus.attackSpeed/*+ strengthStatus.attackSpeed */))
+              ,//{1} 현재 초당 공격 횟수 : 기본공격속도 +  (기본공격속도 * ((성장공격속도*Level) + 아이템 공격속도 + 증강 공격속도)
 
-              ,//{1} 현재 초당 공격 횟수 : (기본공격속도) + (기본공격속도) * (1 + 성장공격속도*Level) + (1 + 성장공격속도*Level)*아이템 공격속도 + (1 + 성장공격속도*Level)*증강 공격속도
-              DataManger.unitStatDictionary[1].AtkSpeed
-              + (DataManger.unitStatDictionary[1].AtkSpeed * (1 + (DataManger.unitStatDictionary[1].GrowthatkSpeed * DataManger.unitStatDictionary[1].Level)))
-              + ((1 + (DataManger.unitStatDictionary[1].GrowthatkSpeed * DataManger.unitStatDictionary[1].Level)) * itemStatus.attackSpeed)
-              //+((1 + (DataManger.unitStatDictionary[1].GrowthatkSpeed * DataManger.unitStatDictionary[1].Level))*strengthStatus.attackSpeed)
-
+               DataManger.unitStatDictionary[1].AtkSpeed + (DataManger.unitStatDictionary[1].AtkSpeed * 0.01 * ((DataManger.unitStatDictionary[1].Growthatk * DataManger.unitStatDictionary[1].Level)
+                                                   + itemStatus.attackSpeed/*+ strengthStatus.attackSpeed */))
               ,//{2} 공격속도 계수 : 기본 공격속도
               DataManger.unitStatDictionary[1].AtkSpeed
               );
@@ -151,13 +176,11 @@ public class SetStatUIManager : MonoBehaviour
 
             //5.
             //스텟창 주문력 수치
-            //{0} 주문력 수치 : 아이템주문력 + 증강주문력 + (아이템주문력+증강주문력) * 아이템 주문력 퍼센트 + (아이템주문력+증강주문력) * 증강 주문력 퍼센트
-            apSTAT.text = string.Format("{0}", itemStatus.abilityPower /*+strengthStatus.apk */
-                                              /*+ ((itemStatus.abilityPower + strengthStatus.apk)*itemStatus.ablityPowerper
-                                               *+ ((itemStatus.abilityPower + strengthStatus.apk)*strengthStatus.apper */);
+            //{0} 주문력 수치 : 아이템주문력 + 증강주문력 
+            apSTAT.text = string.Format("{0}", itemStatus.abilityPower /*+strengthStatus.apk */);
 
             //주문력 설명창
-            ap.text = string.Format("현재 주문력 : 0"
+            ap.text = string.Format("현재 주문력 : {0}"
               ,//{0} 주문력 : 아이템주문력 + 증강주문력 + (아이템주문력+증강주문력) * 증강 주문력 퍼센트
               itemStatus.abilityPower /* +strength.ap + (itemStatus.abilityPower + strengthStatus.ap)*strengthStatus.apper*/);
 
@@ -180,9 +203,11 @@ public class SetStatUIManager : MonoBehaviour
                 DataManger.unitStatDictionary[1].MDefence
                 ,//{2} 추가 마법 저항력: 아이템마법저항력 +  (성장마법저항력 * 레벨) 
                 itemStatus.magicResistance + (DataManger.unitStatDictionary[1].GrowthmDefence * DataManger.unitStatDictionary[1].Level)
-                ,/*{3} 마법피해 감소량: %%마법저항력이 0보다 높으면%% 100 - 100/(100+(기본마법저항력 + 성장마법저항력*Level + 아이템마법저항력)*/
+                ,/*{3} 마법피해 감소량: %%마법저항력이 0보다 높으면%% 100 -(10000/(100+(기본마법저항력 + 성장마법저항력*Level + 아이템마법저항력)*/
 
-                100 - (100 / (100 + (DataManger.unitStatDictionary[1].MDefence + (DataManger.unitStatDictionary[1].GrowthmDefence * DataManger.unitStatDictionary[1].Level) + itemStatus.magicResistance))));
+                (int)(100 - (10000/(100 + ((DataManger.unitStatDictionary[1].MDefence + (DataManger.unitStatDictionary[1].GrowthmDefence * DataManger.unitStatDictionary[1].Level)
+                                + itemStatus.magicResistance/*+ strengthStatus.magicResistance*/)))))
+                );
             }
 
             //마법저항력이 0보다 작으면
@@ -197,8 +222,9 @@ public class SetStatUIManager : MonoBehaviour
                 DataManger.unitStatDictionary[1].MDefence
                 ,//{2} 추가 마법 저항력: 아이템마법저항력 +  (성장마법저항력 * 레벨) 
                 itemStatus.magicResistance + (DataManger.unitStatDictionary[1].GrowthmDefence * DataManger.unitStatDictionary[1].Level)
-                ,/*{3} 마법피해 감소량: %%마법저항력이 0보다 낮으면%% 100 - (2 - (100 / (100 + (기본마법저항력 + 성장마법저항력 * Level + 아이템마법저항력))*/
-                100 - (2 - 100 / (100 + (DataManger.unitStatDictionary[1].MDefence + (DataManger.unitStatDictionary[1].GrowthmDefence * DataManger.unitStatDictionary[1].Level) + itemStatus.magicResistance))));
+                ,/*{3} 마법피해 감소량: %%마법저항력이 0보다 낮으면%% 100-(2-(10000 / (100 + (기본마법저항력 + 성장마법저항력 * Level + 아이템마법저항력)))))*/
+                (int)100-(2-10000/(100 + (DataManger.unitStatDictionary[1].MDefence + (DataManger.unitStatDictionary[1].GrowthmDefence * DataManger.unitStatDictionary[1].Level)
+                            + itemStatus.magicResistance/*+ strengthStatus.magicResistance*/))));
             }
 
             //7.
@@ -261,15 +287,15 @@ public class SetStatUIManager : MonoBehaviour
             //10.
             //방어구관통력수치
             //{0} 물리관통력수치 : 아이템방어구관통력 + 증강물리관통력
-            //{1} 방어구관통력수치 :아이템방어구관통력% + 증강방어구 관통력%
-            armorPenetrationSTAT.text = string.Format("{0}||{1}%", itemStatus.armorPenetration /*+strengthStatus.ArmorPenetration*/, itemStatus.armorPenetration + strengthStatus.ArmorPenetrationper);
+            //{1} 방어구관통력수치 :증강방어구 관통력%
+            armorPenetrationSTAT.text = string.Format("{0}||{1}%", itemStatus.armorPenetration /*+strengthStatus.ArmorPenetration*/,  0 /*+ strengthStatus.ArmorPenetrationper*/);
             //방어구관통력 설명창
             armorPenetration.text = string.Format("현재 물리 관통력 | 방어구 관통력: {0} | {1}%"
 
               ,//{0} 물리관통력수치 : 아이템방어구관통력 + 증강물리관통력
                itemStatus.armorPenetration /*+strengthStatus.ArmorPenetration*/
               ,//{1} 방어구관통력수치 :아이템방어구관통력% + 증강방어구 관통력%
-               itemStatus.armorPenetration + strengthStatus.ArmorPenetrationper
+              0 /*itemStatus.armorPenetrationper + strengthStatus.ArmorPenetrationper*/
               );
 
             //11.
@@ -295,7 +321,7 @@ public class SetStatUIManager : MonoBehaviour
               ,//{1} 기본사정거리 : 기본사정거리
               DataManger.unitStatDictionary[1].AttackRange
               ,//{2} 추가사정거리 : 아이템사정거리
-              DataManger.unitStatDictionary[1].AttackRange
+              0/*itemStatus.AttackRange*/              
               );
 
             //13.
@@ -303,7 +329,7 @@ public class SetStatUIManager : MonoBehaviour
             //{0}자원회복수치 : 기본자원회복수치 +  (성장자원회복수치 * 레벨) + ((기본체력회복+성장자원회복수치*레벨) * 아이템 자원회복))
             // %%실제 적용은%% 1초당 임으로 (체력회복수치/5)를 적용해야함
             mpRegenSTAT.text = string.Format("{0}", DataManger.unitStatDictionary[1].MpRecovery + (DataManger.unitStatDictionary[1].GrowthmpRecovery * DataManger.unitStatDictionary[1].Level)
-                                                   +DataManger.unitStatDictionary[1].MpRecovery + (DataManger.unitStatDictionary[1].GrowthmpRecovery * DataManger.unitStatDictionary[1].Level)* itemStatus.basicManaRegenaration
+                                                   + DataManger.unitStatDictionary[1].MpRecovery + (DataManger.unitStatDictionary[1].GrowthmpRecovery * DataManger.unitStatDictionary[1].Level) * itemStatus.basicManaRegenaration
                                                     );
 
             //자원회복 설명창
@@ -323,14 +349,14 @@ public class SetStatUIManager : MonoBehaviour
             //마법관통력 수치
             //{0}마법관통력(절대값)수치 : 아이템마법관통력 + 증강마법관통력
             //{1}마법관통력%수치 : 마법관통력% + 증강마법관통력%
-            magicPenetrationSTAT.text = string.Format("{0}||{1}",itemStatus.magicPenetration /*+strengthStatus.magicPenetration*/,strengthStatus.MagicPenetrationper);
+            magicPenetrationSTAT.text = string.Format("{0} | {1}", itemStatus.magicPenetration /*+strengthStatus.magicPenetration*/, 0/*itemStatus.magicPenetrationper +strengthStatus.MagicPenetrationper*/);
 
             //마법관통력 설명창
             magicPenetration.text = string.Format("현재 마법 관통력 : {0} | {1}%"
               ,//{0}마법관통력(절대값)수치 : 아이템마법관통력 + 증강마법관통력
               itemStatus.magicPenetration /*+strengthStatus.magicPenetration*/
               ,//{1}마법관통력%수치 : 마법관통력% + 증강마법관통력%
-              strengthStatus.MagicPenetrationper
+              0/*itemStatus.magicPenetrationper + strengthStatus.MagicPenetrationper*/
               );
 
             //15.

@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
-using static Unity.VisualScripting.Metadata;
 
 public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {

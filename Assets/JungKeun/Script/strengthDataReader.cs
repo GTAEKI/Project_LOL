@@ -8,7 +8,6 @@ public class strengthDataReader : MonoBehaviour
 {
     Strength[] strength;
 
-
     void Start()
     {
         string strengthFilePath = "Assets/JungKeun/JK_csv/StrengthInfo.csv";
