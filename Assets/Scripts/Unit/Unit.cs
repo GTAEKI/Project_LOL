@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    // ?醫롫짗??용쐻??덉굲?醫롫짗??
-    protected UnitStat unitStat;                    // ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫짗??(?醫롫짗??용쐻??덉굲?醫롫짗??
-    protected CurrentUnitStat currentUnitStat;      // ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫짗??(?醫롫짗??용쐻?諛댁빽)
-    protected Vector3 targetPos;                    // ?醫롫뼓?紐꾩굲?醫롫짗???醫롫짗??덊뒄
+    // 데이터
+    protected UnitStat unitStat;                    // 유닛 기본 베이스 스탯
+    protected CurrentUnitStat currentUnitStat;      // 유닛 현재 스탯
+    protected Vector3 targetPos;                    // 목표 위치
 
     [Header("Game Team Type")]
     [SerializeField] protected Define.GameTeam unitTeam;             // Unit's Team Type
@@ -81,7 +81,12 @@ public class Unit : MonoBehaviour
     {
         // Data
         currentUnitStat = new CurrentUnitStat(unitStat);
-        currentUnitStat.OnHeal(unitStat.Hp);
+        currentUnitStat.SettingHp(unitStat.Hp);
+        currentUnitStat.SettingMp(unitStat.Mp);
+        currentUnitStat.SettingHpRecovery(unitStat.HpRecovery);
+        currentUnitStat.SettingMpRecovery(unitStat.MpRecovery);
+        currentUnitStat.SettingHpGroup(currentUnitStat.Hp, currentUnitStat.HpRecovery);
+        currentUnitStat.SettingMpGroup(currentUnitStat.Mp, currentUnitStat.MpRecovery);
 
         // UI
         unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // ?醫롫짗??용쐻??덉굲 HUD ?醫롫짗??용쐻??덉굲

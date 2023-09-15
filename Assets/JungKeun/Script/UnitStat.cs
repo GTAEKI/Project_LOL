@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙 클占쏙옙占쏙옙
-/// 占쏙옙關占?230911
+/// 현재 유닛 스탯 클래스
+/// 김민섭_230911
 /// </summary>
 public class CurrentUnitStat
 {
-    public UnitStat UnitStat { private set; get; }       // 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙
+    public UnitStat UnitStat { private set; get; }       // 기본 베이스 유닛 스탯
 
     public float Hp { private set; get; } = 0f;
+    public float Mp { private set; get; } = 0f;
+    public float HpRecovery { private set; get; } = 0f;
+    public float MpRecovery { private set; get; } = 0f;
 
     /// <summary>
     /// 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占싶몌옙 占쏙옙占쏙옙占싹댐옙 占쏙옙占쏙옙占쏙옙
@@ -22,18 +25,79 @@ public class CurrentUnitStat
         UnitStat = unitStat;
     }
 
+    #region 세팅 함수
+
     /// <summary>
-    /// 체占쏙옙 占쏙옙占쏙옙 占쌉쇽옙
-    /// 占쏙옙關占?230911
+    /// 체력 세팅 함수
+    /// 김민섭_230911
     /// </summary>
-    /// <param name="value">占쏙옙치占쏙옙</param>
+    /// <param name="value">수치값</param>
     public void SettingHp(float value) => Hp = value;
 
     /// <summary>
-    /// 체占쏙옙 회占쏙옙 占쌉쇽옙
-    /// 占쏙옙關占?230911
+    /// 마나 세팅 함수
+    /// 김민섭_230915
     /// </summary>
-    /// <param name="value">회占쏙옙占쏙옙</param>
+    /// <param name="value">수치값</param>
+    public void SettingMp(float value) => Mp = value;
+
+    /// <summary>
+    /// 체력자연회복량 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="value">수치값</param>
+    public void SettingHpRecovery(float value) => HpRecovery = value;
+
+    /// <summary>
+    /// 마나자연회복량 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="value">수치값</param>
+    public void SettingMpRecovery(float value) => MpRecovery = value;
+
+    /// <summary>
+    /// 체력 관련 스탯 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="hp">최대 체력</param>
+    /// <param name="recovery">자연 회복량</param>
+    public void SettingHpGroup(float hp, float recovery)
+    {
+        SettingHp(hp);
+        SettingHpRecovery(recovery);
+
+        UI_UnitBottomLayer bottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
+        if(bottomLayer != null)
+        {
+            bottomLayer.SetGaugeBar(UI_UnitBottomLayer.GaugeType.Hp, hp, UnitStat.Hp, recovery);
+        }
+    }
+
+    /// <summary>
+    /// 마나 관련 스탯 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="mp">최대 마나</param>
+    /// <param name="recovery">자연 회복량</param>
+    public void SettingMpGroup(float mp, float recovery)
+    {
+        SettingMp(mp);
+        SettingMpRecovery(recovery);
+
+        UI_UnitBottomLayer bottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
+        if (bottomLayer != null)
+        {
+            bottomLayer.SetGaugeBar(UI_UnitBottomLayer.GaugeType.Mp, mp, UnitStat.Mp, recovery);
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 체력 회복 함수
+    /// 김민섭_230911
+    /// </summary>
+    /// <param name="value">회복량</param>
     public void OnHeal(float value)
     {
         Hp += value;
@@ -45,8 +109,8 @@ public class CurrentUnitStat
     }
 
     /// <summary>
-    /// 占쏙옙占쏙옙占쏙옙 占싸울옙 占쌉쇽옙
-    /// 占쏙옙關占?230911
+    /// 데미지 함수
+    /// 김민섭_230911
     /// </summary>
     /// <param name="value">占쏙옙占쏙옙占쏙옙</param>
     public void OnDamaged(float value)
@@ -140,18 +204,20 @@ public class UnitStat
     public float GrowthattackRange { get; private set; }
 
     /// <summary>
-    /// ?꾩떆 ?앹꽦??
-    /// 源誘쇱꽠_230908
+    /// 임시 생성자
+    /// 김민섭_230908
     /// </summary>
-    public UnitStat(int hp, float movementSpeed)
+    public UnitStat(MS.Data.UnitBaseStat baseStat)
     {
-        Hp = hp;
-        MoveMentSpeed = movementSpeed;
+        Hp = baseStat.maxHp;
+        HpRecovery = baseStat.hpRecovery;
+        Mp = baseStat.maxMp;
+        MpRecovery = baseStat.mpRecovery;
     }
 
     /// <summary>
-    /// ?꾩떆 ?앹꽦??
-    /// 源誘쇱꽠_230908
+    /// 임시 생성자
+    /// 김민섭_230908
     /// </summary>
     public UnitStat(int indexnumber, string name, string EnglishName, float Hp, float Mp, float Atk, float Defence, float MDefence, float AtkSpeed, float MoveMentSpeed,
                     float HpRecovery, float MpRecovery,float AttackRange, float Growthhp, float Growthmp, float Growthatk, float Growthdefence, float GrowthatkSpeed,

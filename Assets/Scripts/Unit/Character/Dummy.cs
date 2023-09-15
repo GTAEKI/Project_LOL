@@ -8,7 +8,7 @@ public class Dummy : Unit
     {
         Debug.Log("�̰� ����ƺ��.");
 
-        unitStat = new UnitStat(10000, 0f);
+        //unitStat = new UnitStat(10000, 0f);
 
         base.Init();
     }
