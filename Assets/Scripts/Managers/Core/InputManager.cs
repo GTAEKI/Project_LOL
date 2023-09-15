@@ -1,17 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InputManager
 {
-    private GameObject playerSubject;      // °üÂû ÁÖÃ¼
-    private Unit playerUnit;               // ÇÃ·¹ÀÌ¾î (º»ÀÎ)
+    private GameObject playerSubject;      // ê´€ì°° ì£¼ì²´
+    private Unit playerUnit;               // í”Œë ˆì´ì–´ (ë³¸ì¸)
 
     /// <summary>
-    /// Managers Å¬·¡½ºÀÇ Start ÇÔ¼ö¿¡¼­ µ¿ÀÛÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// Managers í´ë˜ìŠ¤ì˜ Start í•¨ìˆ˜ì—ì„œ ë™ì‘í•˜ëŠ” í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230906
     /// </summary>
     public void Init()
     {
@@ -20,12 +21,12 @@ public class InputManager
     }
 
     /// <summary>
-    /// Managers Å¬·¡½ºÀÇ Update ÇÔ¼ö¿¡¼­ µ¿ÀÛÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// Managers í´ë˜ìŠ¤ì˜ Update í•¨ìˆ˜ì—ì„œ ë™ì‘í•˜ëŠ” í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230906
     /// </summary>
     public void OnUpdate()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;      // UI ÅÍÄ¡ ¹æÁö
+        if (EventSystem.current.IsPointerOverGameObject()) return;      // UI í„°ì¹˜ ë°©ì§€
 
         playerUnit?.OnUpdate();
 
@@ -36,10 +37,10 @@ public class InputManager
     }
 
     /// <summary>
-    /// ¸¶¿ì½º Å¬¸¯ ÀÌº¥Æ® ÀÔ·Â À¯¹« Ã¼Å© ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ë§ˆìš°ìŠ¤ í´ë¦­ ì´ë²¤íŠ¸ ì…ë ¥ ìœ ë¬´ ì²´í¬ í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230906
     /// </summary>
-    /// <param name="evt">ÀÌº¥Æ® ¹øÈ£</param>
+    /// <param name="evt">ì´ë²¤íŠ¸ ë²ˆí˜¸</param>
     public bool CheckKeyEvent(int evt)
     {
         if (Input.GetMouseButtonDown(evt))
@@ -50,8 +51,8 @@ public class InputManager
     }
 
     /// <summary>
-    /// Managers Å¬·¡½ºÀÇ Clear ÇÔ¼ö¿¡¼­ µ¿ÀÛÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// Managers í´ë˜ìŠ¤ì˜ Clear í•¨ìˆ˜ì—ì„œ ë™ì‘í•˜ëŠ” í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230906
     /// </summary>
     public void Clear()
     {
