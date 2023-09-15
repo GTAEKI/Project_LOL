@@ -11,12 +11,12 @@ public class CameraController : MonoBehaviour
     private float camFOV;                       // Camera Field of View
     private float zoomSpeed = 10f;              // Zoom speed
     private float mouseScrollInput;             // Mouse Scroll Input
-    private Vector3 delta;
+    private  Vector3 delta;
 
     private void Start()
     {
         player = GameObject.FindWithTag("Player");
-        delta = new Vector3(0, 9, -6.5f);
+        delta = new Vector3(0, 15, -9f); //230914 배경택 값 수정
 
         camFOV = GetComponent<Camera>().fieldOfView;        
         transform.position = player.transform.position + delta;

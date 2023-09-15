@@ -423,26 +423,26 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void MoveToBattleArea1()
     {
-        cameraWaitArea.gameObject.SetActive(false);
-        cameraBattleArea2.gameObject.SetActive(false);
-        cameraBattleArea1.gameObject.SetActive(true);
-        //TODO 캐릭터 이동
+        //cameraWaitArea.gameObject.SetActive(false);
+        //cameraBattleArea2.gameObject.SetActive(false);
+        //cameraBattleArea1.gameObject.SetActive(true);
+        ////TODO 캐릭터 이동
     }
 
     public void MoveToBattlArea2()
     {
-        cameraWaitArea.gameObject.SetActive(false);
-        cameraBattleArea1.gameObject.SetActive(false);
-        cameraBattleArea2.gameObject.SetActive(true);
-        //TODO 캐릭터 이동
+        //cameraWaitArea.gameObject.SetActive(false);
+        //cameraBattleArea1.gameObject.SetActive(false);
+        //cameraBattleArea2.gameObject.SetActive(true);
+        ////TODO 캐릭터 이동
     }
 
     public void ReturnWaitArea()
     {
-        cameraBattleArea1.gameObject.SetActive(false);
-        cameraBattleArea2.gameObject.SetActive(false);
-        cameraWaitArea.gameObject.SetActive(true);
-        //TODO 캐릭터 이동
+        //cameraBattleArea1.gameObject.SetActive(false);
+        //cameraBattleArea2.gameObject.SetActive(false);
+        //cameraWaitArea.gameObject.SetActive(true);
+        ////TODO 캐릭터 이동
     }
     #endregion
 
