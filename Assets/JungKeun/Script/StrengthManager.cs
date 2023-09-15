@@ -37,7 +37,7 @@ public class StrengthManager : MonoBehaviour
 
     public void Start()
     {
-
+       
         myButton[0].onClick.AddListener(() => clickCard(myButton[0].transform));
         myButton[1].onClick.AddListener(() => clickCard(myButton[1].transform));
         myButton[2].onClick.AddListener(() => clickCard(myButton[2].transform));
@@ -258,56 +258,67 @@ public class StrengthManager : MonoBehaviour
                 if (StrengthCase[i].gameObject.GetComponent<Image>().name == "evilspirit")
                 {
                     strengthes.Ap += 100;
+                    break;
                 }
 
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "proficiency")
                 {
                     strengthes.AttackSpeed += 100;
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "mindtransfer")
                 {
                     strengthes.Hp += strengthes.Mp;
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "massivestrength")
                 {
                     strengthes.atkper += 15;
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "guillotine")
                 {
                     strengthes.atk += 25;
                     strengthes.SkillBoost += 10;
                     strengthes.ArmorPenetration += 15;
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "threadneedle")
                 {
                     strengthes.ArmorPenetrationper += 25;
                     strengthes.MagicPenetrationper += 25;
-
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "iteration")
                 {
                     strengthes.SkillBoost += 60;
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "fatalattack")
                 {
                     strengthes.CriticalChance += 40;
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "heavenlybody")
                 {
                     strengthes.Hp += 1000;
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "atrocities")
                 {
                     strengthes.Apper += 15;
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "continuation")
                 {
                     strengthes.MovementSpeed += (int)(strengthes.SkillBoost * 1.5);
+                    break;
                 }
                 else if (StrengthCase[i].gameObject.GetComponent<Image>().name == "mysteriousFist")
                 {
                     strengthes.atk += 100;
                     strengthes.AttackSpeed += 15;
+                    break;
                 }
 
 
