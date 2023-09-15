@@ -2524,6 +2524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c3b40f4310cb34ba4dc72745262268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitTeam: 0
   currentState: 1
 --- !u!1 &8891263674251985903
 GameObject:
@@ -2577,7 +2578,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5863650252929523565, guid: e2eaa5cc55ff74b09b73dff138631339, type: 3}
+  - {fileID: 2100000, guid: a7cf300bb5057034faf7edff16d9a4cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
