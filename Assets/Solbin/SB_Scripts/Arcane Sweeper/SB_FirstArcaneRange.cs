@@ -51,11 +51,19 @@ public class SB_FirstArcaneRange : MonoBehaviour
 
         if (!firstLimit) // 첫 제한 30초 후
         {
-            if (!SB_UseArcaneSweeper.arcaneUsed && Input.GetKeyDown(KeyCode.Alpha4)) // 범위 활성화
+            if (!SB_UseArcaneSweeper.arcaneUsed && Input.GetKey(KeyCode.Alpha4)) // 범위 활성화
             {
                 firstSprite.enabled = true;
                 secondSprite.enabled = true;
             }
+<<<<<<< HEAD
+=======
+            //else
+            //{
+            //    firstSprite.enabled = false;
+            //    secondSprite.enabled = false;
+            //}
+>>>>>>> parent of 006060d (Chore Shop)
         }
     }
 

@@ -9,15 +9,13 @@ using TMPro;
 public class SB_ButtonSystem : MonoBehaviour
 {
     Button m_buyButton; // 구매 버튼
-    Button m_returnButton; // 되돌리기 버튼
-    Button m_sellButton; // 판매 버튼
+    Button m_returnButton;
     GameObject m_item;
     SB_InvenrotySlot invenrotySlot;
     SB_TabInventorySlot tabInventorySlot;
     SB_Gold gold;
 
     public UnityEvent buyItem;
-    public UnityEvent returnItem;
     public UnityEvent sellItem;
 
     List<GameObject> buyList = new List<GameObject>(); // 구매한 아이템 리스트
@@ -32,8 +30,6 @@ public class SB_ButtonSystem : MonoBehaviour
         m_buyButton.interactable = false;
         m_returnButton = transform.GetChild(2).GetComponent<Button>();
         m_returnButton.interactable = false;
-        m_sellButton = transform.GetChild(1).GetComponent<Button>();
-        m_sellButton.interactable = false;
 
         invenrotySlot = GameObject.Find("Slot Group").transform.GetComponent<SB_InvenrotySlot>();
         tabInventorySlot = GameObject.Find("TapUI").GetComponent<SB_TabInventorySlot>();
@@ -54,21 +50,6 @@ public class SB_ButtonSystem : MonoBehaviour
             m_item = _item;
             m_buyButton.interactable = true;
         }
-    }
-
-    /// <summary>
-    /// 구매 버튼을 통하지 않고 바로 우측 버튼을 눌렀다면
-    /// </summary>
-    public void ClickRightButton(GameObject _item)
-    {
-        m_item = _item;
-        PressBuy();
-    }
-
-    public void ClickRightButton_Sell(GameObject _item)
-    {
-        m_item = _item;
-        PressSell();
     }
 
     /// <summary>
@@ -96,7 +77,6 @@ public class SB_ButtonSystem : MonoBehaviour
         buyItem.Invoke();
 
         ActiveReturnButton();
-        ActiveSellButton();
     }
 
     /// <summary>
@@ -169,27 +149,15 @@ public class SB_ButtonSystem : MonoBehaviour
         m_returnButton.interactable = true;
     }
 
-    /// <summary>
-    /// 구매와 동시에 판매 버튼 활성화
-    /// </summary>
-    public void ActiveSellButton()
-    {
-        m_sellButton.interactable = true;
-    }
-
     public void PressReturn()
     {
         invenrotySlot.ReturnItem();
-        returnItem.Invoke(); // 골드, Tab 인벤토리
-        buyList[buyList.Count - 1].GetComponent<Button>().interactable = true;
+        sellItem.Invoke(); // 골드, Tab 인벤토리
         ActiveBuyButton(buyList[buyList.Count - 1]);
         buyList.RemoveAt(buyList.Count - 1); // 마지막 구매 아이템 리스트에서 제거
 
         if (buyList.Count <= 0)
-        {
             m_returnButton.interactable = false;
-            m_sellButton.interactable = false;
-        }
 
         int mythCount = 0;
         int bootCount = 0;
@@ -213,43 +181,6 @@ public class SB_ButtonSystem : MonoBehaviour
             ActiveBoot();
         }
     }
-
-    /// <summary>
-    /// 판매 메서드
-    /// </summary>
-    public void PressSell()
-    {
-        sellItem.Invoke();
-        buyList[buyList.Count - 1].GetComponent<Button>().interactable = true;
-        ActiveBuyButton(buyList[buyList.Count - 1]);
-        buyList.RemoveAt(buyList.Count - 1); // 마지막 구매 아이템 리스트에서 제거
-
-        if (buyList.Count <= 0)
-        {
-            m_sellButton.interactable = false;
-            m_returnButton.interactable = false;
-        }
-
-        int mythCount = 0;
-        int bootCount = 0;
-
-        for (int i = 0; i < buyList.Count; i++)
-        {
-            if (buyList[i].GetComponent<SB_ItemProperty>().typeNumber == 1)
-                mythCount += 1;
-
-            if (buyList[i].GetComponent<SB_ItemProperty>().typeNumber == 2)
-                bootCount += 1;
-        }
-
-        if (mythCount <= 0)
-        {
-            ActiveMyth();
-        }
-
-        if (bootCount <= 0)
-        {
-            ActiveBoot();
-        }
-    }
 }
+
+// 환불가격 75%

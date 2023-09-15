@@ -30,21 +30,11 @@ public class SB_Gold : MonoBehaviour
     }
 
     /// <summary>
-    /// 아이템 되돌리기 골드 회복
+    /// 아이템 되돌리기 & 판매 시 골드 회복
     /// </summary>
     public void ReturnMoney()
     {
         m_gold += 3000;
-        m_goldText.text = m_gold.ToString();
-    }
-
-    /// <summary>
-    /// 아이템 판매 골드 얻기. 판매가격은 원가 * 0.7f
-    /// </summary>
-    public void EarnMoney() 
-    {
-        int money = Mathf.RoundToInt(3000 * 0.7f);
-        m_gold += money;
         m_goldText.text = m_gold.ToString();
     }
 }

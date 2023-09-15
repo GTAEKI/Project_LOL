@@ -7,11 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
 
-/// <summary>
-/// 상점 내 아이템 선택 스크립트
-/// </summary>
-
-public class SB_ShopItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     GameObject m_largeItemInfo;
     GameObject m_smallItemInfo;
@@ -137,31 +133,24 @@ public class SB_ShopItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     /// <param name="eventData">입력받기</param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            Image image = m_largeItemInfo.transform.GetChild(0).GetComponent<Image>();
-            TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
+        Image image = m_largeItemInfo.transform.GetChild(0).GetComponent <Image>();
+        TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
 
-            Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
+        Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
+
+        if (itemImg == null)
+        {
+            itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
 
             if (itemImg == null)
             {
-                itemImg = Resources.Load<Sprite>($"Item Img/Boots/{m_itemProperty.englishName}");
-
-                if (itemImg == null)
-                {
-                    itemImg = Resources.Load<Sprite>($"Item Img/Myth/{m_itemProperty.englishName}");
-                }
+                itemImg = Resources.Load<Sprite>($"Item Img/Myth/{m_itemProperty.englishName}");
             }
-
-            image.sprite = itemImg;
-            itemName.text = m_itemProperty.name;
-
-            m_buttonSystem.ActiveBuyButton(gameObject);
         }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            m_buttonSystem.ClickRightButton(gameObject);
-        }
+
+        image.sprite = itemImg;
+        itemName.text = m_itemProperty.name;
+
+        m_buttonSystem.ActiveBuyButton(gameObject);
     }
 }
