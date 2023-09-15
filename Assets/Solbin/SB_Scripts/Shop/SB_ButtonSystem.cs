@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using TMPro;
 
 public class SB_ButtonSystem : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class SB_ButtonSystem : MonoBehaviour
 
     List<GameObject> buyList = new List<GameObject>(); // 구매한 아이템 리스트
 
+    GameObject content; // 상점 아이템 목록
+    GameObject popupContent; // 팝업 상점 아이템 목록
+
     public void Start()
     {
         Transform buy = transform.GetChild(3);
@@ -30,6 +34,9 @@ public class SB_ButtonSystem : MonoBehaviour
         invenrotySlot = GameObject.Find("Slot Group").transform.GetComponent<SB_InvenrotySlot>();
         tabInventorySlot = GameObject.Find("TapUI").GetComponent<SB_TabInventorySlot>();
         gold = GameObject.Find("Inven Gold").transform.GetComponent<SB_Gold>();
+
+        content = GameObject.Find("Content");
+        popupContent = GameObject.Find("Side Shop_Down");
     }
 
     /// <summary>
@@ -38,10 +45,9 @@ public class SB_ButtonSystem : MonoBehaviour
     /// <param name="_itemName">구매한 아이템 오브젝트</param>
     public void ActiveBuyButton(GameObject _item)
     {
-        if (gold.m_gold > 3000)
+        if (gold.m_gold >= 3000 && buyList.Count + 1 < 7) // 아직 Count 전이라 +1
         {
             m_item = _item;
-            m_item.GetComponent<Button>().interactable = true; // 선택한 아이템 버튼 활성화
             m_buyButton.interactable = true;
         }
     }
@@ -53,6 +59,8 @@ public class SB_ButtonSystem : MonoBehaviour
     {
         GameObject item = m_item;
 
+        int whatType = m_item.GetComponent<SB_ItemProperty>().typeNumber; // 아이템 정보 타입(전설, 장화, 신화)
+
         buyList.Add(item);
 
         invenrotySlot.ReceiveItem(item);
@@ -61,9 +69,76 @@ public class SB_ButtonSystem : MonoBehaviour
         m_buyButton.interactable = false;
         m_item.GetComponent<Button>().interactable = false; // 선택한 아이템 버튼 비활성화
 
+        if (whatType == 1) // 신화 아이템 구매 시
+            BanMyth();
+        else if (whatType == 2) // 장화 아이템 구매 시
+            BanBoots();
+
         buyItem.Invoke();
 
         ActiveReturnButton();
+    }
+
+    /// <summary>
+    /// 신화 아이템 중복 구매 불가
+    /// </summary>
+    void BanMyth()
+    {
+        TMP_Text mythText = content.transform.GetChild(1).transform.GetChild(0).GetComponent<TMP_Text>();
+        Button[] mythChildren = content.transform.GetChild(1).transform.GetChild(1).GetComponentsInChildren<Button>();
+        Debug.Assert(mythChildren != null);
+
+        for (int i = 0; i < mythChildren.Length; i++)
+        {
+            mythChildren[i].interactable = false;
+        }
+
+        mythText.text = "신화급 (보유 중)";
+    }
+
+    /// <summary>
+    /// 장화 아이템 중복 구매 불가
+    /// </summary>
+    void BanBoots()
+    {
+        Button[] mythChildren = popupContent.GetComponentsInChildren<Button>();
+        Debug.Assert(mythChildren != null);
+
+        for (int i = 0; i < mythChildren.Length; i++)
+        {
+            mythChildren[i].interactable = false;
+        }
+    }
+
+    /// <summary>
+    /// 인벤에 신화 아이템이 없다면 재활성화
+    /// </summary>
+    void ActiveMyth()
+    {
+        TMP_Text mythText = content.transform.GetChild(1).transform.GetChild(0).GetComponent<TMP_Text>();
+        Button[] mythChildren = content.transform.GetChild(1).transform.GetChild(1).GetComponentsInChildren<Button>();
+        Debug.Assert(mythChildren != null);
+
+        for (int i = 0; i < mythChildren.Length; i++)
+        {
+            mythChildren[i].interactable = true;
+        }
+
+        mythText.text = "신화급";
+    }
+
+    /// <summary>
+    /// 인벤에 장화 아이템이 없다면 재활성화
+    /// </summary>
+    void ActiveBoot()
+    {
+        Button[] mythChildren = popupContent.GetComponentsInChildren<Button>();
+        Debug.Assert(mythChildren != null);
+
+        for (int i = 0; i < mythChildren.Length; i++)
+        {
+            mythChildren[i].interactable = true;
+        }
     }
 
     /// <summary>
@@ -80,5 +155,32 @@ public class SB_ButtonSystem : MonoBehaviour
         sellItem.Invoke(); // 골드, Tab 인벤토리
         ActiveBuyButton(buyList[buyList.Count - 1]);
         buyList.RemoveAt(buyList.Count - 1); // 마지막 구매 아이템 리스트에서 제거
+
+        if (buyList.Count <= 0)
+            m_returnButton.interactable = false;
+
+        int mythCount = 0;
+        int bootCount = 0;
+
+        for (int i = 0; i < buyList.Count; i++)
+        {
+            if (buyList[i].GetComponent<SB_ItemProperty>().typeNumber == 1)
+                mythCount += 1;
+
+            if (buyList[i].GetComponent<SB_ItemProperty>().typeNumber == 2)
+                bootCount += 1;
+        }
+
+        if (mythCount <= 0)
+        {
+            ActiveMyth();
+        }
+        
+        if (bootCount <= 0)
+        {
+            ActiveBoot();
+        }
     }
 }
+
+// 환불가격 75%

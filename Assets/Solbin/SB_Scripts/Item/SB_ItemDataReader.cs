@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-
 /// <summary>
 /// 아이템의 정보 csv로 읽어와 property에 할당 
 /// </summary>

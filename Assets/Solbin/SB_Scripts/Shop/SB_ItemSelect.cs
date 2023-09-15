@@ -7,7 +7,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
 
-
 public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     GameObject m_largeItemInfo;

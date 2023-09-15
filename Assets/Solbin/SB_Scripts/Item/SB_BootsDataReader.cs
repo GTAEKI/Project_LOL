@@ -37,18 +37,19 @@ public class SB_BootsDataReader : MonoBehaviour
             {
                 value = lines[i].Split(",");
 
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().name = value[0];
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().englishName = value[1];
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().movementSpeed = int.Parse(value[2]);
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().abilityHaste = int.Parse(value[3]);
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().attackSpeed = int.Parse(value[4]);
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().magicPenetration = int.Parse(value[5]);
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().armor = int.Parse(value[6]);
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().magicResistance = int.Parse(value[7]);
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().tenacity = int.Parse(value[8]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().typeNumber = int.Parse(value[0]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().name = value[1];
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().englishName = value[2];
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().movementSpeed = int.Parse(value[3]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().abilityHaste = int.Parse(value[4]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().attackSpeed = int.Parse(value[5]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().magicPenetration = int.Parse(value[6]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().armor = int.Parse(value[7]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().magicResistance = int.Parse(value[8]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().tenacity = int.Parse(value[9]);
 
                 // 이미지 삽입을 위함
-                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeBootsImg(value[1]);
+                newLegendItem[i - 1].GetComponent<SB_ItemProperty>().ChangeBootsImg(value[2]);
             }
         }
         else
