@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class SB_ArcaneCoolTime : MonoBehaviour
 {
@@ -13,10 +14,10 @@ public class SB_ArcaneCoolTime : MonoBehaviour
         coolTime = transform.GetComponent<TMP_Text>();
         Debug.Assert(coolTime != null);
 
-        // 쿨타임 추가 
+        SB_UseArcaneSweeper.useArcane += new EventHandler(StartCoolTime);
     }
 
-    public void StartCoolTime()
+    public void StartCoolTime(object sender, EventArgs e)
     {
         StartCoroutine(CoolTime());
     }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,6 +14,9 @@ public class SB_TabInventorySlot : MonoBehaviour
     private void Start()
     {
         firstTeam = transform.GetChild(0).transform.GetChild(0);
+
+        SB_ButtonSystem.returnItem += new EventHandler(ReturnItem);
+        SB_ButtonSystem.sellItem += new EventHandler(ReturnItem);
     }
 
     // Update is called once per frame
@@ -43,7 +48,7 @@ public class SB_TabInventorySlot : MonoBehaviour
     /// <summary>
     /// ButtonSystem 이벤트 받아서 최근 등록된 아이템 반환
     /// </summary>
-    public void ReturnItem()
+    public void ReturnItem(object sender, EventArgs e)
     {
         itemCounter--;
 
