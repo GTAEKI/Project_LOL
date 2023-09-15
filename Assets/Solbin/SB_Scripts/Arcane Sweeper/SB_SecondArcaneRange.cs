@@ -30,7 +30,6 @@ public class SB_SecondArcaneRange : MonoBehaviour
                 Vector3 rangePosition = new Vector3(hit.point.x, hit.point.y + 1, hit.point.z);
                 Vector3 localPosition = transform.InverseTransformPoint(rangePosition);
                 secondRange.transform.localPosition = localPosition;
-                //arcaneSweeper.transform.localPosition = rangePosition;
             }
         }
     }

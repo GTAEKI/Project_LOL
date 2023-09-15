@@ -27,8 +27,11 @@ public class SB_FirstArcaneRange : MonoBehaviour
         secondSprite = secondRange.GetComponent<SpriteRenderer>();
         arcaneCoolTime = GameObject.Find("Cool Time").transform.GetComponent<SB_ArcaneCoolTime>();
 
-        firstSprite.enabled = false;
-        secondSprite.enabled = false;
+        firstRange.SetActive(false);
+        secondRange.SetActive(false);
+
+        //firstSprite.enabled = false;
+        //secondSprite.enabled = false;
 
         //arcaneCoolTime.StartCoolTime();
         //StartCoroutine(StartLimit());
@@ -53,8 +56,11 @@ public class SB_FirstArcaneRange : MonoBehaviour
         {
             if (!SB_UseArcaneSweeper.arcaneUsed && Input.GetKey(KeyCode.Alpha4)) // 범위 활성화
             {
-                firstSprite.enabled = true;
-                secondSprite.enabled = true;
+                firstRange.SetActive(true);
+                secondRange.SetActive(true);
+
+                //firstSprite.enabled = true;
+                //secondSprite.enabled = true;
             }
             //else
             //{
