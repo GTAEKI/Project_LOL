@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class Unit : MonoBehaviour
     // 데이터
     protected UnitStat unitStat;                    // 유닛 기본 베이스 스탯
     protected CurrentUnitStat currentUnitStat;      // 유닛 현재 스탯
+    protected UnitSkill unitSkill;                  // 유닛 스킬 정보
     protected Vector3 targetPos;                    // 목표 위치
 
     [Header("Game Team Type")]
@@ -81,12 +83,6 @@ public class Unit : MonoBehaviour
     {
         // Data
         currentUnitStat = new CurrentUnitStat(unitStat);
-        currentUnitStat.SettingHp(unitStat.Hp);
-        currentUnitStat.SettingMp(unitStat.Mp);
-        currentUnitStat.SettingHpRecovery(unitStat.HpRecovery);
-        currentUnitStat.SettingMpRecovery(unitStat.MpRecovery);
-        currentUnitStat.SettingHpGroup(currentUnitStat.Hp, currentUnitStat.HpRecovery);
-        currentUnitStat.SettingMpGroup(currentUnitStat.Mp, currentUnitStat.MpRecovery);
 
         // UI
         unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // ?醫롫짗??용쐻??덉굲 HUD ?醫롫짗??용쐻??덉굲
@@ -100,6 +96,8 @@ public class Unit : MonoBehaviour
     {
         Move();
         Select();
+
+        CastActiveSkill();
     }
 
     public void Update()
@@ -200,7 +198,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    #region ?醫롫짗??됯텢 ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
+    #region 스킬 관련 함수
 
     /// <summary>
     /// ???醫롫셾?關????醫롫짗??용쐻??덉굲 ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 ?醫롫짗??용쐻??덉굲?醫롫뼣?癒?굲 ?醫롫셾??뚯굲
@@ -256,15 +254,35 @@ public class Unit : MonoBehaviour
         }
     }
 
-    #region ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢
+    #region 액티브 스킬 함수
 
     /// <summary>
-    /// ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 Q ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 액티브 스킬 Q 실행 함수
+    /// 김민섭_230906
     /// </summary>
     protected virtual void CastActiveQ()
     {
-        Debug.Log("Q ?醫롫짗??됯텢 ?醫롫솯?紐꾩굲");
+        Debug.Log("Q 스킬 사용");
+
+        StartCoroutine(CoolActive(0));
+    }
+
+    private IEnumerator CoolActive(int index)
+    {
+        UI_UnitBottomLayer unitBottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
+        if (unitBottomLayer?.GetCooltime((UI_UnitBottomLayer.CooltimeType)index) > 0f) yield break;
+
+        float currentTime = unitSkill.Actives[index].Cooltime;
+        unitBottomLayer?.SetCooltime((UI_UnitBottomLayer.CooltimeType)index, currentTime, unitSkill.Actives[index].Cooltime);        
+
+        while (unitBottomLayer?.GetCooltime((UI_UnitBottomLayer.CooltimeType)index) > 0f)
+        {
+            currentTime -= Time.deltaTime;
+            unitBottomLayer?.SetCooltime((UI_UnitBottomLayer.CooltimeType)index, currentTime, unitSkill.Actives[index].Cooltime);
+
+            yield return null;
+        }
+        yield break;
     }
 
     /// <summary>
@@ -273,7 +291,9 @@ public class Unit : MonoBehaviour
     /// </summary>
     protected virtual void CastActiveW()
     {
-        Debug.Log("W ?醫롫짗??됯텢 ?醫롫솯?紐꾩굲");
+        Debug.Log("W 스킬 사용");
+
+        StartCoroutine(CoolActive(1));
     }
 
     /// <summary>
@@ -282,7 +302,9 @@ public class Unit : MonoBehaviour
     /// </summary>
     protected virtual void CastActiveE()
     {
-        Debug.Log("E ?醫롫짗??됯텢 ?醫롫솯?紐꾩굲");
+        Debug.Log("E 스킬 사용");
+
+        StartCoroutine(CoolActive(2));
     }
 
     /// <summary>
@@ -291,7 +313,9 @@ public class Unit : MonoBehaviour
     /// </summary>
     protected virtual void CastActiveR()
     {
-        Debug.Log("R ?醫롫짗??됯텢 ?醫롫솯?紐꾩굲");
+        Debug.Log("R 스킬 사용");
+
+        StartCoroutine(CoolActive(3));
     }
 
     #endregion
