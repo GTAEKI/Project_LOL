@@ -40,32 +40,24 @@ public class GameManager : MonoBehaviour
     public bool isTeam3Win;
     public bool isTeam4Win;
 
-
-    //TEST player
-    private int player1HP = 10;
-    private int player2HP = 10;
-    private int player3HP = 10;
-    private int player4HP = 10;
-    private int player5HP = 10;
-    private int player6HP = 10;
-    private int player7HP = 10;
-    private int player8HP = 10;
-
+    // 4가지 팀 정의 _230917 배경택
+    public enum Team
+    {
+        Team1,
+        Team2,
+        Team3,
+        Team4
+    }
 
     // 라운드 별 패배시 데미지 _230907 배경택
-    private int teamDamage;
+    private int Team4amage;
     private int[] teamRoundDamages =
     {
         0,2,2,2,4,4,4,6,6,6,8,8,8,10,10,10
     };
 
-
-    // 캐릭터 체력 변수 _230906 배경택
-    private float CharactorHP = 100f;
-
     // 라운드 종료 _230906 배경택
     private bool isRoundOver;
-    //private 
 
     // 게임종료, 한 팀만 살아남았을 경우 _230906 배경택
     private bool isGameOver;
@@ -89,7 +81,7 @@ public class GameManager : MonoBehaviour
     private int roundNumber;
 
     // 자기장 움직임 변수 _230907 배경택
-    private int maneticCount = 0;
+    private int magneticCount = 0;
     private Vector3 MoveTomagneticPos1;
     private Vector3 MoveTomagneticPos2;
     private bool isArriveMagnetic;
@@ -210,11 +202,11 @@ public class GameManager : MonoBehaviour
                     int randomBattleArea = Random.Range(0, 2);
                     if (randomBattleArea == 1)
                     {
-                        MoveToBattleArea1();
+                        //MoveToBattleArea1(); TODO
                     }
                     else
                     {
-                        MoveToBattlArea2();
+                        //MoveToBattlArea2(); TODO
                     }
                     break;
                 }
@@ -281,11 +273,11 @@ public class GameManager : MonoBehaviour
                         {
                             baseTime = 0f;
 
-                            if(maneticCount < 3) // Test : 3번 자기장 위로 움직이게 실행
+                            if(magneticCount < 3) // Test : 3번 자기장 위로 움직이게 실행
                             {
-                                MangeticCycle(); // Cycle마다 자기장의 다음 움직일 위치 계산
+                                MagneticCycle(); // Cycle마다 자기장의 다음 움직일 위치 계산
                             }
-                            else if(maneticCount == 3) // Test : 자기장 일정높이 도달시 라운드종료 할 수 있도록
+                            else if(magneticCount == 3) // Test : 자기장 일정높이 도달시 라운드종료 할 수 있도록
                             {
                                 EndMagneticField(); // 자기장 모드 종료시 실행
                             }
@@ -320,7 +312,7 @@ public class GameManager : MonoBehaviour
     //배경택 230907
     private void EndMagneticField() // 자기장모드 종료
     {
-        maneticCount = 0;
+        magneticCount = 0;
         magneticField1.SetActive(false);
         magneticField2.SetActive(false);
 
@@ -339,10 +331,10 @@ public class GameManager : MonoBehaviour
     }
 
     //배경택 230907
-    private void MangeticCycle() // 자기장 위쪽방향의 위치값 저장
+    private void MagneticCycle() // 자기장 위쪽방향의 위치값 저장
     {
         Debug.Log("자기장 +1");
-        maneticCount += 1;
+        magneticCount += 1;
         isArriveMagnetic = false;
 
         MoveTomagneticPos1 = magneticField1.transform.localPosition + (Vector3.up * 1.5f);
@@ -405,7 +397,7 @@ public class GameManager : MonoBehaviour
     {
         roundNumber += 1; // 라운드 변경
         waitStageMode = waitStageModes[roundNumber]; //라운드별 스테이지 모드 적용
-        teamDamage = teamRoundDamages[roundNumber]; //라운드별 체력감소량 적용
+        Team4amage = teamRoundDamages[roundNumber]; //라운드별 체력감소량 적용
 
         stage = Stage.WAIT_STAGE;
         RoundResult(); // 캐릭터 및 팀 체력계산되면서 수정필요
@@ -421,7 +413,7 @@ public class GameManager : MonoBehaviour
     /// TODO 캐릭터 이동
     /// 배경택 230906
     /// </summary>
-    public void MoveToBattleArea1()
+    public void MoveToBattleArea1(Team team1, Team team2)
     {
         //cameraWaitArea.gameObject.SetActive(false);
         //cameraBattleArea2.gameObject.SetActive(false);
@@ -429,7 +421,7 @@ public class GameManager : MonoBehaviour
         ////TODO 캐릭터 이동
     }
 
-    public void MoveToBattlArea2()
+    public void MoveToBattlArea2(Team team1, Team team2)
     {
         //cameraWaitArea.gameObject.SetActive(false);
         //cameraBattleArea1.gameObject.SetActive(false);
@@ -446,31 +438,84 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    /// 팀 별로 배틀을 어떻게 이루어지게 할 것인지 결정
+    /// 배경택 _ 230917
+    /// </summary>
+    private void BattleSystem()
+    {
+        List<Team> ExistTeams = CheckExistTeam(); //현재 존재하는 팀을 확인
+
+        if(ExistTeams.Count == 2)
+        {
+            
+        }
+        else if(ExistTeams.Count == 3)
+        {
+
+        }
+        else if(ExistTeams.Count == 4)
+        {
+
+        }
+        else
+        {
+            //TODO ExistTeams[0] = win 하도록
+        }
+    }
+
+    // 현재 존재하는 팀을 체크함 _ 230917 배경택
+    private List<Team> CheckExistTeam()
+    {
+        List<Team> teams = new List<Team>();
+
+        if (team1HP > 0)
+        {
+            teams.Add(Team.Team1);
+        }
+        if (team2HP > 0)
+        {
+            teams.Add(Team.Team2);
+        }
+        if (team3HP > 0)
+        {
+            teams.Add(Team.Team3);
+        }
+        if (team4HP > 0)
+        {
+            teams.Add(Team.Team4);
+        }
+
+        return teams;
+    }
+
+
+
     #region 라운드 및 최종 결과 계산 _230907 배경택
     // 라운드 결과 계산 _230907 배경택
     private void RoundResult()
     {
         if (!isTeam1Win)
         {
-            team1HP -= teamDamage;
+            team1HP -= Team4amage;
             isTeam1Win = true;
         }
 
         if (!isTeam2Win)
         {
-            team2HP -= teamDamage;
+            team2HP -= Team4amage;
             isTeam2Win = true;
         }
 
         if (!isTeam3Win)
         {
-            team3HP -= teamDamage;
+            team3HP -= Team4amage;
             isTeam3Win = true;
         }
 
         if (!isTeam4Win)
         {
-            team4HP -= teamDamage;
+            team4HP -= Team4amage;
             isTeam4Win = true;
         }
     }
