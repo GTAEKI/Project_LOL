@@ -12,6 +12,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     GameObject m_largeItemInfo;
     GameObject m_smallItemInfo;
+    Transform m_itemContainer; // 아이템의 부가효과까지 담고 있는 프리팹
     SB_ItemProperty m_itemProperty;
     Button m_buyButton;
     SB_ButtonSystem m_buttonSystem;
@@ -19,6 +20,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     Camera UICamera;
 
     public static bool hoverMouse = false;
+    private bool myMouse = false; // 마우스가 해당 아이콘 위에 있는지 여부
 
     private (string, int)[] itemProperties;
 
@@ -29,6 +31,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         m_smallItemInfo = GameObject.Find("Item Info"); // 작은 화면 설명창
         m_itemProperty = transform.GetComponent<SB_ItemProperty>();
         m_buttonSystem = GameObject.Find("Buttons").transform.GetComponent<SB_ButtonSystem>();
+        m_itemContainer = gameObject.transform.parent;
 
         UICamera = GameObject.Find("UI Camera").transform.GetComponent<Camera>();
 
@@ -54,6 +57,9 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
             infoRect.anchoredPosition = new Vector2(-1765, -550);
         }
+
+        if (!myMouse && Input.GetMouseButtonDown(0))
+            m_itemContainer.GetComponent<Image>().enabled = false;
     }
 
     /// <summary>
@@ -67,6 +73,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         PrintInfoText();
 
         hoverMouse = true;
+        myMouse = true;
 
         RectTransform infoRect = m_smallItemInfo.transform.GetComponent<RectTransform>();
 
@@ -130,6 +137,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerExit(PointerEventData eventData)
     {
         hoverMouse = false;
+        myMouse = false;
     }
 
     /// <summary>
@@ -145,6 +153,8 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             Color color = image.color;
             color.a = 1;
             image.color = color;
+
+            m_itemContainer.GetComponent<Image>().enabled = true; // 클릭하면 파란색 선택 이미지
 
             Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
 
