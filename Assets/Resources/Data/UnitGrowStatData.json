@@ -1,0 +1,19 @@
+{
+  "unitGrowStats": [
+    {
+      "index": "0",
+      "name_ko": "허수아비",
+      "name_en": "Dummy_Puppet",
+      "growHp": "109.0",
+      "growMp": "82.0",
+      "growStrength": "1.0",
+      "growDefense": "100.0",
+      "growMagicDefense": "50.0",
+      "growAttackSpeed": "1.0",
+      "growMovementSpeed": "100.0",
+      "growHpRecovery": "1.2",
+      "growMpRecovery": "0.8",
+      "growAttackRange": "0.0"
+    }
+  ]
+}

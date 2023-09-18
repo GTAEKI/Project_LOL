@@ -1,66 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-/// <summary>
-/// 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙 클占쏙옙占쏙옙
-/// 占쏙옙關占?230911
-/// </summary>
-public class CurrentUnitStat
-{
-    public UnitStat UnitStat { private set; get; }       // 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙
-
-    public float Hp { private set; get; } = 0f;
-
-    /// <summary>
-    /// 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占싶몌옙 占쏙옙占쏙옙占싹댐옙 占쏙옙占쏙옙占쏙옙
-    /// 占쏙옙關占?230911
-    /// </summary>
-    /// <param name="unitStat"></param>
-    public CurrentUnitStat(UnitStat unitStat)
-    {
-        UnitStat = unitStat;
-    }
-
-    /// <summary>
-    /// 체占쏙옙 占쏙옙占쏙옙 占쌉쇽옙
-    /// 占쏙옙關占?230911
-    /// </summary>
-    /// <param name="value">占쏙옙치占쏙옙</param>
-    public void SettingHp(float value) => Hp = value;
-
-    /// <summary>
-    /// 체占쏙옙 회占쏙옙 占쌉쇽옙
-    /// 占쏙옙關占?230911
-    /// </summary>
-    /// <param name="value">회占쏙옙占쏙옙</param>
-    public void OnHeal(float value)
-    {
-        Hp += value;
-        
-        if(Hp >= UnitStat.Hp)
-        {
-            Hp = UnitStat.Hp;
-        }
-    }
-
-    /// <summary>
-    /// 占쏙옙占쏙옙占쏙옙 占싸울옙 占쌉쇽옙
-    /// 占쏙옙關占?230911
-    /// </summary>
-    /// <param name="value">占쏙옙占쏙옙占쏙옙</param>
-    public void OnDamaged(float value)
-    {
-        Hp -= value;
-
-        if(Hp <= 0)
-        {
-            Hp = 0;
-        }
-    }
-}
-
-
 public class UnitStat
 {
     /// <summary>
@@ -140,18 +77,29 @@ public class UnitStat
     public float GrowthattackRange { get; private set; }
 
     /// <summary>
-    /// ?꾩떆 ?앹꽦??
-    /// 源誘쇱꽠_230908
+    /// 임시 생성자
+    /// 김민섭_230908
     /// </summary>
-    public UnitStat(int hp, float movementSpeed)
+    public UnitStat(MS.Data.UnitBaseStat baseStat)
     {
-        Hp = hp;
-        MoveMentSpeed = movementSpeed;
+        indexnumber = baseStat.index;
+        name = baseStat.name_ko;
+        EnglishName = baseStat.name_en;
+        Hp = baseStat.maxHp;
+        Mp = baseStat.maxMp;
+        Atk = baseStat.strength;
+        Defence = baseStat.physicalDefense;
+        MDefence = baseStat.magicDefense;
+        AtkSpeed = baseStat.attackSpeed;
+        MoveMentSpeed = baseStat.movementSpeed;
+        HpRecovery = baseStat.hpRecovery;
+        MpRecovery = baseStat.mpRecovery;
+        AttackRange = baseStat.attackRange;
     }
 
     /// <summary>
-    /// ?꾩떆 ?앹꽦??
-    /// 源誘쇱꽠_230908
+    /// 임시 생성자
+    /// 김민섭_230908
     /// </summary>
     public UnitStat(int indexnumber, string name, string EnglishName, float Hp, float Mp, float Atk, float Defence, float MDefence, float AtkSpeed, float MoveMentSpeed,
                     float HpRecovery, float MpRecovery,float AttackRange, float Growthhp, float Growthmp, float Growthatk, float Growthdefence, float GrowthatkSpeed,
@@ -200,5 +148,249 @@ public class UnitStat
     public void OnChangeMaxHp(float value)
     {
         Hp += value;
+    }
+}
+
+/// <summary>
+/// 현재 유닛 스탯 클래스
+/// 김민섭_230911
+/// </summary>
+public class CurrentUnitStat
+{
+    private float atk;
+    private float apk;
+    private float defence;
+    private float mdefence;
+    private float atkSpeed;
+    private float skillBoost;
+    private float criticalPer;
+    private float movementSpeed;
+    private float hpRecovery;
+    private float mpRecovery;
+    private float armorPenetration;
+    private float magicPenetration;
+    private float attackbloodSucking;
+    private float skillbloodSucking;
+    private float attackRange;
+    private float tenacity;
+
+    public UnitStat UnitStat { private set; get; }       // 기본 베이스 유닛 스탯
+
+    public int Level { get; private set; }
+    public float Hp { get; private set; }
+    public float Mp { get; private set; }
+    public float Atk { get => atk; private set { atk = value; RefreshStatusUI(); } }
+    public float Apk { get => apk; private set { apk = value; RefreshStatusUI(); } }
+    public float Defence { get => defence; private set { defence = value; RefreshStatusUI(); } }
+    public float MDefence { get => mdefence; private set { mdefence = value; RefreshStatusUI(); } }
+    public float AtkSpeed { get => atkSpeed; private set { atkSpeed = value; RefreshStatusUI(); } }
+    public float SkillBoost { get => skillBoost; private set { skillBoost = value; RefreshStatusUI(); } }
+    public float CriticalPer { get => criticalPer; private set { criticalPer = value; RefreshStatusUI(); } }
+    public float MoveMentSpeed { get => movementSpeed; private set { movementSpeed = value; RefreshStatusUI(); } }
+    public float HpRecovery { get => hpRecovery; private set { hpRecovery = value; RefreshStatusUI(); } }
+    public float MpRecovery { get => mpRecovery; private set { mpRecovery = value; RefreshStatusUI(); } }
+    public float ArmorPenetration { get => armorPenetration; private set { armorPenetration = value; RefreshStatusUI(); } }
+    public float ArmorPenetrationPer { get; private set; }
+    public float MagicPenetration { get => magicPenetration; private set { magicPenetration = value; RefreshStatusUI(); } }
+    public float MagicPenetrationPer { get; private set; }
+    public float AttakBloodSucking { get => attackbloodSucking; private set { attackbloodSucking = value; RefreshStatusUI(); } }
+    public float SkillBloodSucking { get => skillbloodSucking; private set { skillbloodSucking = value; RefreshStatusUI(); } }
+    public float AttackRange { get => attackRange; private set { attackRange = value; RefreshStatusUI(); } }
+    public float Tenacity { get => tenacity; private set { tenacity = value; RefreshStatusUI(); } }
+
+    /// <summary>
+    /// 유닛 기본 스탯을 가져와서 세팅하는 생성자
+    /// 김민섭_230911
+    /// </summary>
+    /// <param name="unitStat">유닛 기본 스탯</param>
+    public CurrentUnitStat(UnitStat unitStat)
+    {
+        UnitStat = unitStat;
+
+        atk = UnitStat.Atk;
+        apk = UnitStat.Apk;
+        defence = UnitStat.Defence;
+        mdefence = UnitStat.MDefence;
+        atkSpeed = UnitStat.AtkSpeed;
+        skillBoost = UnitStat.SkillBoost;
+        criticalPer = UnitStat.CriticalPer;
+        movementSpeed = UnitStat.MoveMentSpeed;
+
+        armorPenetration = UnitStat.ArmorPenetration;
+        magicPenetration = UnitStat.MagicPenetration;
+        attackbloodSucking = UnitStat.AttakBloodSucking;
+        skillbloodSucking = UnitStat.SkillBloodSucking;
+        attackRange = UnitStat.AttackRange;
+        tenacity = UnitStat.Tenacity;
+
+        SettingHpGroup(unitStat.Hp, unitStat.HpRecovery);
+        SettingMpGroup(unitStat.Mp, unitStat.MpRecovery);
+
+        RefreshStatusUI();
+    }
+
+    /// <summary>
+    /// 스탯 관련 UI 초기화 함수
+    /// 김민섭_230917
+    /// </summary>
+    private void RefreshStatusUI()
+    {
+        UI_UnitBottomLayer bottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
+        bottomLayer?.SetMainStatusText(this);
+        bottomLayer?.SetOtherStatusText(this);
+    }
+
+    #region 세팅 함수
+
+    /// <summary>
+    /// 체력 세팅 함수
+    /// 김민섭_230911
+    /// </summary>
+    /// <param name="value">수치값</param>
+    public void SettingHp(float value) => Hp = value;
+
+    /// <summary>
+    /// 마나 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="value">수치값</param>
+    public void SettingMp(float value) => Mp = value;
+
+    /// <summary>
+    /// 체력자연회복량 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="value">수치값</param>
+    public void SettingHpRecovery(float value) => HpRecovery = value;
+
+    /// <summary>
+    /// 마나자연회복량 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="value">수치값</param>
+    public void SettingMpRecovery(float value) => MpRecovery = value;
+
+    /// <summary>
+    /// 체력 관련 스탯 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="hp">최대 체력</param>
+    /// <param name="recovery">자연 회복량</param>
+    public void SettingHpGroup(float hp, float recovery)
+    {
+        SettingHp(hp);
+        SettingHpRecovery(recovery);
+
+        UI_UnitBottomLayer bottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
+        if (bottomLayer != null)
+        {
+            bottomLayer.SetGaugeBar(UI_UnitBottomLayer.GaugeType.Hp, hp, UnitStat.Hp, recovery);
+        }
+    }
+
+    /// <summary>
+    /// 마나 관련 스탯 세팅 함수
+    /// 김민섭_230915
+    /// </summary>
+    /// <param name="mp">최대 마나</param>
+    /// <param name="recovery">자연 회복량</param>
+    public void SettingMpGroup(float mp, float recovery)
+    {
+        SettingMp(mp);
+        SettingMpRecovery(recovery);
+
+        UI_UnitBottomLayer bottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
+        if (bottomLayer != null)
+        {
+            bottomLayer.SetGaugeBar(UI_UnitBottomLayer.GaugeType.Mp, mp, UnitStat.Mp, recovery);
+        }
+    }
+
+    /// <summary>
+    /// 공격력 세팅 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="atk">세팅값</param>
+    public void SettingAtk(float atk) => Atk = atk;
+
+    /// <summary>
+    /// 주문력 세팅 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="apk">세팅값</param>
+    public void SettingApk(float apk) => Apk = apk;
+
+    /// <summary>
+    /// 물리방어력 세팅 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="def">세팅값</param>
+    public void SettingDef(float def) => Defence = def;
+
+    /// <summary>
+    /// 마법방어력 세팅 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="mdef">세팅값</param>
+    public void SettingMDef(float mdef) => MDefence = mdef;
+
+    /// <summary>
+    /// 공격속도 세팅 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="atkSpeed">세팅값</param>
+    public void SettingAtkSpeed(float atkSpeed) => AtkSpeed = atkSpeed;
+
+    /// <summary>
+    /// 치명타율 세팅 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="criPer">세팅값</param>
+    public void SettingCriPer(float criPer) => CriticalPer = criPer;
+
+    /// <summary>
+    /// 스킬 가속 세팅 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="skillBoost">세팅값</param>
+    public void SettingSkillBoost(float skillBoost) => SkillBoost = skillBoost;
+
+    /// <summary>
+    /// 이동속도 세팅 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="movement">세팅값</param>
+    public void SettingMovement(float movement) => MoveMentSpeed = movement;
+
+    #endregion
+
+    /// <summary>
+    /// 체력 회복 함수
+    /// 김민섭_230911
+    /// </summary>
+    /// <param name="value">회복량</param>
+    public void OnHeal(float value)
+    {
+        Hp += value;
+
+        if (Hp >= UnitStat.Hp)
+        {
+            Hp = UnitStat.Hp;
+        }
+    }
+
+    /// <summary>
+    /// 데미지 함수
+    /// 김민섭_230911
+    /// </summary>
+    /// <param name="value">占쏙옙占쏙옙占쏙옙</param>
+    public void OnDamaged(float value)
+    {
+        Hp -= value;
+
+        if (Hp <= 0)
+        {
+            Hp = 0;
+        }
     }
 }
