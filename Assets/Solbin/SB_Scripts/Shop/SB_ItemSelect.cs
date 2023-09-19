@@ -23,6 +23,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private bool myMouse = false; // 마우스가 해당 아이콘 위에 있는지 여부
 
     private (string, int)[] itemProperties;
+    private string allProperty;
 
     // Start is called before the first frame update
     void Start()
@@ -112,7 +113,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         image.sprite = itemImg;
         itemName.text = m_itemProperty.name;
 
-        string allProperty = string.Empty;
+        allProperty = string.Empty;
         foreach ((string propertyName, int propertyValue) in itemProperties) // 튜플의 아이템 속성 출력
         {
             if (propertyValue > 0)
@@ -149,10 +150,15 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             Image image = m_largeItemInfo.transform.GetChild(0).GetComponent<Image>();
-            TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
+            Image smallImage = m_largeItemInfo.transform.GetChild(1).GetComponent<Image>();
+            TMP_Text itemName = m_largeItemInfo.transform.GetChild(2).GetComponent<TMP_Text>();
+            TMP_Text itemInfo = m_largeItemInfo.transform.GetChild(3).GetComponent<TMP_Text>();
             Color color = image.color;
+            Color smallColor = smallImage.color;
             color.a = 1;
+            smallColor.a = 1;
             image.color = color;
+            smallImage.color = smallColor;
 
             m_itemContainer.GetComponent<Image>().enabled = true; // 클릭하면 파란색 선택 이미지
 
@@ -169,7 +175,9 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
 
             image.sprite = itemImg;
+            smallImage.sprite = itemImg;
             itemName.text = m_itemProperty.name;
+            itemInfo.text = allProperty;
 
             m_buttonSystem.ActiveBuyButton(gameObject);
         }
