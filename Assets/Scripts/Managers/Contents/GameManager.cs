@@ -15,7 +15,12 @@ public class GameManager
     }
 
     private Dictionary<int, Transform[]> waitAreaSpawnPointDict = new Dictionary<int, Transform[]>();       // 대기존 스폰 포인트
+    private Dictionary<int, Transform[]> battleAreaASpawnPointDict = new Dictionary<int, Transform[]>();    // 배틀존A 스폰 포인트
+    private Dictionary<int, Transform[]> battleAreaBSpawnPointDict = new Dictionary<int, Transform[]>();    // 배틀존B 스폰 포인트
     private Dictionary<int, TeamController> totalTeamDict = new Dictionary<int, TeamController>();          // 아레나 참가팀
+
+    private GameObject director;                                                                    // 카메라 관리자
+    private Dictionary<int, Vector3> directorPosDict = new Dictionary<int, Vector3>();              // 카메라 관리자 이동 위치
 
     private FlowerObjectManager healFlowerManager;      // 회복초 관리자
     private FlowerObjectManager explosionFlowerManager; // 폭발초 관리자
@@ -142,6 +147,11 @@ public class GameManager
 
     public void Init()
     {
+        director = GameObject.Find("Director");
+        directorPosDict.Add(-1, new Vector3(0, 0, -94));
+        directorPosDict.Add(0, Vector3.zero);
+        directorPosDict.Add(1, new Vector3(130, 0, 0));
+
         // 게임시작시 스테이지 대기모드로 초기화 _230906 배경택
         stage = Stage.WAIT_STAGE;
         roundNumber = 0;
@@ -156,7 +166,23 @@ public class GameManager
             waitAreaSpawnPointDict.Add(i, spawnPoints);
         }
 
-        // TODO: 배틀존 스폰 포인트 추가
+        // 배틀존 스폰 포인트 추가
+        Transform battleAreaZone = GameObject.Find("BattleAreaZone").transform;
+        for(int i = 1; i <= TOTAL_ARENA_TEAM; i+=2)
+        {
+            int index;
+            if (i == 1) index = 0;
+            else index = 1;
+
+            GameObject battleArea = battleAreaZone.transform.GetChild(index).gameObject;
+            Transform pointParent = battleArea.transform.Find("RespawnPoints");
+
+            Transform[] spawnRedPoints = { pointParent.GetChild(0).GetChild(0), pointParent.GetChild(0).GetChild(1) };
+            battleAreaASpawnPointDict.Add(i, spawnRedPoints);
+
+            Transform[] spawnBluePoints = { pointParent.GetChild(1).GetChild(0), pointParent.GetChild(1).GetChild(1) };
+            battleAreaASpawnPointDict.Add(i + 1, spawnBluePoints);
+        }
 
         // 아레나 참여팀 초기화 진행
         for (int i = 1; i <= TOTAL_ARENA_TEAM; i++)
@@ -212,7 +238,7 @@ public class GameManager
 
     public void OnUpdate()
     {
-        //GameFlow(); //게임 흐름 함수(시간에 따라 제어) _230906 배경택
+        GameFlow(); //게임 흐름 함수(시간에 따라 제어) _230906 배경택
 
         if (!isArriveMagnetic) // 자기장이 전부 줄어들었는가 _230907 배경택
         {
@@ -231,7 +257,7 @@ public class GameManager
         switch (stage)
         {
             case Stage.WAIT_STAGE: UpdateWait(); break;
-            case Stage.BATTLE_STAGE: UpdateBattle(); break;
+            //case Stage.BATTLE_STAGE: UpdateBattle(); break;
         }
     }
 
@@ -248,40 +274,50 @@ public class GameManager
             Debug.Log("Test: 경기장 이동");
 
             // 랜덤 한 위치로 카메라 이동
-            int randomBattleArea = Random.Range(0, 2);
-            if (randomBattleArea == 1)
+            MoveMap(Random.Range(0, 2));
+
+            // 각 팀들이 지정된 위치로 위치 이동
+            for (int i = 1; i <= totalTeamDict.Count; i++)
             {
-                MoveToBattleArea1();
-            }
-            else
-            {
-                MoveToBattlArea2();
+                TeamController arenaTeam = totalTeamDict[i];
+
+                // Test: 대기존 스폰 포인트로 세팅
+                arenaTeam.SetSpawnPoint(battleAreaASpawnPointDict[i]);
+
+                // Test: 팀원들 부모 오브젝트 재정의
+                for(int j = 0; j < arenaTeam.Players.Count; j++)
+                {
+                    arenaTeam.Players[j].transform.parent = battleAreaASpawnPointDict[i][j];
+                }
+
+                // Test: 스폰 포인트로 이동
+                arenaTeam.SpawnPlayers();
             }
             return;
         }
 
-        switch (waitStageMode) // 라운드 수에 따라 모드에 맞게 실행
-        {
-            case WaitStageMode.BASIC_MODE:
-                Debug.Log("대기실_기본");
+        //switch (waitStageMode) // 라운드 수에 따라 모드에 맞게 실행
+        //{
+        //    case WaitStageMode.BASIC_MODE:
+        //        Debug.Log("대기실_기본");
 
-                break;
+        //        break;
 
-            case WaitStageMode.MONEY_1000_MODE:
-                Debug.Log("대기실_1000_돈");
+        //    case WaitStageMode.MONEY_1000_MODE:
+        //        Debug.Log("대기실_1000_돈");
 
-                break;
+        //        break;
 
-            case WaitStageMode.MONEY_3000_MODE:
-                Debug.Log("대기실_3000_돈");
+        //    case WaitStageMode.MONEY_3000_MODE:
+        //        Debug.Log("대기실_3000_돈");
 
-                break;
+        //        break;
 
-            case WaitStageMode.CARD_MODE:
-                Debug.Log("대기실_카드");
+        //    case WaitStageMode.CARD_MODE:
+        //        Debug.Log("대기실_카드");
 
-                break;
-        }
+        //        break;
+        //}
     }
 
     public void UpdateBattle()
@@ -497,6 +533,12 @@ public class GameManager
         //cameraBattleArea1.gameObject.SetActive(true);
         ////TODO 캐릭터 이동
     }
+
+    /// <summary>
+    /// 카메라 관리자 이동 함수
+    /// 김민섭_230919
+    /// </summary>
+    private void MoveMap(int index) => director.transform.position = directorPosDict[index];
 
     public void MoveToBattlArea2()
     {

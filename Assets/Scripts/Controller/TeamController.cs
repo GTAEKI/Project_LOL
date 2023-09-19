@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class TeamController
 {
-    private Dictionary<int, Unit> players = new Dictionary<int, Unit>();        // 소속 플레이어
     private Transform[] spawnPoints;        // 스폰할 위치
 
     private int teamNumber;                 // 팀 번호
     private int currentHp;                  // 현재 체력
     
+    public Dictionary<int, Unit> Players { private set; get; } = new Dictionary<int, Unit>();       // 소속 플레이어
+
     #region 상수
 
     private const int TEAM_HP_MAX = 20;                  // 팀 최대 체력 _230906 배경택
@@ -32,7 +33,7 @@ public class TeamController
     /// </summary>
     /// <param name="index">팀에 소속된 번호</param>
     /// <param name="player">팀에 참여할 플레이어</param>
-    public void SettingPlayer(int index, Unit player) => players.Add(index, player);
+    public void SettingPlayer(int index, Unit player) => Players.Add(index, player);
 
     /// <summary>
     /// 소속 플레이어 스폰 함수
@@ -40,9 +41,9 @@ public class TeamController
     /// </summary>
     public void SpawnPlayers()
     {
-        for(int i = 0; i < players.Count; i++)
+        for(int i = 0; i < Players.Count; i++)
         {
-            players[i].transform.position = spawnPoints[i].position;
+            Players[i].transform.position = spawnPoints[i].position;
         }
     }
 
