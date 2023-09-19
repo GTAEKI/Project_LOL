@@ -10,7 +10,8 @@ public class GameScene : BaseScene
 
         SceneType = Define.Scene.Game;
 
-        //Managers.UI.ShowPopupUI<UI_DummyController>();
+        // 기본 Scene UI
+        Managers.UI.ShowSceneUI<UI_UnitBottomLayer>();      // 플레이어 하단 UI 생성
     }
 
     public override void Clear()

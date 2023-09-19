@@ -8,7 +8,8 @@ public class TestPlayer : Unit
     {
         Debug.Log("테스트 플레이어가 생성되었습니다.");
 
-        unitStat = new UnitStat(1000, 5f);
+        unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Dummy_Puppet]);
+        unitSkill = new UnitSkill(Define.UnitName.Dummy_Puppet);
 
         base.Init();
     }

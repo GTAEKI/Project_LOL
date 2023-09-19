@@ -6,9 +6,7 @@ public class Dummy : Unit
 {
     public override void Init()
     {
-        Debug.Log("�̰� ����ƺ��.");
-
-        unitStat = new UnitStat(10000, 0f);
+        Debug.Log("허수아비 생성");
 
         base.Init();
     }
