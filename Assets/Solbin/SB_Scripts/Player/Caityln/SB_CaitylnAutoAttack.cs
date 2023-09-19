@@ -22,27 +22,19 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         animator = caityln.GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /// <summary>
     /// 적이 범위 내 있음
     /// </summary>
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        int hitLayer = other.gameObject.layer;
-        if (hitLayer == LayerMask.NameToLayer("Target")) // 평타
+        if (other.tag == "Player") // 평타
         {
             enemyPoint = other.transform.position;
 
             if (!animator.GetBool("Run") && !isAttack) // 만약 달리는 중이 아니라면
             {
                 FindTarget(); // 적 봄
-                StartCoroutine(AutoAttack()); // 평타
             }
         }
     }
@@ -57,9 +49,23 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(dir); // 목표 방향
 
-        float rotationSpeed = 10f; // 회전 속도
-        caityln.transform.rotation = // 부드럽게 회전
-            Quaternion.Slerp(caityln.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        //float rotationSpeed = 20f; // 회전 속도
+        //caityln.transform.rotation = // 부드럽게 회전
+        //    Quaternion.Slerp(caityln.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+
+        caityln.transform.rotation = targetRotation;
+
+        //Quaternion currentRotation = caityln.transform.rotation;
+
+        //float rotationDifference = Quaternion.Angle(currentRotation, targetRotation);
+
+        //if (rotationDifference <= 0.1f)
+        //{
+        //    StartCoroutine(AutoAttack()); // 회전 후 평타 진행
+        //}
+
+        StartCoroutine(AutoAttack());
     }
 
     /// <summary>

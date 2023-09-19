@@ -10,7 +10,7 @@
             "physicalDefense": "100.0",
             "magicDefense": "50.0",
             "attackSpeed": "1.0",
-            "movementSpeed": "100.0",
+            "movementSpeed": "10.0",
             "hpRecovery": "1.2",
             "mpRecovery": "0.8",
             "attackRange": "0.0"    
