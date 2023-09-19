@@ -37,7 +37,6 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         int hitLayer = other.gameObject.layer;
         if (hitLayer == LayerMask.NameToLayer("Target")) // 평타
         {
-            Debug.Log("적 감지");
             enemyPoint = other.transform.position;
 
             if (!animator.GetBool("Run") && !isAttack) // 만약 달리는 중이 아니라면
