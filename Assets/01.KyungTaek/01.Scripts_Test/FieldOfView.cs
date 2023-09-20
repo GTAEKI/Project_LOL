@@ -60,7 +60,7 @@ public class FieldOfView : MonoBehaviour
         if (Vector3.Distance(transform.position, lastUpdatePos) > updateDistance || Time.time < .5f)
         {
             lastUpdatePos = transform.position;
-            fogProjector.UpdateFog();
+            fogProjector?.UpdateFog();
         }
     }
 

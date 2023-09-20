@@ -44,7 +44,7 @@ public class Managers : MonoBehaviour
 
     private void Update()
     {
-        _game.OnUpdate();
+        //_game.OnUpdate();
         _input.OnUpdate();
     }
 
@@ -68,7 +68,7 @@ public class Managers : MonoBehaviour
             s_instance._input.Init();
             s_instance._ui.Init();
 
-            s_instance._game.Init();
+            //s_instance._game.Init();
         }
     }
 
