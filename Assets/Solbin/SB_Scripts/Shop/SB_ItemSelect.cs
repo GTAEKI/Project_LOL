@@ -12,6 +12,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     GameObject m_largeItemInfo;
     GameObject m_smallItemInfo;
+    Transform m_itemContainer; // 아이템의 부가효과까지 담고 있는 프리팹
     SB_ItemProperty m_itemProperty;
     Button m_buyButton;
     SB_ButtonSystem m_buttonSystem;
@@ -19,8 +20,10 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     Camera UICamera;
 
     public static bool hoverMouse = false;
+    private bool myMouse = false; // 마우스가 해당 아이콘 위에 있는지 여부
 
     private (string, int)[] itemProperties;
+    private string allProperty;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +32,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         m_smallItemInfo = GameObject.Find("Item Info"); // 작은 화면 설명창
         m_itemProperty = transform.GetComponent<SB_ItemProperty>();
         m_buttonSystem = GameObject.Find("Buttons").transform.GetComponent<SB_ButtonSystem>();
+        m_itemContainer = gameObject.transform.parent;
 
         UICamera = GameObject.Find("UI Camera").transform.GetComponent<Camera>();
 
@@ -54,6 +58,9 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             RectTransform infoRect = m_smallItemInfo.transform as RectTransform;
             infoRect.anchoredPosition = new Vector2(-1765, -550);
         }
+
+        if (!myMouse && Input.GetMouseButtonDown(0))
+            m_itemContainer.GetComponent<Image>().enabled = false;
     }
 
     /// <summary>
@@ -67,6 +74,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         PrintInfoText();
 
         hoverMouse = true;
+        myMouse = true;
 
         RectTransform infoRect = m_smallItemInfo.transform.GetComponent<RectTransform>();
 
@@ -105,7 +113,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         image.sprite = itemImg;
         itemName.text = m_itemProperty.name;
 
-        string allProperty = string.Empty;
+        allProperty = string.Empty;
         foreach ((string propertyName, int propertyValue) in itemProperties) // 튜플의 아이템 속성 출력
         {
             if (propertyValue > 0)
@@ -130,6 +138,7 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerExit(PointerEventData eventData)
     {
         hoverMouse = false;
+        myMouse = false;
     }
 
     /// <summary>
@@ -141,10 +150,17 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             Image image = m_largeItemInfo.transform.GetChild(0).GetComponent<Image>();
-            TMP_Text itemName = m_largeItemInfo.transform.GetChild(1).GetComponent<TMP_Text>();
+            Image smallImage = m_largeItemInfo.transform.GetChild(1).GetComponent<Image>();
+            TMP_Text itemName = m_largeItemInfo.transform.GetChild(2).GetComponent<TMP_Text>();
+            TMP_Text itemInfo = m_largeItemInfo.transform.GetChild(3).GetComponent<TMP_Text>();
             Color color = image.color;
+            Color smallColor = smallImage.color;
             color.a = 1;
+            smallColor.a = 1;
             image.color = color;
+            smallImage.color = smallColor;
+
+            m_itemContainer.GetComponent<Image>().enabled = true; // 클릭하면 파란색 선택 이미지
 
             Sprite itemImg = Resources.Load<Sprite>($"Item Img/Legend/{m_itemProperty.englishName}");
 
@@ -159,7 +175,9 @@ public class SB_ItemSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
 
             image.sprite = itemImg;
+            smallImage.sprite = itemImg;
             itemName.text = m_itemProperty.name;
+            itemInfo.text = allProperty;
 
             m_buttonSystem.ActiveBuyButton(gameObject);
         }

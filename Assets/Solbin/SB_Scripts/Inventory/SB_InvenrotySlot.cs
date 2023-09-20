@@ -43,7 +43,6 @@ public class SB_InvenrotySlot : MonoBehaviour, IDropHandler
         m_items[m_items.Count - 1].transform.SetSiblingIndex(m_items.Count - 1);
 
         //if ((m_items.Count - 1) > )
-        Debug.Log(m_items.Count - 1);
         m_items[m_items.Count - 1].transform.GetComponent<SB_ItemSelect>().enabled = false; // 상점 아이템 선택 X
         m_items[m_items.Count - 1].transform.GetComponent<SB_ItemSelect_Inven>().enabled = true; // 인벤 아이템 선택 O
 

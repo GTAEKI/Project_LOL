@@ -12,14 +12,14 @@ public class SB_UseArcaneSweeper : MonoBehaviour
 {
     GameObject arcaneSweeper; // 비전 탐지기
     public static bool arcaneUsed = false;
-    FieldOfView fieldOfView;
+    SB_FieldOfView fieldOfView;
     public static event EventHandler useArcane;
 
     // Start is called before the first frame update
     void Start()
     {
         arcaneSweeper = transform.GetChild(0).gameObject;
-        fieldOfView = transform.GetChild(0).GetComponent<FieldOfView>(); // 아이템 Arcane Sweeper의 시야
+        fieldOfView = transform.GetChild(0).GetComponent<SB_FieldOfView>(); // 아이템 Arcane Sweeper의 시야
 
         fieldOfView.enabled = false;
     }
@@ -40,8 +40,6 @@ public class SB_UseArcaneSweeper : MonoBehaviour
     /// <returns></returns>
     IEnumerator ActiveArcaneSweeper()
     {
-        Debug.Log("사용시간은 5초");
-
         fieldOfView.enabled = true;
 
         useArcane?.Invoke(this, EventArgs.Empty); // 비전 탐지기 사용 이벤트
