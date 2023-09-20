@@ -1,6 +1,6 @@
 /// <summary>
-/// 疫꿸퀬? 揶쏅?諭??筌뤴뫁釉??蹂? ?????
-/// 繹먃沃섏눘苑?230906
+/// 다양한 enum 보관 클래스
+/// 김민섭_230906
 /// </summary>
 public class Define
 {
@@ -32,13 +32,13 @@ public class Define
     }
 
     /// <summary>
-    /// Camera Mode enum
-    /// KimMinSeob_230913
+    /// 카메라 타입 enum
+    /// 김민섭_230913
     /// </summary>
     public enum CameraMode
     {
-        QuaterView
-    }
+        WaitView, BattleViewA, BattleViewB
+    }   // 대기존, 전투존A, 전투존B
 
     /// <summary>
     /// Unit's State enum
