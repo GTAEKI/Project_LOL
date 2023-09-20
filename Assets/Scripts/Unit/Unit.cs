@@ -35,21 +35,16 @@ public class Unit : MonoBehaviour
     [Header("Player Current State")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
 
-    #region ?醫롫짗??용쐻??덉굲?醫롫짗??됰뼒
+    #region 프로퍼티
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫짗??됰뼒
-    /// ?醫롫짗??낅퓳??230906
+    /// 현재 상태에 따라 처리하는 프로퍼티
+    /// 김민섭_230906
     /// </summary>
     public virtual Define.UnitState CurrentState
     {
         get => currentState;
-        set
-        {
-            currentState = value;
-
-            //testText.text = currentState.ToString();
-        }
+        set => currentState = value;
     }
 
     public CurrentUnitStat CurrentUnitStat
@@ -63,10 +58,10 @@ public class Unit : MonoBehaviour
 
     #endregion
 
-    #region ?醫롫짗??용쐻?
+    #region 상수
 
-    private const float ROTATE_SPEED = 20f;     // ?醫롫짗??용쐻??덉굲 ???쐻??덉굲?醫롫셽?紐꾩굲
-    private const float RAY_DISTANCE = 100f;     // ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫뻿筌뤿슣??
+    private const float ROTATE_SPEED = 20f;     // 유닛 회전 속도
+    private const float RAY_DISTANCE = 100f;     // 레이 사거리
 
     #endregion
 
@@ -140,7 +135,8 @@ public class Unit : MonoBehaviour
         }
         else
         {
-            float moveDistance = Mathf.Clamp(unitStat.MoveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
+            // 이동속도 비율 조정 0.03f
+            float moveDistance = Mathf.Clamp((currentUnitStat.MoveMentSpeed * 0.03f) * Time.deltaTime, 0f, direct.magnitude);
             transform.position += direct.normalized * moveDistance;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), ROTATE_SPEED * Time.deltaTime);
         }
