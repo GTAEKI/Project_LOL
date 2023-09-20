@@ -5,8 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bush
-  - HealFlowerSpawnPoint
-  - ExplosionFlowerSpawnPoint
   layers:
   - Default
   - TransparentFX

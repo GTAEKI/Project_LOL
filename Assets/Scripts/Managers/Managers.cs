@@ -9,7 +9,7 @@ public class Managers : MonoBehaviour
     // Instance가 get? 호출되면 Init함수가 실행되고 s_instance를 반환함
     private static Managers Instance { get { Init(); return s_instance; } }
 
-    // Core
+    // 매니저별로 신규로 할당
     private DataManager _data = new DataManager();
     private InputManager _input = new InputManager();
     private PoolManager _pool = new PoolManager();
@@ -18,12 +18,6 @@ public class Managers : MonoBehaviour
     private SoundManager _sound = new SoundManager();
     private UIManager _ui = new UIManager();
 
-    // Content
-    private GameManager _game = new GameManager();
-
-    #region 프로퍼티
-
-    // Core
     public static DataManager Data => Instance._data;
     public static InputManager Input => Instance._input;
     public static PoolManager Pool => Instance._pool;
@@ -32,11 +26,6 @@ public class Managers : MonoBehaviour
     public static SoundManager Sound => Instance._sound;
     public static UIManager UI => Instance._ui;
 
-    // Contents
-    public static GameManager Game => Instance._game;
-
-    #endregion
-
     private void Start()
     {
         Init();
@@ -44,7 +33,6 @@ public class Managers : MonoBehaviour
 
     private void Update()
     {
-        _game.OnUpdate();
         _input.OnUpdate();
     }
 
@@ -67,8 +55,6 @@ public class Managers : MonoBehaviour
             s_instance._sound.Init();
             s_instance._input.Init();
             s_instance._ui.Init();
-
-            s_instance._game.Init();
         }
     }
 
