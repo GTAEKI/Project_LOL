@@ -15,7 +15,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     Vector3 enemyPoint;
     Vector3 targetPoint; // 총알 발사 위치
 
-    bool getTarget = false; // 적이 범위 내에 있는지 체크
+    //bool getTarget = false; // 적이 범위 내에 있는지 체크
     bool isAttack = false; // 공격 진행 중 
     bool bulletFire = false; // 총알 이동
 
@@ -32,7 +32,6 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
             ("Assets/Solbin/SB_Prefabs/Auto Attack.prefab", typeof(GameObject));
 
         autoAttack = Instantiate(autoAttackPrefab);
-        autoAttack.transform.SetParent(caityln.transform);
         autoAttack.transform.position = new Vector3(caityln.transform.position.x, 2.5f, caityln.transform.position.z);
 
     }
@@ -72,6 +71,9 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(dir); // 목표 방향
         caityln.transform.rotation = targetRotation;
+        autoAttack.transform.rotation = targetRotation;
+
+        animator.SetBool("Auto Attack", true);
 
         StartCoroutine(AutoAttack());
     }
@@ -82,7 +84,6 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     private IEnumerator AutoAttack()
     {
         isAttack = true;
-        animator.SetBool("Auto Attack", true);
 
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.1f);
 
@@ -90,6 +91,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         targetPoint = enemyPoint;
         targetPoint.y = 2.5f;
 
+        autoAttack.transform.position = caityln.transform.position;
         bulletFire = true; // 총알 발사
 
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.9f);

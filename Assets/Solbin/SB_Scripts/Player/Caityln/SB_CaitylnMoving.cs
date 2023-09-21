@@ -7,8 +7,11 @@ using UnityEngine.TextCore.Text;
 public class SB_CaitylnMoving : Unit
 {
     Animator animator;
-    public static bool caitylnMoving = false;
+    public static bool caitylnMoving = false; // 이동 시 자동 평타 종료
+    public static bool skillAct = false; // 스킬 애니메이션 중 개입 금지
     SB_CaitylnQ caitylnQ; // Q
+    SB_CaitylnW caitylnW; // W
+    SB_CaitylnE caitylnE; // E
 
     public override void Init()
     {
@@ -18,24 +21,31 @@ public class SB_CaitylnMoving : Unit
         base.Init();
 
         animator = GetComponent<Animator>();
-        caitylnQ = transform.GetChild(2).GetComponent<SB_CaitylnQ>();
+        caitylnQ = transform.GetComponent<SB_CaitylnQ>();
+        caitylnW = transform.GetComponent<SB_CaitylnW>();
+        caitylnE = transform.GetComponent<SB_CaitylnE>();
     }
 
     protected override void UpdateMove()
     {
-        caitylnMoving = true;
+        if (!skillAct)
+        {
+            caitylnMoving = true;
+            animator.SetBool("Run", true);
+            base.UpdateMove();
+        }
 
-        animator.SetBool("Run", true);
-
-        base.UpdateMove();
     }
 
     protected override void UpdateIdle()
     {
-        caitylnMoving = false;
+        if (!skillAct)
+        {
+            caitylnMoving = false;
+            animator.SetBool("Run", false);
+            base.UpdateIdle();
+        }
 
-        animator.SetBool("Run", false);
-        base.UpdateIdle();
     }
 
     protected override void CastActiveQ() // 필트오버 피스메이커
@@ -47,13 +57,15 @@ public class SB_CaitylnMoving : Unit
 
     protected override void CastActiveW() // 요들잡이 덫 
     {
-        // 스킬 구현
-        base.CastActiveE();
+        caitylnW.SkillW();
+
+        base.CastActiveW();
     }
 
     protected override void CastActiveE() // 90구경 투망
     {
-        // 스킬 구현
+        caitylnE.SkillE();
+
         base.CastActiveE();
     }
 

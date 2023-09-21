@@ -22,19 +22,20 @@ public class SB_CaitylnQ : MonoBehaviour
 
     private void Start()
     {
-        caityln = transform.parent;
+        caityln = transform;
         caitylnAnimator = caityln.GetComponent<Animator>();
 
         qAttackPrefab = (GameObject)AssetDatabase.LoadAssetAtPath
             ("Assets/Solbin/SB_Prefabs/Attack_Q.prefab", typeof(GameObject));
 
         qAttack = Instantiate(qAttackPrefab);
-        qAttack.transform.SetParent(caityln);
         qAttack.transform.position = new Vector3(caityln.position.x, 2.5f, caityln.position.z);
+        qAttack.transform.rotation = caityln.rotation;
 
         armorAnimator = qAttack.transform.GetComponent<Animator>();
 
         camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
+        Debug.Assert(camera != null);
     }
 
     public void SkillQ()
@@ -58,7 +59,6 @@ public class SB_CaitylnQ : MonoBehaviour
 
     private IEnumerator Fire()
     {
-
         isAttack = true; // 중복 키 입력 X
 
         caitylnAnimator.SetTrigger("PressQ");
@@ -67,9 +67,14 @@ public class SB_CaitylnQ : MonoBehaviour
         dir.y = 0f;
 
         Quaternion targetRotation = Quaternion.LookRotation(dir); // 목표 방향
-        caityln.transform.rotation = targetRotation;
 
-        qAttack.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length * 0.5f);
+
+        caityln.transform.rotation = targetRotation;
+        qAttack.transform.rotation = targetRotation;
+        qAttack.transform.position = caityln.position;
+        qAttack.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+
         bulletFire = true; // 총알 발사
         Invoke("UnfoldBullet", 0.5f); // 총알 펼치기 (애니)
 
@@ -86,16 +91,32 @@ public class SB_CaitylnQ : MonoBehaviour
         armorAnimator.enabled = true;
     }
 
+    private void Update()
+    {
+        if (bulletFire && Input.GetMouseButtonDown(1)) // q 중 이동
+        {
+            Debug.Log("이동 감지");
+            StartCoroutine(ChangeState());
+        }
+    }
+
+    private IEnumerator ChangeState()
+    {
+        caitylnAnimator.SetBool("PressQ_Run", true);
+        yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length);
+        caitylnAnimator.SetBool("PressQ_Run", false);
+    }
+
     private void FixedUpdate()
     {
         if (bulletFire)
         {
-            qAttack.transform.Translate(targetPosition * Time.deltaTime * 0.5f);
+            qAttack.transform.Translate(Vector3.forward * Time.deltaTime * 20f);
 
             if (Vector3.Distance(qAttack.transform.position, caityln.position) > 15f)
             {
                 bulletFire = false;
-
+                qAttack.transform.rotation = caityln.rotation;
                 armorAnimator.Rebind(); // 총알 애니메이션 되감기
                 armorAnimator.enabled = false;
 
