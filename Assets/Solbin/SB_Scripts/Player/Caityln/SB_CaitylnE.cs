@@ -104,7 +104,7 @@ public class SB_CaitylnE : MonoBehaviour
                 armorAnimator.enabled = false;
 
                 eAttack.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-                eAttack.transform.position = new Vector3(caityln.position.x, 2.5f, caityln.position.z);
+                eAttack.transform.position = new Vector3(0, 0, -10);
             }
         }
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// 케이틀린: 평타
@@ -15,12 +17,21 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     Vector3 enemyPoint;
     Vector3 targetPoint; // 총알 발사 위치
 
-    //bool getTarget = false; // 적이 범위 내에 있는지 체크
+    bool getTarget = false; // 적이 범위 내에 있는지 체크
     bool isAttack = false; // 공격 진행 중 
     bool bulletFire = false; // 총알 이동
+    bool trace = false; // 적을 쫓는 중
 
     GameObject autoAttackPrefab; // 자동 평타 총알 프리팹
     GameObject autoAttack; // 자동 평타 총알
+
+    GameObject enemy; // 타겟팅 한 적 챔피언
+    GameObject targetEnemy; // 적 저장
+
+    Vector3 beforPos;
+    Vector3 afterPos;
+
+    Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +45,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         autoAttack = Instantiate(autoAttackPrefab);
         autoAttack.transform.position = new Vector3(caityln.transform.position.x, 2.5f, caityln.transform.position.z);
 
+        rb = GetComponent<Rigidbody>();
     }
 
     /// <summary>
@@ -44,9 +56,11 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     {
         if (other.tag == "Player") // 평타
         {
-            enemyPoint = other.transform.position;
+            enemy = (GameObject)other.gameObject;
+            enemyPoint = enemy.transform.position;
+            getTarget = true;
 
-            if (!animator.GetBool("Run") && !isAttack) // 만약 달리는 중이 아니라면
+            if (!animator.GetBool("Run") && !isAttack) // 이동, 쫓는 중, 공격 중이 아니라면
             {
                 FindTarget(); // 적 봄
             }
@@ -57,7 +71,15 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     {
         if (!animator.GetBool("Run") && other.tag == "Player") // 적이 범위에서 벗어나면
         {
+            enemy = (GameObject)other.gameObject;
+            getTarget = false;
             animator.SetBool("Auto Attack", false);
+        }
+
+        if (other.tag == "Player") // 적이 범위에서 벗어나면
+        {
+            getTarget = false;
+            trace = true;
         }
     }
 
@@ -73,9 +95,11 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         caityln.transform.rotation = targetRotation;
         autoAttack.transform.rotation = targetRotation;
 
-        animator.SetBool("Auto Attack", true);
-
-        StartCoroutine(AutoAttack());
+        if (!trace) // 적을 쫓는 중이 아니라면 자동 공격
+        {
+            animator.SetBool("Auto Attack", true);
+            StartCoroutine(AutoAttack());
+        }
     }
 
     /// <summary>
@@ -84,6 +108,8 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     private IEnumerator AutoAttack()
     {
         isAttack = true;
+
+        targetEnemy = enemy;
 
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.1f);
 
@@ -111,7 +137,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if (Vector3.Distance(autoAttack.transform.position, targetPoint) > 0.1f && bulletFire)
+        if (Vector3.Distance(autoAttack.transform.position, targetPoint) > 0.1f && bulletFire) // 총알 이동
         {
             autoAttack.transform.position =
                 Vector3.MoveTowards(autoAttack.transform.position, targetPoint, Time.deltaTime * 15f);
@@ -123,5 +149,39 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
             autoAttack.transform.position = new Vector3(caityln.transform.position.x, 2.5f, caityln.transform.position.z);
             autoAttack.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
         }
+
+        if (!getTarget && targetEnemy != null)
+        {
+            isAttack = false; // 공격 해제
+
+            beforPos = targetEnemy.transform.position;
+            Invoke("AfterPosCheck", 0.1f);
+
+            SB_CaitylnMoving.skillAct = true;
+            trace = true;
+            animator.SetBool("Auto Attack", false);
+            animator.SetBool("Run", true);
+
+            Vector3 dir = targetEnemy.transform.position - caityln.transform.position;
+            dir.y = 0f;
+
+            Quaternion targetRotation = Quaternion.LookRotation(dir); // 목표 방향
+            caityln.transform.rotation = targetRotation;
+            autoAttack.transform.rotation = targetRotation;
+
+            caityln.transform.Translate(Vector3.forward * 5f * Time.deltaTime);
+        }
+
+        if (getTarget || targetEnemy == null)
+        {
+            trace = false; // 추적 해제
+            animator.SetBool("Run", false);
+        }
+
+    }
+
+    private void AfterPosCheck()
+    {
+        afterPos = enemy.transform.position;
     }
 }

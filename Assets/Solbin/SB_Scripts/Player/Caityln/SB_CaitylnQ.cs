@@ -121,6 +121,7 @@ public class SB_CaitylnQ : MonoBehaviour
                 armorAnimator.enabled = false;
 
                 qAttack.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+                qAttack.transform.position = new Vector3(0, 0, -10);
                 qAttack.transform.position = new Vector3(caityln.position.x, 2.5f, caityln.position.z);
             }
         }

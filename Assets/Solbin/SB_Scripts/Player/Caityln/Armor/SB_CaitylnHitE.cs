@@ -45,6 +45,7 @@ public class SB_CaitylnHitE : MonoBehaviour
         blueEffect.transform.localScale = new Vector3(2, 2, 2);
         yield return new WaitForSeconds(2); // 이펙트 유지 시간
         blueEffect.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+        blueEffect.transform.position = new Vector3(0, 0, -10);
 
         oneCheck = false;
     }
