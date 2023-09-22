@@ -38,7 +38,6 @@ public class SB_CaitylnMoving : Unit
             animator.SetBool("Run", true);
             base.UpdateMove();
         }
-
     }
 
     protected override void UpdateIdle()
@@ -50,7 +49,6 @@ public class SB_CaitylnMoving : Unit
             animator.SetBool("Run", false);
             base.UpdateIdle();
         }
-
     }
 
     protected override void CastActiveQ() // 필트오버 피스메이커

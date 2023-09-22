@@ -109,7 +109,6 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
         if (!trace) // 적을 쫓는 중이 아니라면 자동 공격
         {
-            animator.SetBool("Auto Attack", true);
             StartCoroutine(AutoAttack());
         }
     }
@@ -119,17 +118,22 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     /// </summary>
     private IEnumerator AutoAttack()
     {
+        SB_CaitylnMoving.skillAct = true;
+
         isAttack = true;
 
         targetEnemy = enemy;
 
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.2f);
+        animator.SetBool("Auto Attack", true);
 
-        autoAttack.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
         targetPoint = enemyPoint;
         targetPoint.y = 2.5f;
 
-        autoAttack.transform.position = caityln.transform.position;
+        Vector3 firePos = caityln.transform.position + (caityln.transform.forward * 3) + (caityln.transform.up * 3);
+        autoAttack.transform.position = firePos;
+
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.2f);
+        autoAttack.transform.localScale = new Vector3(50f, 50f, 50f);
         bulletFire = true; // 총알 발사
 
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.8f);
@@ -141,14 +145,13 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         if (Input.GetMouseButtonDown(1)) // 마우스 오른쪽 버튼 => 케이틀린이 이동 중
         {
             getTarget = false;
-            SB_CaitylnMoving.skillAct = false;
+            SB_CaitylnMoving.skillAct = false;  
         }
 
         if (SB_CaitylnMoving.caitylnMoving) // 자의로 이동 중이면
         {
             trace = false;
             animator.SetBool("Auto Attack", false); // 자동 평타 종료 
-            bulletFire = false;
 
             if (!getTarget)
             {
@@ -156,15 +159,6 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
                 targetEnemy = null;
             }
         }
-
-        // 아래 코드가 문제
-        //if ((getTarget && !SB_CaitylnMoving.caitylnMoving) || targetEnemy == null) // 범위 내 적이 있거나 적 인식X
-        //{
-        //    animator.SetBool("Run", false);
-        //    trace = false; // 추적 해제
-        //    SB_CaitylnMoving.skillAct = true;
-        //}
-
     }
 
     /// <summary>
@@ -174,6 +168,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     {
         if (Vector3.Distance(autoAttack.transform.position, targetPoint) > 0.1f && bulletFire) // 총알 이동
         {
+            Debug.Log("도는가");
             autoAttack.transform.position =
                 Vector3.MoveTowards(autoAttack.transform.position, targetPoint, Time.deltaTime * 15f);
 

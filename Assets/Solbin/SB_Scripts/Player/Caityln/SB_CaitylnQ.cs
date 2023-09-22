@@ -59,6 +59,8 @@ public class SB_CaitylnQ : MonoBehaviour
 
     private IEnumerator Fire()
     {
+        SB_CaitylnMoving.skillAct = true;
+
         isAttack = true; // 중복 키 입력 X
 
         caitylnAnimator.SetTrigger("PressQ");
@@ -84,6 +86,8 @@ public class SB_CaitylnQ : MonoBehaviour
         caitylnAnimator.SetBool("PressQ_Idle", false);
 
         isAttack = false;
+
+        SB_CaitylnMoving.skillAct = false;
     }
 
     private void UnfoldBullet()
@@ -93,9 +97,8 @@ public class SB_CaitylnQ : MonoBehaviour
 
     private void Update()
     {
-        if (bulletFire && Input.GetMouseButtonDown(1)) // q 중 이동
+        if (isAttack && Input.GetMouseButtonDown(1)) // q 중 이동
         {
-            Debug.Log("이동 감지");
             StartCoroutine(ChangeState());
         }
     }
@@ -109,8 +112,9 @@ public class SB_CaitylnQ : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (bulletFire)
+        if (bulletFire) // 총알 발사
         {
+            qAttack.transform.position = new Vector3(qAttack.transform.position.x, 2.5f, qAttack.transform.position.z);
             qAttack.transform.Translate(Vector3.forward * Time.deltaTime * 20f);
 
             if (Vector3.Distance(qAttack.transform.position, caityln.position) > 15f)
