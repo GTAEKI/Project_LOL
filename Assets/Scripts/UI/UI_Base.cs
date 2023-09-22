@@ -56,7 +56,7 @@ public abstract class UI_Base : MonoBehaviour
     {
         UnityEngine.Object[] objects = null;
         if (!objDict.TryGetValue(typeof(T), out objects)) return null;
-        return objects[_index] as T;
+        return objects[_index] as T; //objDict에 있는 값들이 objects로 배열로 들어감
     }
 
     /// <summary>

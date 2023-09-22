@@ -29,6 +29,21 @@
         "growHpRecovery": "800.0",
         "growMpRecovery": "900.0",
         "growAttackRange": "10.0"
+    },
+    {
+        "index": "2",
+        "name_ko": "애쉬",
+        "name_en": "Ashe",
+        "growHp": "100.0",
+        "growMp": "200.0",
+        "growStrength": "300.0",
+        "growDefense": "400.0",
+        "growMagicDefense": "500.0",
+        "growAttackSpeed": "600.0",
+        "growMovementSpeed": "700.0",
+        "growHpRecovery": "800.0",
+        "growMpRecovery": "900.0",
+        "growAttackRange": "10.0"
     }
   ]
 }

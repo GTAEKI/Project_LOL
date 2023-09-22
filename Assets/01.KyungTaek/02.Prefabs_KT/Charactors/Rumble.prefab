@@ -1741,7 +1741,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3369536747905687169
 Transform:
   m_ObjectHideFlags: 0
@@ -1808,7 +1808,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.4
+  m_Radius: 0.3
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
@@ -1833,6 +1833,7 @@ MonoBehaviour:
   Effect_Q: {fileID: 3249353358125578261}
   MuzzleE: {fileID: 456476673959869233}
   Effect_E: {fileID: 4145901978685869423, guid: c648d33ccda124f078299d095fdf92a7, type: 3}
+  Effect_R: {fileID: 1492342625783669635, guid: 642278783192b41dfad4579de6f6a624, type: 3}
 --- !u!1 &2821986761038074204
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,20 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 럼블 캐릭터를 위한 스크립트
-/// 배경택 _ 230921
-/// </summary>
-public class Rumble : Unit
+public class Ashe : Unit
 {
     public Animator animator;
-    public GameObject RangeImg_R;
+
     public GameObject RangeImg_Attack;
-    public GameObject ShotImg;
-    public GameObject Effect_Q;
-    public GameObject MuzzleE;
+    public GameObject ShotImg_R;
+
+    public GameObject Effect_Attack;
     public GameObject Effect_E;
     public GameObject Effect_R;
+
+    public GameObject Muzzle_Attack;
+    public GameObject Muzzle_W;
+    public GameObject Muzzle_E;
+    public GameObject Muzzle_R;
 
     private Vector3 startPosR;
     private Vector3 rotationR;
@@ -26,15 +27,16 @@ public class Rumble : Unit
     // 다른 플레이어를 담아줄 게임오브젝트
     private GameObject otherPlayer;
 
-    // 럼블 객체 Init
+    // 애쉬 객체 Init
     public override void Init()
     {
-        Debug.Log("럼블 생성");
+        Debug.Log("애쉬 생성");
 
         unitStat = new UnitStat(
-            Managers.Data.UnitBaseStatDict[Define.UnitName.Rumble]);
-        unitSkill = new UnitSkill(Define.UnitName.Rumble);
+            Managers.Data.UnitBaseStatDict[Define.UnitName.Ashe]);
+        unitSkill = new UnitSkill(Define.UnitName.Ashe);
         animator = GetComponent<Animator>();
+        base.Init();
     }
 
     // 움직임 구현에 추가해야할 내용이 있어서 Override함, Unit은 현재 공용으로 사용중이므로 수정하지 않았음
@@ -74,7 +76,7 @@ public class Rumble : Unit
                     targetPos = hit.point;
 
                     CurrentState = Define.UnitState.MOVE;
-                }                
+                }
             }
         }
     }
@@ -84,7 +86,7 @@ public class Rumble : Unit
     {
         if (Input.GetKey(KeyCode.A))
         {
-            BasicAttack();
+            BasicAttackMove();
         }
         if (Input.GetKeyUp(KeyCode.A))
         {
@@ -93,12 +95,13 @@ public class Rumble : Unit
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            
+
             CastActiveQ();
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
+            CurrentState = Define.UnitState.CastW;
             CastActiveW();
         }
 
@@ -108,73 +111,19 @@ public class Rumble : Unit
             CastActiveE();
         }
 
-
         if (Input.GetKey(KeyCode.R))
         {
-            RangeImg_R.SetActive(true);
-
-           
-
-            if (Input.GetMouseButtonDown(0))
-            {              
-                Vector3 mousePos = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePos);
-                RaycastHit hit;
-
-                if(Physics.Raycast(ray, out hit, RAY_DISTANCE,LayerMask.GetMask("Floor")))
-                {
-                    Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
-
-                    startPosR = hit.point;
-
-                    ShotImg.SetActive(true);
-                    ShotImg.transform.position = hit.point;
-                }
-
-            }
-
-            if (Input.GetMouseButton(0))
-            {
-                Vector3 mousePos = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePos);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, RAY_DISTANCE))
-                {
-                    Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
-
-                    rotationR = hit.point;
-
-                    ShotImg.transform.LookAt(hit.point);
-
-                }
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                CurrentState = Define.UnitState.CastR;
-
-                Vector3 direction = (rotationR-startPosR).normalized;             
-                Quaternion rotation = Quaternion.LookRotation(direction);
-                // Effect_R을 계산된 위치와 회전값으로 생성
-                GameObject skillR =  Instantiate(Effect_R, startPosR, rotation);
-
-                Destroy(skillR, 3f);
-
-                RangeImg_R.SetActive(false);
-                ShotImg.SetActive(false);
-                CastActiveR();
-            }
+            CastActiveR();
         }
 
         if (Input.GetKeyUp(KeyCode.R))
         {
-            RangeImg_R.SetActive(false);
-            ShotImg.SetActive(false);
+            ShotImg_R.SetActive(false);
         }
     }
 
-    private void BasicAttack()
+    // 일반 공격을 위해 이동, 실제 공격처리는 UpdateMove()에서 처리함
+    private void BasicAttackMove()
     {
         RangeImg_Attack.SetActive(true); // 평타 범위 보이도록 변경
         if (Managers.Input.CheckKeyEvent(0))
@@ -200,33 +149,16 @@ public class Rumble : Unit
         }
     }
 
+    // 스킬 Q
     protected override void CastActiveQ()
     {
-        animator.SetTrigger("Q");
-        StartCoroutine(SkillQ()); //스킬 Q 이미지 보이도록
+        animator.SetBool("Q", true) ;
         base.CastActiveQ();
     }
 
-    IEnumerator  SkillQ()
-    {
-        Effect_Q.SetActive(true);
-
-        yield return new WaitForSeconds(3f);
-
-        Effect_Q.SetActive(false);
-    }
-
+    // 스킬 W
     protected override void CastActiveW()
     {
-        animator.SetTrigger("W");
-
-        base.CastActiveW();
-    }
-
-    protected override void CastActiveE()
-    {
-        
-        Invoke("InstantiateSkillE",0.2f);
         Vector3 mousePos = Input.mousePosition;
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
@@ -242,19 +174,88 @@ public class Rumble : Unit
 
             transform.rotation = Quaternion.LookRotation(direct);
         }
+        //Instantiate(Effect_Attack, Muzzle_W.transform.position, Muzzle_W.transform.rotation);
 
+        int numProjectiles = 10; // 이펙트 개수
+        float startAngle = -45f; // 시작 각도
+        float endAngle = 45f; // 끝 각도
+
+        float angleStep = (endAngle - startAngle) / (numProjectiles - 1);
+
+        for (int i = 0; i < numProjectiles; i++)
+        {
+            float angle = startAngle + i * angleStep;
+            Vector3 spawnDirection = Quaternion.Euler(0, angle, 0) * transform.forward;
+            GameObject skill_W = Instantiate(Effect_Attack, Muzzle_W.transform.position, Quaternion.LookRotation(spawnDirection));
+            Destroy(skill_W, 0.7f);
+        }
+
+        animator.SetTrigger("W");
+        base.CastActiveW();
+
+        currentState = Define.UnitState.IDLE;
+    }
+
+    // 스킬 E
+    protected override void CastActiveE()
+    {
+        Vector3 mousePos = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE))
+        {
+            Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
+
+            targetPos = hit.point;
+
+            Vector3 direct = targetPos - transform.position;
+            direct.y = 0f;
+
+            transform.rotation = Quaternion.LookRotation(direct);
+        }
+        Instantiate(Effect_E, Muzzle_E.transform.position, Muzzle_E.transform.rotation);
         base.CastActiveE();
     }
 
-    private void InstantiateSkillE()
-    {
-        Instantiate(Effect_E, MuzzleE.transform.position, MuzzleE.transform.rotation);
-    }
-
+    // 스킬 R
     protected override void CastActiveR()
     {
+        ShotImg_R.SetActive(true);
 
-        base.CastActiveR();
+        startPosR = transform.position;
+
+        Vector3 mousePos = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
+        {
+            Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
+            ShotImg_R.transform.position = hit.point;
+            Vector3 direction = (hit.point-startPosR).normalized;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            ShotImg_R.transform.rotation = rotation;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE))
+            {
+                Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
+
+                transform.LookAt(hit.point);
+
+                GameObject skillR = Instantiate(Effect_R, Muzzle_R.transform.position, Muzzle_R.transform.rotation);
+                Destroy(skillR, 10f);
+
+                ShotImg_R.SetActive(false);
+
+                CurrentState = Define.UnitState.CastR;
+
+                base.CastActiveR();
+            }
+        }
     }
 
     protected override void CastPassive()
@@ -262,6 +263,21 @@ public class Rumble : Unit
         //base.CastPassive();
     }
 
+
+
+    IEnumerator Attack()
+    {
+        while (true)
+        {
+            animator.SetTrigger("AttackTR");
+
+            yield return new WaitForSeconds(0.3f);
+
+            Instantiate(Effect_Attack, Muzzle_Attack.transform.position, Muzzle_Attack.transform.rotation);
+        }
+    }
+
+    // 실제 이동처리와 공격처리를 하는 함수
     protected override void UpdateMove()
     {
         if (targetPos == default) return;
@@ -271,12 +287,13 @@ public class Rumble : Unit
 
         float minDistance = direct.magnitude;
 
-        
-        if(isAttack == true && unitStat.AttackRange >= direct.magnitude)
+
+        if (isAttack == true && unitStat.AttackRange >= direct.magnitude)
         {
             targetPos = default;
             transform.rotation = Quaternion.LookRotation(direct);
             CurrentState = Define.UnitState.Attack;
+            StartCoroutine(Attack());
             return;
         }
         else if (minDistance <= 1f && CurrentState != Define.UnitState.Attack)
@@ -285,7 +302,7 @@ public class Rumble : Unit
             CurrentState = Define.UnitState.IDLE;
             return;
         }
-        else if(currentState == Define.UnitState.MOVE)
+        else if (currentState == Define.UnitState.MOVE)
         {
             float moveDistance = Mathf.Clamp(unitStat.MoveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
             transform.position += direct.normalized * moveDistance;
@@ -293,39 +310,54 @@ public class Rumble : Unit
         }
     }
 
-    // TEST
-    private void AttackOnDamage()
+    //죽었는지 체크
+    bool isDead = false;
+
+    public override void OnUpdate()
     {
-        otherPlayer.GetComponent<Unit>().CurrentUnitStat.OnDamaged(currentUnitStat.Atk);
+        base.OnUpdate();
+
+        if (currentUnitStat.Hp <= 0 && !isDead)
+        {
+            isDead = true;
+            Debug.Log("나 죽었다");
+            CurrentState = Define.UnitState.Die;
+        }
     }
 
+
+    // 상태에 맞춰서 애니메이션 처리함
     public override Define.UnitState CurrentState
     {
         get => base.CurrentState;
         set
         {
-            base.CurrentState = value;
+            currentState = value;
+
             switch (currentState)
             {
                 case Define.UnitState.IDLE:
+                    animator.SetBool("Attack", false);
+                    animator.SetTrigger("Idle");
                     animator.SetBool("Move", false);
-                    animator.SetBool("Attack",false);
                     break;
 
                 case Define.UnitState.MOVE:
                     animator.SetBool("Move", true);
-                    animator.SetBool("Attack",false);
+                    animator.SetBool("Attack", false);
 
                     break;
 
-                // 이동을 하면서 사용해야하는 스킬로 주석처리함
+                // 이동을 하면서 사용해야하는 스킬은 주석처리함
+                // MOVE상태일때만 이동하게끔 함수가 되어있음
                 //case Define.UnitState.CastQ:
                 //    animator.SetTrigger("Q");
                 //    break;
 
-                //case Define.UnitState.CastW:
-                //    animator.SetTrigger("W");
-                //    break;
+                case Define.UnitState.CastW:
+                    targetPos = default;
+                    animator.SetTrigger("W");
+                    break;
 
                 case Define.UnitState.CastE:
                     animator.SetTrigger("E");
@@ -335,18 +367,15 @@ public class Rumble : Unit
                     animator.SetTrigger("R");
                     break;
 
-                case Define.UnitState.Attack:                 
-                    animator.SetTrigger("AttackTR");
-                    animator.SetBool("Attack",true);
+                case Define.UnitState.Attack:
+                    //animator.SetTrigger("AttackTR"); // AnyState에서 Transition을 원활하게 하기 위한 Trigger
+                    animator.SetBool("Attack", true);
                     animator.SetBool("Move", false);
-                    
-
                     break;
 
                 case Define.UnitState.Die:
-                    animator.SetBool("Die", true);
+                    animator.SetTrigger("Death");
                     break;
-
             }
         }
     }

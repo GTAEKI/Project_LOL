@@ -23,6 +23,20 @@
         "activeW_Range": "0",
         "activeE_Range": "0",
         "activeR_Range": "10"
+    },
+    {
+        "index": "2",
+        "name_ko": "애쉬",
+        "name_en": "Ashe",
+        "passive_cooltime": "5.0",
+        "activeQ_cooltime": "6.0",
+        "activeW_cooltime": "7.0",
+        "activeE_cooltime": "8.0",
+        "activeR_cooltime": "9.0",
+        "activeQ_Range": "0",
+        "activeW_Range": "0",
+        "activeE_Range": "0",
+        "activeR_Range": "10"
     }
   ]
 }

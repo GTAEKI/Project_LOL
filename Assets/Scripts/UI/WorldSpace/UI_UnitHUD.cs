@@ -23,7 +23,7 @@ public class UI_UnitHUD : UI_Base
     private static readonly int floatWidth = Shader.PropertyToID(WIDTH);
     private static readonly int floatThickness = Shader.PropertyToID(THICKNESS);
 
-    private float hpShieldRatio;        // ??삳굡 筌ｋ?????쑴??
+    private float hpShieldRatio;        // HP Shield
     private float rectWidth = 100f;
     private float thickness = 2f;
 
@@ -40,7 +40,7 @@ public class UI_UnitHUD : UI_Base
 
     #region ???뮞??癰궰??
 
-    private float sp = 0f;
+    private float sp = 0f; // 쉴드
     private float speed = 3f;
 
     #endregion
@@ -84,8 +84,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// HUD ??륂뒄 ?④쑴沅???λ땾
-    /// 繹먃沃섏눘苑?230911
+    /// HUD 체력바 관리되는것은 이 함수에 다 있음
+    /// 김민섭 _ 230911
     /// </summary>
     private void UpdateValueHUD()
     {
@@ -117,14 +117,14 @@ public class UI_UnitHUD : UI_Base
         else
         {
             GetImage((int)Images.Img_Mana).fillAmount = 0f;
-            step = unit.CurrentUnitStat.UnitStat.Hp / 300f;
+            step = unit.CurrentUnitStat.UnitStat.Hp / 300f; // 체력 칸 나누는 기준
             hpShieldRatio = 1f;
             GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
         }
 
         GetImage((int)Images.Img_Damaged).fillAmount = Mathf.Lerp(GetImage((int)Images.Img_Damaged).fillAmount, GetImage((int)Images.Img_Hp).fillAmount, Time.deltaTime * speed);
-        GetImage((int)Images.Img_Separator).material.SetFloat(floatSteps, step);
-        GetImage((int)Images.Img_Separator).material.SetFloat(floatRatio, hpShieldRatio);
+        GetImage((int)Images.Img_Separator).material.SetFloat(floatSteps, step); //floatSteps처럼 float붙어있는거 다 쉐이더 값 조절하는 변수
+        GetImage((int)Images.Img_Separator).material.SetFloat(floatRatio, hpShieldRatio); //int가 Enum앞에 있으면 index번호대로 들어감
         GetImage((int)Images.Img_Separator).material.SetFloat(floatWidth, rectWidth);
         GetImage((int)Images.Img_Separator).material.SetFloat(floatThickness, thickness);
     }

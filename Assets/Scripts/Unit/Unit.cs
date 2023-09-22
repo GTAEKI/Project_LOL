@@ -98,6 +98,13 @@ public class Unit : MonoBehaviour
         Select();
 
         CastActiveSkill();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            currentUnitStat.OnDamaged(10);
+        }
+
+        
     }
 
     public virtual void Update()
