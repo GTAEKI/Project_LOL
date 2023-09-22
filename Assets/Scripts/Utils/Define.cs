@@ -62,7 +62,8 @@ public class Define
 
     public enum UnitName
     {
-        Dummy_Puppet
+        Dummy_Puppet,
+        Fiora,
     }
 
     #endregion

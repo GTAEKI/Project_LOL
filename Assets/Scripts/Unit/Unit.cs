@@ -92,12 +92,13 @@ public class Unit : MonoBehaviour
     /// InputManager ??룸쐻??덉굲?醫롫짗??용쐻??덉굲 OnUpdate ?醫롫셾??뚯굲?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??삳솇???醫롫셾??뚯굲
     /// ?醫롫짗??낅퓳??230906
     /// </summary>
-    public void OnUpdate()
+    public virtual void OnUpdate()
     {
         Move();
         Select();
 
         CastActiveSkill();
+        CastPassiveSkill();
     }
 
     public void Update()
@@ -324,7 +325,6 @@ public class Unit : MonoBehaviour
 
     protected virtual void CastPassive()
     {
-        Debug.Log("?醫롫뼦??뺥닰???醫롫짗??됯텢");
     }
 
     #endregion
@@ -333,12 +333,10 @@ public class Unit : MonoBehaviour
 
     protected virtual void CastSpellD()
     {
-        Debug.Log("D ?醫롫짗??용쐻??덉굲 ?醫롫솯?紐꾩굲");
     }
 
     protected virtual void CastSpellF()
     {
-        Debug.Log("F ?醫롫짗??용쐻??덉굲 ?醫롫솯?紐꾩굲");
     }
 
     #endregion

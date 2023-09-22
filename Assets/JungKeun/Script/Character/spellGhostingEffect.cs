@@ -3,8 +3,8 @@ using UnityEngine;
 public class spellGhostingEffect : MonoBehaviour
 {
     public GameObject ghostPrefab; // 잔상을 나타내는 프리팹
-    public float ghostCreationInterval = 0.2f; // 잔상 생성 간격
-    public float ghostDuration = 1.0f; // 잔상 지속 시간
+    public float ghostCreationInterval = 0.01f; // 잔상 생성 간격
+    public float ghostDuration = 0.1f; // 잔상 지속 시간
 
     private bool isGhosting = false; // 유체화 효과 활성화 여부
     private float nextGhostCreationTime; // 다음 잔상 생성 시간
