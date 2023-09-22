@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class UIManager
 {
-    private Camera uiCamera;        // UI Ä«¸Þ¶ó
+    private Camera uiCamera;        // UI Ä«ï¿½Þ¶ï¿½
     
     private Stack<UI_Popup> popupStack = new Stack<UI_Popup>();
     private Dictionary<string, UI_Scene> sceneDict = new Dictionary<string, UI_Scene>();
     
-    private int order = 10;      // ÇöÀç Äµ¹ö½ºÀÇ ¿À´õ
+    private int order = 10;      // ï¿½ï¿½ï¿½ï¿½ Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     public GameObject Root
     {
@@ -45,23 +45,23 @@ public class UIManager
         canvas.overrideSorting = true;
 
         if (_sort)
-        {   // TODO: ÆË¾÷ UI´Â order Áõ°¡
+        {   // TODO: ï¿½Ë¾ï¿½ UIï¿½ï¿½ order ï¿½ï¿½ï¿½ï¿½
             canvas.sortingOrder = order;
             order++;
         }
         else
-        {   // TODO: ÀÏ¹Ý UI´Â order 0
+        {   // TODO: ï¿½Ï¹ï¿½ UIï¿½ï¿½ order 0
             canvas.sortingOrder = 0;
         }
     }
 
-    #region Scene °ü¸®
+    #region Scene ï¿½ï¿½ï¿½ï¿½
     /// <summary>
-    /// ¾À UI¸¦ È£ÃâÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½ UIï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
-    /// <typeparam name="T">½ºÅ©¸³Æ® ÀÌ¸§</typeparam>
-    /// <param name="_name">ÇÁ¸®ÆÕ ÀÌ¸§</param>
+    /// <typeparam name="T">ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½Ì¸ï¿½</typeparam>
+    /// <param name="_name">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½</param>
     public T ShowSceneUI<T>(string _name = null) where T : UI_Scene
     {
         if (string.IsNullOrEmpty(_name)) _name = typeof(T).Name;
@@ -82,15 +82,15 @@ public class UIManager
     }
     #endregion
 
-    #region SubItem °ü¸®
+    #region SubItem ï¿½ï¿½ï¿½ï¿½
 
     /// <summary>
-    /// ¼­ºê¾ÆÀÌÅÛ »ý¼º ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
-    /// <typeparam name="T">½ºÅ©¸³Æ® ÀÌ¸§</typeparam>
-    /// <param name="_parent">»ý¼ºµÉ À§Ä¡ (ºÎ¸ð)</param>
-    /// <param name="_name">ÇÁ¸®ÆÕ ÀÌ¸§</param>
+    /// <typeparam name="T">ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½Ì¸ï¿½</typeparam>
+    /// <param name="_parent">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ (ï¿½Î¸ï¿½)</param>
+    /// <param name="_name">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½</param>
     public T MakeSubItem<T>(Transform _parent = null, string _name = null) where T: UI_Base
     {
         if (string.IsNullOrEmpty(_name)) _name = typeof(T).Name;
@@ -104,7 +104,7 @@ public class UIManager
     }
     #endregion
 
-    #region WordSpace °ü¸®
+    #region WordSpace ï¿½ï¿½ï¿½ï¿½
     public T MakeWordSpaceUI<T>(Transform _parent = null, string _name = null) where T : UI_Base
     {
         if (string.IsNullOrEmpty(_name)) _name = typeof(T).Name;
@@ -123,7 +123,7 @@ public class UIManager
     }
     #endregion
 
-    #region Popup °ü¸®
+    #region Popup ï¿½ï¿½ï¿½ï¿½
 
     public T GetPopupUI<T>(string name = null) where T: UI_Popup
     {
@@ -138,11 +138,11 @@ public class UIManager
     }
 
     /// <summary>
-    /// ÆË¾÷ UI¸¦ È£ÃâÇÏ´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½Ë¾ï¿½ UIï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
-    /// <typeparam name="T">½ºÅ©¸³Æ® ÀÌ¸§</typeparam>
-    /// <param name="_name">ÇÁ¸®ÆÕ ÀÌ¸§</param>
+    /// <typeparam name="T">ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½Ì¸ï¿½</typeparam>
+    /// <param name="_name">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½</param>
     public T ShowPopupUI<T>(string _name = null) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(_name)) _name = typeof(T).Name;
@@ -155,12 +155,12 @@ public class UIManager
 
         return popup;
     }
-
+     
     /// <summary>
-    /// ´Ý´Â ÆË¾÷ UI°¡ ¸Â´ÂÁö ºñ±³ ÈÄ ´Ý´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½Ý´ï¿½ ï¿½Ë¾ï¿½ UIï¿½ï¿½ ï¿½Â´ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ý´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
-    /// <param name="_popup">´ÝÈ÷´Â ÆË¾÷</param>
+    /// <param name="_popup">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½</param>
     public void ClosePopupUI(UI_Popup _popup)
     {
         if (popupStack.Count == 0) return;
@@ -174,8 +174,8 @@ public class UIManager
     }
 
     /// <summary>
-    /// ÆË¾÷ UI¸¦ ´Ý´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½Ë¾ï¿½ UIï¿½ï¿½ ï¿½Ý´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     public void ClosePopupUI()
     {
@@ -188,8 +188,8 @@ public class UIManager
     }
 
     /// <summary>
-    /// ¸ðµç ÆË¾÷ UI¸¦ ´Ý´Â ÇÔ¼ö
-    /// ±è¹Î¼·_230906
+    /// ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½ UIï¿½ï¿½ ï¿½Ý´ï¿½ ï¿½Ô¼ï¿½
+    /// ï¿½ï¿½Î¼ï¿½_230906
     /// </summary>
     public void CloseAllPopupUI()
     {

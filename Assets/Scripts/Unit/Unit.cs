@@ -35,11 +35,11 @@ public class Unit : MonoBehaviour
     [Header("Player Current State")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
 
-    #region ?醫롫짗??용쐻??덉굲?醫롫짗??됰뼒
+    #region 
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫짗??됰뼒
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     public virtual Define.UnitState CurrentState
     {
@@ -63,10 +63,10 @@ public class Unit : MonoBehaviour
 
     #endregion
 
-    #region ?醫롫짗??용쐻?
+    #region 
 
-    private const float ROTATE_SPEED = 20f;     // ?醫롫짗??용쐻??덉굲 ???쐻??덉굲?醫롫셽?紐꾩굲
-    private const float RAY_DISTANCE = 100f;     // ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫뻿筌뤿슣??
+    protected const float ROTATE_SPEED = 20f;    
+    protected const float RAY_DISTANCE = 100f;
 
     #endregion
 
@@ -76,8 +76,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫뼏繹먮씮????醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230911
+    /// 
+    /// 
     /// </summary>
     public virtual void Init()
     {
@@ -85,14 +85,14 @@ public class Unit : MonoBehaviour
         currentUnitStat = new CurrentUnitStat(unitStat);
 
         // UI
-        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // ?醫롫짗??용쐻??덉굲 HUD ?醫롫짗??용쐻??덉굲
+        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);
     }
 
     /// <summary>
-    /// InputManager ??룸쐻??덉굲?醫롫짗??용쐻??덉굲 OnUpdate ?醫롫셾??뚯굲?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??삳솇???醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
-    public void OnUpdate()
+    public virtual void OnUpdate()
     {
         Move();
         Select();
@@ -100,7 +100,7 @@ public class Unit : MonoBehaviour
         CastActiveSkill();
     }
 
-    public void Update()
+    public virtual void Update()
     {
         switch (CurrentState)
         {
@@ -109,20 +109,20 @@ public class Unit : MonoBehaviour
         }
     }
 
-    #region ?醫롫짗??용쐻?諛명닰???醫롫짗??용쐻??덉굲?醫롫짗??됰뱜 ?醫롫셾??뚯굲
+    #region 
 
     /// <summary>
-    /// ?醫롫짗??용쐻?諛대???IDLE?醫롫짗???醫롫짗???醫롫짗??용쐻??덉굲?遺룸쐻??醫롫짗??용쐻??덉굲?醫롫짗??됰뱜 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void UpdateIdle()
     {
-        // TODO: ?醫롫짗??용쐻??덉굲
+        // TODO: 
     }
 
     /// <summary>
-    /// ?醫롫짗??용쐻?諛대???MOVE?醫롫짗???醫롫짗???醫롫짗??용쐻??덉굲?遺룸쐻??醫롫짗??용쐻??덉굲?醫롫짗??됰뱜 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void UpdateMove()
     {
@@ -149,10 +149,10 @@ public class Unit : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
-    private void Select()
+    public void Select()
     {
         if(Managers.Input.CheckKeyEvent(0))
         {
@@ -163,7 +163,7 @@ public class Unit : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(mousePos);
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
+                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")))
                 {
                     Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
                 }
@@ -172,10 +172,10 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫짗??筌ｋ똾寃??醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
-    public void Move()
+    protected virtual void Move()
     {
         if (Managers.Input.CheckKeyEvent(1))
         {
@@ -197,39 +197,39 @@ public class Unit : MonoBehaviour
             }
         }
     }
-
+     
     #region 스킬 관련 함수
 
     /// <summary>
-    /// ???醫롫셾?關????醫롫짗??용쐻??덉굲 ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 ?醫롫짗??용쐻??덉굲?醫롫뼣?癒?굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     public virtual void CastActiveSkill()
     {
         if (Input.GetKeyDown(KeyCode.Q))
-        {
+        {         
             CastActiveQ();
         }
 
         if (Input.GetKeyDown(KeyCode.W))
-        {
+        {    
             CastActiveW();
         }
 
         if (Input.GetKeyDown(KeyCode.E))
-        {
+        {            
             CastActiveE();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
-        {
+        {            
             CastActiveR();
         }
     }
 
     /// <summary>
-    /// ?醫롫뼦??뺥닰???醫롫짗??됯텢 ?醫롫짗??용쐻??덉굲?醫롫뼣?癒?굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     public virtual void CastPassiveSkill()
     {
@@ -237,8 +237,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ???醫롫셾?關????醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??됯텢 ?醫롫짗??용쐻??덉굲?醫롫뼣?癒?굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     /// <param name="key"></param>
     public virtual void CastSpellSkill()
@@ -286,8 +286,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 W ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void CastActiveW()
     {
@@ -297,8 +297,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 E ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void CastActiveE()
     {
@@ -308,8 +308,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 R ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void CastActiveR()
     {
@@ -320,25 +320,25 @@ public class Unit : MonoBehaviour
 
     #endregion
 
-    #region ?醫롫뼦??뺥닰???醫롫짗??됯텢
+    #region 
 
     protected virtual void CastPassive()
     {
-        Debug.Log("?醫롫뼦??뺥닰???醫롫짗??됯텢");
+        Debug.Log("패시브 스킬 사용");
     }
 
     #endregion
 
-    #region ?醫롫짗??용쐻??덉굲 ?醫롫짗??됯텢
+    #region D,F스킬
 
     protected virtual void CastSpellD()
     {
-        Debug.Log("D ?醫롫짗??용쐻??덉굲 ?醫롫솯?紐꾩굲");
+        Debug.Log("D 스킬 사용");
     }
 
     protected virtual void CastSpellF()
     {
-        Debug.Log("F ?醫롫짗??용쐻??덉굲 ?醫롫솯?紐꾩굲");
+        Debug.Log("F 스킬 사용");
     }
 
     #endregion
