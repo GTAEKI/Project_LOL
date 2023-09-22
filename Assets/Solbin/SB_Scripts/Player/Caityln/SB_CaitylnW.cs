@@ -89,9 +89,6 @@ public class SB_CaitylnW : MonoBehaviour
     {
         SB_CaitylnMoving.skillAct = true; // 스킬 실행 중임을 알림
 
-        animator.SetTrigger("PressW");
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length);
-
         if (trapNumber < 3)
         {
             traps[trapNumber].transform.position = targetPosition;
@@ -106,11 +103,22 @@ public class SB_CaitylnW : MonoBehaviour
             trapNumber++;
         }
 
+        animator.SetTrigger("PressW");
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length);
         animator.SetBool("PressW_Idle", true);
         yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length);
         animator.SetBool("PressW_Idle", false);
 
         SB_CaitylnMoving.skillAct = false;
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButton(1)) // 제대로 동작 필요 
+        {
+            StopCoroutine(MountingTrap());
+            SB_CaitylnMoving.skillAct = false;
+        }
     }
 
     // Update is called once per frame

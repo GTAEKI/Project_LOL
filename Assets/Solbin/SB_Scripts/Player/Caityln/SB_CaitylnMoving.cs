@@ -9,9 +9,11 @@ public class SB_CaitylnMoving : Unit
     Animator animator;
     public static bool caitylnMoving = false; // 이동 시 자동 평타 종료
     public static bool skillAct = false; // 스킬 애니메이션 중 개입 금지
+
     SB_CaitylnQ caitylnQ; // Q
     SB_CaitylnW caitylnW; // W
     SB_CaitylnE caitylnE; // E
+    SB_CaitylnR caitylnR; // R
 
     public override void Init()
     {
@@ -24,13 +26,14 @@ public class SB_CaitylnMoving : Unit
         caitylnQ = transform.GetComponent<SB_CaitylnQ>();
         caitylnW = transform.GetComponent<SB_CaitylnW>();
         caitylnE = transform.GetComponent<SB_CaitylnE>();
+        caitylnR = transform.GetComponent<SB_CaitylnR>();
     }
 
     protected override void UpdateMove()
     {
         if (!skillAct)
         {
-            Debug.Log("개입 중");
+            Debug.Log("Move 개입 중");
             caitylnMoving = true;
             animator.SetBool("Run", true);
             base.UpdateMove();
@@ -42,7 +45,7 @@ public class SB_CaitylnMoving : Unit
     {
         if (!skillAct)
         {
-            Debug.Log("개입 중");
+            Debug.Log("Idle 개입 중");
             caitylnMoving = false;
             animator.SetBool("Run", false);
             base.UpdateIdle();
@@ -73,7 +76,9 @@ public class SB_CaitylnMoving : Unit
 
     protected override void CastActiveR() // 비장의 한 발
     {
+        caitylnR.SkillR();
+
         // 스킬 구현
-        base.CastActiveE();
+        base.CastActiveR();
     }
 }

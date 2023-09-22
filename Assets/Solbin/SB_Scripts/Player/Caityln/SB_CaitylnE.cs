@@ -60,6 +60,8 @@ public class SB_CaitylnE : MonoBehaviour
 
     private IEnumerator Fire()
     {
+        SB_CaitylnMoving.skillAct = true;
+
         isAttack = true; // 중복 키 입력 X
 
         caitylnAnimator.SetTrigger("PressE");
@@ -83,6 +85,8 @@ public class SB_CaitylnE : MonoBehaviour
         caitylnAnimator.SetBool("PressE_Idle", false);
 
         isAttack = false;
+
+        SB_CaitylnMoving.skillAct = false;
     }
 
     private void UnfoldNet()

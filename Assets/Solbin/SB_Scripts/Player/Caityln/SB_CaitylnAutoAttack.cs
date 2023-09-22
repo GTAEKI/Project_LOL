@@ -56,8 +56,20 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     {
         if (other.tag == "Player") // 평타
         {
-            enemy = (GameObject)other.gameObject;
+            enemy = (GameObject)other.gameObject; // 인식한 적을 담는 임시 컨테이너
             enemyPoint = enemy.transform.position;
+            getTarget = true;
+
+            if (!animator.GetBool("Run") && !isAttack) // 이동, 쫓는 중, 공격 중이 아니라면
+            {
+                FindTarget(); // 적 봄
+            }
+        }
+
+        if (other.tag == "Player" && trace)
+        {
+            animator.SetBool("Run", false);
+            trace = false;
             getTarget = true;
 
             if (!animator.GetBool("Run") && !isAttack) // 이동, 쫓는 중, 공격 중이 아니라면
@@ -69,14 +81,14 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (!animator.GetBool("Run") && other.tag == "Player") // 적이 범위에서 벗어나면
+        if (!animator.GetBool("Run") && other.tag == "Player") // 타의로 적이 벗어남 => 타겟팅 적용
         {
             enemy = (GameObject)other.gameObject;
             getTarget = false;
             animator.SetBool("Auto Attack", false);
         }
 
-        if (other.tag == "Player") // 적이 범위에서 벗어나면
+        if (other.tag == "Player") // 자의로 적에게서 벗어남 => 타겟팅 미적용
         {
             getTarget = false;
             trace = true;
@@ -111,7 +123,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
         targetEnemy = enemy;
 
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.1f);
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.2f);
 
         autoAttack.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
         targetPoint = enemyPoint;
@@ -120,16 +132,39 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         autoAttack.transform.position = caityln.transform.position;
         bulletFire = true; // 총알 발사
 
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.9f);
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.8f);
         isAttack = false; // 다시 평타
     }
 
     private void Update()
     {
-        if (SB_CaitylnMoving.caitylnMoving) // 이동 중이면
+        if (Input.GetMouseButtonDown(1)) // 마우스 오른쪽 버튼 => 케이틀린이 이동 중
         {
-            animator.SetBool("Auto Attack", false); // 자동 평타 종료 
+            getTarget = false;
+            SB_CaitylnMoving.skillAct = false;
         }
+
+        if (SB_CaitylnMoving.caitylnMoving) // 자의로 이동 중이면
+        {
+            trace = false;
+            animator.SetBool("Auto Attack", false); // 자동 평타 종료 
+            bulletFire = false;
+
+            if (!getTarget)
+            {
+                SB_CaitylnMoving.skillAct = false;
+                targetEnemy = null;
+            }
+        }
+
+        // 아래 코드가 문제
+        //if ((getTarget && !SB_CaitylnMoving.caitylnMoving) || targetEnemy == null) // 범위 내 적이 있거나 적 인식X
+        //{
+        //    animator.SetBool("Run", false);
+        //    trace = false; // 추적 해제
+        //    SB_CaitylnMoving.skillAct = true;
+        //}
+
     }
 
     /// <summary>
@@ -150,7 +185,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
             autoAttack.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
         }
 
-        if (!getTarget && targetEnemy != null)
+        if (!getTarget && targetEnemy != null && !SB_CaitylnMoving.caitylnMoving) // 적이 범위를 벗어나면 쫓음
         {
             isAttack = false; // 공격 해제
 
@@ -169,15 +204,8 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
             caityln.transform.rotation = targetRotation;
             autoAttack.transform.rotation = targetRotation;
 
-            caityln.transform.Translate(Vector3.forward * 5f * Time.deltaTime);
+            caityln.transform.Translate(Vector3.forward * 3f * Time.deltaTime);
         }
-
-        if (getTarget || targetEnemy == null)
-        {
-            trace = false; // 추적 해제
-            animator.SetBool("Run", false);
-        }
-
     }
 
     private void AfterPosCheck()
