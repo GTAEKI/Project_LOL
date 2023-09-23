@@ -151,7 +151,6 @@ public class Rumble : Unit
     // 스킬 Q
     protected override void CastActiveQ()
     {
-        animator.SetTrigger("Q");
         StartCoroutine(SkillQ()); //스킬 Q 보였다가 꺼지도록
         base.CastActiveQ();
     }
@@ -159,7 +158,7 @@ public class Rumble : Unit
     IEnumerator  SkillQ()
     {
         Effect_Q.SetActive(true);
-
+        Effect_Q.GetComponent<CalculateDamage>().damage = unitStat.Atk;
         yield return new WaitForSeconds(3f);
 
         Effect_Q.SetActive(false);
@@ -200,7 +199,8 @@ public class Rumble : Unit
     // 애니메이션 모션에 맞춰 스킬 E를 나가게 하기 위한 함수_Invoke에 사용
     private void InstantiateSkillE()
     {
-        Instantiate(Effect_E, MuzzleE.transform.position, MuzzleE.transform.rotation);
+        GameObject skiil_E = Instantiate(Effect_E, MuzzleE.transform.position, MuzzleE.transform.rotation);
+        skiil_E.GetComponent<CalculateDamage>().damage = unitStat.Atk;
     }
 
     // 스킬 R

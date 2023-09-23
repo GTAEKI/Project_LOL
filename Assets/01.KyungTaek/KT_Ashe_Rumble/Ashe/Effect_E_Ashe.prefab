@@ -9673,7 +9673,7 @@ GameObject:
   - component: {fileID: 7745275811218787398}
   - component: {fileID: 7665043107020499362}
   - component: {fileID: 7655408273489515442}
-  m_Layer: 0
+  m_Layer: 24
   m_Name: Effect_E_Ashe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9689,8 +9689,8 @@ Transform:
   m_GameObject: {fileID: 7763693222232303948}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7760610360644137362}
   m_Father: {fileID: 0}

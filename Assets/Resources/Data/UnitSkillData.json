@@ -14,15 +14,11 @@
         "index": "1",
         "name_ko": "럼블",
         "name_en": "Rumble",
-        "passive_cooltime": "5.0",
-        "activeQ_cooltime": "6.0",
-        "activeW_cooltime": "7.0",
-        "activeE_cooltime": "8.0",
-        "activeR_cooltime": "9.0",
-        "activeQ_Range": "0",
-        "activeW_Range": "0",
-        "activeE_Range": "0",
-        "activeR_Range": "10"
+        "passive_cooltime": "0.0",
+        "activeQ_cooltime": "10.0",
+        "activeW_cooltime": "6.0",
+        "activeE_cooltime": "6.0",
+        "activeR_cooltime": "130.0"
     },
     {
         "index": "2",
@@ -30,13 +26,9 @@
         "name_en": "Ashe",
         "passive_cooltime": "5.0",
         "activeQ_cooltime": "6.0",
-        "activeW_cooltime": "7.0",
-        "activeE_cooltime": "8.0",
-        "activeR_cooltime": "9.0",
-        "activeQ_Range": "0",
-        "activeW_Range": "0",
-        "activeE_Range": "0",
-        "activeR_Range": "10"
+        "activeW_cooltime": "18.0",
+        "activeE_cooltime": "90.0",
+        "activeR_cooltime": "100.0"
     }
   ]
 }

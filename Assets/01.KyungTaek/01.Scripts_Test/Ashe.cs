@@ -14,12 +14,12 @@ public class Ashe : Unit
     public GameObject Effect_R;
 
     public GameObject Muzzle_Attack;
+    public GameObject Muzzle_Q;
     public GameObject Muzzle_W;
     public GameObject Muzzle_E;
     public GameObject Muzzle_R;
 
     private Vector3 startPosR;
-    private Vector3 rotationR;
 
     // 공격 체크를 위한 bool
     private bool isAttack;
@@ -152,7 +152,7 @@ public class Ashe : Unit
     // 스킬 Q
     protected override void CastActiveQ()
     {
-        animator.SetBool("Q", true) ;
+        CurrentState = Define.UnitState.CastQ;
         base.CastActiveQ();
     }
 
@@ -163,7 +163,7 @@ public class Ashe : Unit
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, RAY_DISTANCE))
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
         {
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
@@ -174,7 +174,6 @@ public class Ashe : Unit
 
             transform.rotation = Quaternion.LookRotation(direct);
         }
-        //Instantiate(Effect_Attack, Muzzle_W.transform.position, Muzzle_W.transform.rotation);
 
         int numProjectiles = 10; // 이펙트 개수
         float startAngle = -45f; // 시작 각도
@@ -187,13 +186,12 @@ public class Ashe : Unit
             float angle = startAngle + i * angleStep;
             Vector3 spawnDirection = Quaternion.Euler(0, angle, 0) * transform.forward;
             GameObject skill_W = Instantiate(Effect_Attack, Muzzle_W.transform.position, Quaternion.LookRotation(spawnDirection));
+            skill_W.GetComponent<CalculateDamage>().damage = unitStat.Atk; // 스킬 W 데미지 계산
             Destroy(skill_W, 0.7f);
         }
 
         animator.SetTrigger("W");
         base.CastActiveW();
-
-        currentState = Define.UnitState.IDLE;
     }
 
     // 스킬 E
@@ -203,7 +201,7 @@ public class Ashe : Unit
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, RAY_DISTANCE))
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE,LayerMask.GetMask("Floor")))
         {
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
@@ -214,8 +212,25 @@ public class Ashe : Unit
 
             transform.rotation = Quaternion.LookRotation(direct);
         }
-        Instantiate(Effect_E, Muzzle_E.transform.position, Muzzle_E.transform.rotation);
+        GameObject effect_E = Instantiate(Effect_E, Muzzle_E.transform.position, Muzzle_E.transform.rotation);
+        StartCoroutine(DetectionSight(effect_E,targetPos));
         base.CastActiveE();
+    }
+
+    IEnumerator DetectionSight(GameObject effect_E, Vector3 targetPos)
+    {
+        while (true)
+        {
+            Debug.Log("스킬 들어왔다");
+            if(effect_E.transform.position.z >= targetPos.z)
+            {
+                Destroy(effect_E);
+                Debug.Log("시야 탐지");
+                yield break;
+            }
+            yield return new WaitForFixedUpdate();
+        }
+
     }
 
     // 스킬 R
@@ -240,13 +255,14 @@ public class Ashe : Unit
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (Physics.Raycast(ray, out hit, RAY_DISTANCE))
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
             {
                 Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
                 transform.LookAt(hit.point);
 
                 GameObject skillR = Instantiate(Effect_R, Muzzle_R.transform.position, Muzzle_R.transform.rotation);
+                skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk * 3; // 데미지 계산
                 Destroy(skillR, 10f);
 
                 ShotImg_R.SetActive(false);
@@ -264,19 +280,6 @@ public class Ashe : Unit
     }
 
 
-
-    IEnumerator Attack()
-    {
-        while (true)
-        {
-            animator.SetTrigger("AttackTR");
-
-            yield return new WaitForSeconds(0.3f);
-
-            Instantiate(Effect_Attack, Muzzle_Attack.transform.position, Muzzle_Attack.transform.rotation);
-        }
-    }
-
     // 실제 이동처리와 공격처리를 하는 함수
     protected override void UpdateMove()
     {
@@ -293,7 +296,6 @@ public class Ashe : Unit
             targetPos = default;
             transform.rotation = Quaternion.LookRotation(direct);
             CurrentState = Define.UnitState.Attack;
-            StartCoroutine(Attack());
             return;
         }
         else if (minDistance <= 1f && CurrentState != Define.UnitState.Attack)
@@ -307,6 +309,40 @@ public class Ashe : Unit
             float moveDistance = Mathf.Clamp(unitStat.MoveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
             transform.position += direct.normalized * moveDistance;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), ROTATE_SPEED * Time.deltaTime);
+        }
+    }
+
+    private void AutoAttack()
+    {
+        GameObject guidedArrow = Instantiate(Effect_Attack, Muzzle_Attack.transform.position, Muzzle_Attack.transform.rotation);
+        guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer;
+        guidedArrow.GetComponent<CalculateDamage>().damage = unitStat.Atk;
+        Debug.Log(unitStat.Atk);
+    }
+
+    /// <summary>
+    /// 애니메이션 이벤트에 맞춰 실행되는 함수_ 스킬 Q실행시
+    /// 배경택 _ 230923
+    /// </summary>
+    private void AutoAttackQ()
+    {
+        StartCoroutine(MakeAttackQ());
+    }
+
+    // AutoAttackQ에 맞춰 실행되는 코루틴, 여러개의 화살을 발사하기 위한 함수
+    IEnumerator MakeAttackQ()
+    {
+        for (int i = -2; i < 3; i++)
+        {
+            Vector3 localPosition = new Vector3(i * 0.3f, 0f, 0f);
+            Vector3 arrowPosition = Muzzle_Q.transform.TransformPoint(localPosition);
+
+            // 화살 생성
+            GameObject guidedArrow = Instantiate(Effect_Attack, arrowPosition, Muzzle_Attack.transform.rotation);
+            guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer; // Enemy값을 추가하여 화살이 대상을 따라가도록 함
+            guidedArrow.GetComponent<CalculateDamage>().damage = unitStat.Atk / 3; // 데미지 계산
+
+            yield return new WaitForSeconds(0.05f); // 각 화살을 일정 시간 간격으로 발사 (조절 가능)
         }
     }
 
@@ -345,14 +381,13 @@ public class Ashe : Unit
                 case Define.UnitState.MOVE:
                     animator.SetBool("Move", true);
                     animator.SetBool("Attack", false);
-
                     break;
 
-                // 이동을 하면서 사용해야하는 스킬은 주석처리함
-                // MOVE상태일때만 이동하게끔 함수가 되어있음
-                //case Define.UnitState.CastQ:
-                //    animator.SetTrigger("Q");
-                //    break;
+                case Define.UnitState.CastQ:
+                    animator.SetBool("Q", true); 
+                    animator.SetTrigger("QTR");
+                    animator.SetBool("Attack", true);
+                    break;
 
                 case Define.UnitState.CastW:
                     targetPos = default;
@@ -368,7 +403,7 @@ public class Ashe : Unit
                     break;
 
                 case Define.UnitState.Attack:
-                    //animator.SetTrigger("AttackTR"); // AnyState에서 Transition을 원활하게 하기 위한 Trigger
+                    animator.SetTrigger("AttackTR"); // AnyState에서 Transition을 원활하게 하기 위한 Trigger
                     animator.SetBool("Attack", true);
                     animator.SetBool("Move", false);
                     break;
