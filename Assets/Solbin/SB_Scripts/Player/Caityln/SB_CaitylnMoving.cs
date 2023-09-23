@@ -8,6 +8,7 @@ public class SB_CaitylnMoving : Unit
 {
     Animator animator;
     public static bool caitylnMoving = false; // 이동 시 자동 평타 종료
+    public static bool normalAct = false; // 평타 중 개입 금지
     public static bool skillAct = false; // 스킬 애니메이션 중 개입 금지
 
     SB_CaitylnQ caitylnQ; // Q
@@ -42,7 +43,7 @@ public class SB_CaitylnMoving : Unit
 
     protected override void UpdateIdle()
     {
-        if (!skillAct)
+        if (!skillAct && !normalAct)
         {
             Debug.Log("Idle 개입 중");
             caitylnMoving = false;
@@ -53,30 +54,47 @@ public class SB_CaitylnMoving : Unit
 
     protected override void CastActiveQ() // 필트오버 피스메이커
     {
-        caitylnQ.SkillQ();
+        
+        if (!skillAct)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            caitylnQ.SkillQ();
 
-        base.CastActiveQ();
+            base.CastActiveQ();
+        }
     }
 
     protected override void CastActiveW() // 요들잡이 덫 
     {
-        caitylnW.SkillW();
+        if (!skillAct)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            caitylnW.SkillW();
 
-        base.CastActiveW();
+            base.CastActiveW();
+        }
     }
 
     protected override void CastActiveE() // 90구경 투망
     {
-        caitylnE.SkillE();
+        if (!skillAct)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            caitylnE.SkillE();
 
-        base.CastActiveE();
+            base.CastActiveE();
+        }
     }
 
     protected override void CastActiveR() // 비장의 한 발
     {
-        caitylnR.SkillR();
+        if (!skillAct)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            caitylnR.SkillR();
 
-        // 스킬 구현
-        base.CastActiveR();
+            // 스킬 구현
+            base.CastActiveR();
+        }
     }
 }

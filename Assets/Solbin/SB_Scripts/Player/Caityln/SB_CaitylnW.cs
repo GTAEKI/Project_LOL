@@ -53,7 +53,7 @@ public class SB_CaitylnW : MonoBehaviour
             {
                 Debug.Log(hit.collider.name);
 
-                if (hit.collider.gameObject == range) // E스킬 사용 가능 범위 충돌
+                if (hit.collider.gameObject == range) // 스킬 사용 가능 범위 충돌
                 {
                     RaycastHit floorHit;
                     if (Physics.Raycast(ray, out floorHit, Mathf.Infinity, layerMask)) // 맵 바닥 충돌
@@ -105,18 +105,17 @@ public class SB_CaitylnW : MonoBehaviour
 
         animator.SetTrigger("PressW");
         yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length);
-        animator.SetBool("PressW_Idle", true);
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length);
-        animator.SetBool("PressW_Idle", false);
+        animator.SetTrigger("PressW_Idle");
 
         SB_CaitylnMoving.skillAct = false;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButton(1)) // 제대로 동작 필요 
+        if (Input.GetMouseButton(1))
         {
             StopCoroutine(MountingTrap());
+            animator.SetTrigger("PressW_Run");
             SB_CaitylnMoving.skillAct = false;
         }
     }

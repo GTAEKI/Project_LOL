@@ -64,8 +64,9 @@ public class SB_CaitylnE : MonoBehaviour
 
         isAttack = true; // 중복 키 입력 X
 
+        Invoke("UnfoldNet", 0.5f); // 총알 펼치기 (애니)
         caitylnAnimator.SetTrigger("PressE");
-
+        knockback = true;
         Vector3 dir = targetPosition - caityln.position;
         dir.y = 0f;
 
@@ -77,15 +78,10 @@ public class SB_CaitylnE : MonoBehaviour
         eAttack.transform.localScale = new Vector3(2f, 2f, 2f);
         bulletFire = true; // 총알 발사
         knockback = true; // 넉백
-        Invoke("UnfoldNet", 0.5f); // 총알 펼치기 (애니)
 
         yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length);
-        caitylnAnimator.SetBool("PressE_Idle", true);
-        yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length);
-        caitylnAnimator.SetBool("PressE_Idle", false);
-
+        caitylnAnimator.SetTrigger("PressE_Idle");
         isAttack = false;
-
         SB_CaitylnMoving.skillAct = false;
     }
 

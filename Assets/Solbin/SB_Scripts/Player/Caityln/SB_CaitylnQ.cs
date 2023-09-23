@@ -42,6 +42,10 @@ public class SB_CaitylnQ : MonoBehaviour
     {
         if (!isAttack)
         {
+            SB_CaitylnMoving.skillAct = true;
+
+            transform.position = caityln.position; // 이동 중일때를 고려하여 케이틀린 정지
+
             int layerMask = 1 << LayerMask.NameToLayer("Floor"); 
 
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -59,8 +63,6 @@ public class SB_CaitylnQ : MonoBehaviour
 
     private IEnumerator Fire()
     {
-        SB_CaitylnMoving.skillAct = true;
-
         isAttack = true; // 중복 키 입력 X
 
         caitylnAnimator.SetTrigger("PressQ");
@@ -99,15 +101,8 @@ public class SB_CaitylnQ : MonoBehaviour
     {
         if (isAttack && Input.GetMouseButtonDown(1)) // q 중 이동
         {
-            StartCoroutine(ChangeState());
+            caitylnAnimator.SetTrigger("Any Run");
         }
-    }
-
-    private IEnumerator ChangeState()
-    {
-        caitylnAnimator.SetBool("PressQ_Run", true);
-        yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length);
-        caitylnAnimator.SetBool("PressQ_Run", false);
     }
 
     private void FixedUpdate()

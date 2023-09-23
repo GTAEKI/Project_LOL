@@ -39,23 +39,27 @@ public class SB_CaitylnR : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.tag == "Player")
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            enemy = hit.collider.gameObject;
-            targetPosition = hit.point;
-
-            Vector3 lookAtPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
-            transform.LookAt(lookAtPosition);
-
-            if (!isAttack)
+            if (hit.collider.tag == "Player" && hit.collider.gameObject.name != "Caityln")
             {
-                transform.GetChild(2).GetComponent<SB_CaitylnAutoAttack>().enabled = false;
-                animator.SetBool("Auto Attack", false);
+                Debug.Log("그라가스");
+                enemy = hit.collider.gameObject;
+                targetPosition = hit.point;
 
-                targetPosition = enemy.transform.position;
-
-                StartCoroutine(Targeting());
+                Vector3 lookAtPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
+                transform.LookAt(lookAtPosition);
             }
+
+            //if (!isAttack)
+            //{
+            //    transform.GetChild(2).GetComponent<SB_CaitylnAutoAttack>().enabled = false;
+            //    animator.SetBool("Auto Attack", false);
+
+            //    targetPosition = enemy.transform.position;
+
+            //    StartCoroutine(Targeting());
+            //}
         }
     }
 
@@ -83,9 +87,6 @@ public class SB_CaitylnR : MonoBehaviour
 
         isAttack = false;
         SB_CaitylnMoving.skillAct = false;
-
-        Debug.Log("끝까지 돌았다");
-
     }
 
     private void Update()
