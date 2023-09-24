@@ -112,7 +112,7 @@ public class SB_CaitylnW : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && caitylnMove)
         {
             StopCoroutine(MountingTrap());
             animator.SetTrigger("PressW_Run");

@@ -11,12 +11,15 @@ public class SB_CaitylnR : MonoBehaviour
 
     bool isAttack = false; // 공격을 시작했는가
     bool drawLaser = false; // 레이저 그리기
+    bool fireBullet = false; // 총알 발사
 
     Vector3 targetPosition; // 타겟팅 위치 (적 위치)
     GameObject enemy; // 적
 
     GameObject rEffectPrefab; // 타겟팅 이펙트 프리팹
     GameObject rEffect; // 타겟팅 이펙트
+    GameObject rBulletPrefab;
+    GameObject rBullet;
 
     private Camera camera;
     private LineRenderer lineRenderer;
@@ -32,6 +35,10 @@ public class SB_CaitylnR : MonoBehaviour
         rEffectPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Solbin/SB_Prefabs/rEffect.prefab", typeof(GameObject));
         rEffect = Instantiate(rEffectPrefab);
         rEffect.transform.position = new Vector3(0, 0, -10);
+
+        rBulletPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Solbin/SB_Prefabs/Attack_R.prefab", typeof(GameObject));
+        rBullet = Instantiate(rBulletPrefab);
+        rBullet.transform.position = new Vector3(0, 0, -10);
     }
 
     public void SkillR()
@@ -43,23 +50,19 @@ public class SB_CaitylnR : MonoBehaviour
         {
             if (hit.collider.tag == "Player" && hit.collider.gameObject.name != "Caityln")
             {
-                Debug.Log("그라가스");
                 enemy = hit.collider.gameObject;
                 targetPosition = hit.point;
 
-                Vector3 lookAtPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
-                transform.LookAt(lookAtPosition);
+                if (!isAttack)
+                {
+                    transform.GetChild(2).GetComponent<SB_CaitylnAutoAttack>().enabled = false;
+                    animator.SetBool("Auto Attack", false);
+
+                    targetPosition = enemy.transform.position;
+
+                    StartCoroutine(Targeting());
+                }
             }
-
-            //if (!isAttack)
-            //{
-            //    transform.GetChild(2).GetComponent<SB_CaitylnAutoAttack>().enabled = false;
-            //    animator.SetBool("Auto Attack", false);
-
-            //    targetPosition = enemy.transform.position;
-
-            //    StartCoroutine(Targeting());
-            //}
         }
     }
 
@@ -69,9 +72,6 @@ public class SB_CaitylnR : MonoBehaviour
 
         SB_CaitylnMoving.skillAct = true;
         animator.SetTrigger("PressR");
-        Vector3 targetEffectPos = targetPosition;
-        targetEffectPos.y = 4.8f;
-        rEffect.transform.position = targetEffectPos;
 
         yield return new WaitForSeconds(0.8f);
         animator.enabled = false;
@@ -79,11 +79,15 @@ public class SB_CaitylnR : MonoBehaviour
         yield return new WaitForSeconds(1);
         animator.enabled = true;
         drawLaser = false;
+        // 발사 시점 
+        Vector3 bulletPos = caityln.position;
+        bulletPos.y = 2.5f;
+        rBullet.transform.position = bulletPos;
+        rBullet.transform.GetComponent<ParticleSystem>().Play();
+        fireBullet = true;
 
-        animator.SetBool("PressR_Idle", true);
-        drawLaser = false;
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-        animator.SetBool("PressR_Idle", false);
+        animator.SetTrigger("PressR_Idle");
+        rEffect.transform.position = new Vector3(0, 0, -10);
 
         isAttack = false;
         SB_CaitylnMoving.skillAct = false;
@@ -91,9 +95,32 @@ public class SB_CaitylnR : MonoBehaviour
 
     private void Update()
     {
-        if (drawLaser)
+        if (isAttack) // 만약 타겟팅 중이라면
+        {
+            targetPosition = enemy.transform.position;
+
+            Vector3 lookAtPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
+            transform.LookAt(lookAtPosition);
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                isAttack = false;
+                drawLaser = false;
+                StopCoroutine(Targeting());
+                animator.enabled = true;
+                animator.SetTrigger("PressR_Run");
+
+                SB_CaitylnMoving.skillAct = false;
+            }
+        }
+
+        if (drawLaser) // 조준 레이저
         {
             lineRenderer.enabled = true;
+
+            Vector3 targetEffectPos = targetPosition;
+            targetEffectPos.y = 4.8f;
+            rEffect.transform.position = targetEffectPos;
 
             Vector3 lagerPos = targetPosition;
             lagerPos.y = 1f; // 레이저 고도
@@ -105,17 +132,27 @@ public class SB_CaitylnR : MonoBehaviour
             Ray ray = new Ray(caitylnPos, direction);
             RaycastHit hit;
 
-            Color laserColor = Color.blue;
-
             if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.tag == "Player")
             {
-                lineRenderer.SetPosition(0, caitylnPos);
+                lineRenderer.SetPosition(0, new Vector3(caitylnPos.x + 0.15f, caitylnPos.y, caitylnPos.z));
+
+                Vector3 laserDes = new Vector3(hit.point.x, 2.5f, hit.point.y);
                 lineRenderer.SetPosition(1, hit.point);
-                lineRenderer.material.color = laserColor;
             }
         }
         else
             lineRenderer.enabled = false;
         
+
+        if (fireBullet) // 총알 발사
+        {
+            targetPosition = enemy.transform.position;
+
+            Vector3 lookAtPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
+            transform.LookAt(lookAtPosition);
+
+            rBullet.transform.LookAt(lookAtPosition);
+            rBullet.transform.Translate(Vector3.forward * Time.deltaTime * 20f);
+        }
     }
 }

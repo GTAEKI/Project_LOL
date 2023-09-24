@@ -74,7 +74,9 @@ public class SB_CaitylnE : MonoBehaviour
 
         caityln.transform.rotation = targetRotation;
         eAttack.transform.rotation = targetRotation;
-        eAttack.transform.position = caityln.position;
+        Vector3 netPos = caityln.position;
+        netPos.y += 2f;
+        eAttack.transform.position = netPos;
         eAttack.transform.localScale = new Vector3(2f, 2f, 2f);
         bulletFire = true; // 총알 발사
         knockback = true; // 넉백

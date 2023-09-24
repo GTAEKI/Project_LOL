@@ -81,14 +81,14 @@ public class SB_CaitylnQ : MonoBehaviour
 
         bulletFire = true; // 총알 발사
         Invoke("UnfoldBullet", 0.5f); // 총알 펼치기 (애니)
+        yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length);
 
-        yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length);
-        caitylnAnimator.SetBool("PressQ_Idle", true);
-        yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length);
-        caitylnAnimator.SetBool("PressQ_Idle", false);
+        if (Input.GetMouseButtonDown(1))
+        {
+            yield break;
+        }
 
         isAttack = false;
-
         SB_CaitylnMoving.skillAct = false;
     }
 
@@ -101,7 +101,10 @@ public class SB_CaitylnQ : MonoBehaviour
     {
         if (isAttack && Input.GetMouseButtonDown(1)) // q 중 이동
         {
-            caitylnAnimator.SetTrigger("Any Run");
+            isAttack = false;
+            StopCoroutine(Fire());
+            caitylnAnimator.SetTrigger("PressQ_Run");
+            SB_CaitylnMoving.skillAct = false;
         }
     }
 
