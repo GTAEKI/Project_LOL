@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -56,6 +57,7 @@ public class Yasuo : Unit
     #region 상수
 
     private const float SPELL_Q_STACK_TIME = 6f;            // Q 스택 유지 시간
+    private const float SPELL_W_WORK_TIME = 4f;             // W 유지 시간
 
     #endregion
 
@@ -72,7 +74,8 @@ public class Yasuo : Unit
 
     public override void Move()
     {
-        if (CurrentState == Define.UnitState.SPELLE) return;
+        if (CurrentState == Define.UnitState.SPELLQ || CurrentState == Define.UnitState.SPELLW ||
+            CurrentState == Define.UnitState.SPELLE || CurrentState == Define.UnitState.SPELLR) return;
 
         base.Move();
     }
@@ -84,16 +87,47 @@ public class Yasuo : Unit
     protected override void CastActiveQ()
     {
         if (anim.GetBool("SpellQ")) return;
-        SpellQ_Count++;
 
-        Debug.Log(anim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
+        targetPos = default;
+        CurrentState = Define.UnitState.SPELLQ;
 
-        Invoke("Delay_CastActiveQ", anim.GetCurrentAnimatorClipInfo(0).Length - 0.1f);
+        StartCoroutine(Thrust());
     }
 
-    private void Delay_CastActiveQ()
+    private IEnumerator Thrust()
     {
+        SpellQ_Count++;
+
+        // 해당 스킬 애니메이션인지 딜레이
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("SPELL_Q_" + SpellQ_Count))
+        {
+            //anim.SetBool("SpellQ", true);
+            yield return null;
+        }
+
+        float animDuration = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - 0.1f;
+        float elapsedTime = 0f;
+
+        if (SpellQ_Count >= 3)
+        {
+            Vector3 initialPosition = transform.position;                           // 시작 위치
+            Vector3 targetPosition = initialPosition + transform.forward;
+            Vector3 spawnPosition = new Vector3(targetPosition.x, transform.localScale.y / 1f, targetPosition.z);
+            Vector3 moveDirection = (targetPosition - initialPosition).normalized;
+
+            GameObject tornado = Managers.Resource.Instantiate("Unit/Yasuo/Tornado", spawnPosition, transform.rotation);
+            tornado.GetComponent<TornadoController>().moveDirect = moveDirection;
+            Managers.Resource.Destroy(tornado, SPELL_W_WORK_TIME);
+        }
+
+        while (elapsedTime < animDuration / 2f)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
         anim.SetBool("SpellQ", false);
+        CurrentState = Define.UnitState.IDLE;
 
         if (SpellQ_Count >= 3) SpellQ_Count = 0;
 
@@ -149,16 +183,40 @@ public class Yasuo : Unit
     {
         if (anim.GetBool("SpellW")) return;
 
-        anim.SetBool("SpellW", true);
+        targetPos = default;
+        CurrentState = Define.UnitState.SPELLW;
 
-        AnimatorClipInfo[] anims = anim.GetCurrentAnimatorClipInfo(0);
-
-        Invoke("Delay_CastActiveW", 0.667f);
+        StartCoroutine(WindWall());
     }
 
-    private void Delay_CastActiveW()
+    private IEnumerator WindWall()
     {
+        // 해당 스킬 애니메이션인지 딜레이
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("SPELL_W"))
+        {
+            anim.SetBool("SpellW", true);
+            yield return null;
+        }
+
+        float animDuration = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - 0.1f;
+        float elapsedTime = 0f;
+
+        Vector3 initialPosition = transform.position;                           // 시작 위치
+        Vector3 targetPosition = initialPosition + transform.forward * 10f;
+
+        while (elapsedTime < animDuration / 2f)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Vector3 spawnPosition = new Vector3(targetPosition.x, transform.localScale.y / 2f, targetPosition.z);
+
+        GameObject windwall = Managers.Resource.Instantiate("Unit/Yasuo/WindWall", spawnPosition, transform.rotation);
+        Managers.Resource.Destroy(windwall, SPELL_W_WORK_TIME);
+
         anim.SetBool("SpellW", false);
+        CurrentState = Define.UnitState.IDLE;
 
         base.CastActiveW();
     }
@@ -166,8 +224,6 @@ public class Yasuo : Unit
     #endregion
 
     #region 액티브 E
-
-    private bool isDashing = false; // 돌진 중인지 여부를 나타내는 변수
 
     protected override void CastActiveE()
     {
@@ -179,8 +235,6 @@ public class Yasuo : Unit
 
         if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object", "Unit_Blue", "Unit_Red")))
         {
-            if (isDashing) return;
-
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
 
             targetPos = default;
@@ -193,14 +247,12 @@ public class Yasuo : Unit
             transform.LookAt(goalPos);
 
             // 타겟을 향해 돌진 시작
-            StartCoroutine(Dash(goalPos, hit));
+            StartCoroutine(Dash(goalPos));
         }
     }
 
-    private IEnumerator Dash(Vector3 targetPosition, RaycastHit hit)
+    private IEnumerator Dash(Vector3 targetPosition)
     {
-        isDashing = true; // 돌진 중으로 설정
-
         // 해당 스킬 애니메이션인지 딜레이
         while (!anim.GetCurrentAnimatorStateInfo(0).IsName("SPELL_E"))
         {
@@ -214,69 +266,16 @@ public class Yasuo : Unit
 
         while (elapsedTime < dashDuration)
         {
-            // 계산된 위치로 이동 (일정한 속도로 이동)
             float t = elapsedTime / dashDuration;
-            //Vector3 newPosition = Vector3.Lerp(initialPosition, targetPosition, t);
-
-            // 타겟의 위치와의 각도와 동일하게 일정 거리만큼 이동
             Vector3 moveDirection = (targetPosition - initialPosition).normalized;
-            //Vector3 finalPosition = newPosition + moveDirection * distance;
-
-            // Y 좌표는 고정
-            //finalPosition.y = 0f;
 
             transform.position = Vector3.Lerp(initialPosition, targetPosition + moveDirection * 10f, t);
             elapsedTime += Time.deltaTime * 2f;
             yield return null;
         }
 
-        // 돌진이 끝나면 멈추고 애니메이션 리셋
-        isDashing = false;
         anim.SetBool("SpellE", false);
         CurrentState = Define.UnitState.IDLE;
-
-        base.CastActiveE();
-    }
-
-
-    //private IEnumerator Dash(Vector3 targetPosition, RaycastHit hit)
-    //{
-    //    isDashing = true; // 돌진 중으로 설정
-
-    //    Vector3 initialPosition = transform.position;
-    //    float distance = Vector3.Distance(initialPosition, targetPosition);
-
-    //    // 현재 위치에서 타겟의 위치로 이동한다.
-    //    // 타겟의 위치는 현재 위치와 타겟의 위치의 각도와 동일하게 일정 거리만큼 이동된다.
-    //    // 이 이동된 위치가 타겟의 위치가 된다.
-    //    Vector3 targetBackPosition = targetPosition - hit.normal * distance;
-    //    targetBackPosition.y = 0f;
-
-    //    Debug.Log("타겟 위치: " + targetPosition);
-    //    Debug.Log("타겟 등 위치: " + targetBackPosition);
-
-    //    float elapsedTime = 0f;
-    //    float dashDuration = anim.GetCurrentAnimatorClipInfo(0).Length - 0.1f;
-
-    //    while (elapsedTime < dashDuration)
-    //    {
-    //        // 계산된 위치로 이동
-    //        float t = elapsedTime / dashDuration;
-    //        transform.position = Vector3.Lerp(initialPosition, targetBackPosition, t);
-    //        elapsedTime += Time.deltaTime;
-    //        yield return null;
-    //    }
-
-    //    // 돌진이 끝나면 멈추고 애니메이션 리셋
-    //    isDashing = false;
-    //    anim.SetBool("SpellE", false);
-    //}
-
-
-
-    private void Delay_CastActiveE()
-    {
-        anim.SetBool("SpellE", false);
 
         base.CastActiveE();
     }
@@ -289,16 +288,57 @@ public class Yasuo : Unit
     {
         if (anim.GetBool("SpellR")) return;
 
-        anim.SetBool("SpellR", true);
+        Vector3 mousePos = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit hit;
 
-        AnimatorClipInfo[] anims = anim.GetCurrentAnimatorClipInfo(0);
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object", "Unit_Blue", "Unit_Red")))
+        {
+            Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
 
-        Invoke("Delay_CastActiveR", anim.GetCurrentAnimatorClipInfo(0).Length - 0.1f);
+            targetPos = default;
+            CurrentState = Define.UnitState.SPELLR;
+
+            Vector3 goalPos = hit.transform.position;
+            goalPos.y = 0f;
+
+            // 타겟을 바라보게 회전
+            transform.LookAt(goalPos);
+
+            // 타겟을 향해 돌진 시작
+            StartCoroutine(Ultimate(goalPos));
+        }
     }
 
-    private void Delay_CastActiveR()
+    private IEnumerator Ultimate(Vector3 targetPosition)
     {
+        // 해당 스킬 애니메이션인지 딜레이
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("SPELL_R"))
+        {
+            anim.SetBool("SpellR", true);
+            yield return null;
+        }
+
+        Vector3 initialPosition = transform.position;
+        float dashDuration = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - 0.1f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < dashDuration)
+        {
+            float t = elapsedTime / dashDuration;
+            Vector3 moveDirection = (targetPosition - initialPosition).normalized;
+
+            //transform.position = Vector3.Lerp(initialPosition, targetPosition + moveDirection * 10f, t);
+            transform.position = targetPosition + moveDirection * 8f;
+            elapsedTime += Time.deltaTime * 2f;
+
+            transform.LookAt(targetPosition);
+
+            yield return null;
+        }
+
         anim.SetBool("SpellR", false);
+        CurrentState = Define.UnitState.IDLE;
 
         base.CastActiveR();
     }
