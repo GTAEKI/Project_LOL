@@ -35,6 +35,8 @@ public class Unit : MonoBehaviour
     [Header("Player Current State")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
 
+    protected Animator anim;            // 유닛 애니메이터
+
     #region 프로퍼티
 
     /// <summary>
@@ -60,8 +62,8 @@ public class Unit : MonoBehaviour
 
     #region 상수
 
-    private const float ROTATE_SPEED = 20f;     // 유닛 회전 속도
-    private const float RAY_DISTANCE = 100f;     // 레이 사거리
+    protected const float ROTATE_SPEED = 20f;     // 유닛 회전 속도
+    protected const float RAY_DISTANCE = 100f;     // 레이 사거리
 
     #endregion
 
@@ -71,8 +73,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫뼏繹먮씮????醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230911
+    /// 유닛 초기화 함수
+    /// 김민섭_230911
     /// </summary>
     public virtual void Init()
     {
@@ -80,12 +82,14 @@ public class Unit : MonoBehaviour
         currentUnitStat = new CurrentUnitStat(unitStat);
 
         // UI
-        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // ?醫롫짗??용쐻??덉굲 HUD ?醫롫짗??용쐻??덉굲
+        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform); 
+
+        anim = GetComponent<Animator>();
     }
 
     /// <summary>
-    /// InputManager ??룸쐻??덉굲?醫롫짗??용쐻??덉굲 OnUpdate ?醫롫셾??뚯굲?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??삳솇???醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// InputManager 에서 사용하는 OnUpdate 함수
+    /// 김민섭_230906
     /// </summary>
     public void OnUpdate()
     {
@@ -171,7 +175,7 @@ public class Unit : MonoBehaviour
     /// ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫짗??筌ｋ똾寃??醫롫셾??뚯굲
     /// ?醫롫짗??낅퓳??230906
     /// </summary>
-    public void Move()
+    public virtual void Move()
     {
         if (Managers.Input.CheckKeyEvent(1))
         {
@@ -212,7 +216,7 @@ public class Unit : MonoBehaviour
             CastActiveW();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!isCool_SpellE && Input.GetKeyDown(KeyCode.E))
         {
             CastActiveE();
         }
@@ -252,6 +256,8 @@ public class Unit : MonoBehaviour
 
     #region 액티브 스킬 함수
 
+    protected bool isCool_SpellE = false;       // 스펠 E 쿨타임 체크
+
     /// <summary>
     /// 액티브 스킬 Q 실행 함수
     /// 김민섭_230906
@@ -268,6 +274,11 @@ public class Unit : MonoBehaviour
         UI_UnitBottomLayer unitBottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
         if (unitBottomLayer?.GetCooltime((UI_UnitBottomLayer.CooltimeType)index) > 0f) yield break;
 
+        switch (index)
+        {
+            case 2: isCool_SpellE = true; break;
+        }
+
         float currentTime = unitSkill.Actives[index].Cooltime;
         unitBottomLayer?.SetCooltime((UI_UnitBottomLayer.CooltimeType)index, currentTime, unitSkill.Actives[index].Cooltime);        
 
@@ -278,6 +289,12 @@ public class Unit : MonoBehaviour
 
             yield return null;
         }
+
+        switch(index)
+        {
+            case 2: isCool_SpellE = false; break;
+        }
+
         yield break;
     }
 

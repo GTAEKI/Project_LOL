@@ -29,16 +29,17 @@ public class UI_UnitHUD : UI_Base
 
     private Collider col;
 
-    #region ?怨몃땾
+    #region 상수
 
     private const string STEP = "_Steps";
     private const string RATIO = "_HSRatio";
     private const string WIDTH = "_Width";
     private const string THICKNESS = "_Thickness";
+    private const float HP_RATIO = 100f;
 
     #endregion
 
-    #region ???뮞??癰궰??
+    #region 테스트
 
     private float sp = 0f;
     private float speed = 3f;
@@ -103,21 +104,21 @@ public class UI_UnitHUD : UI_Base
             {   // ?袁⑹삺 筌ｋ???+ ??諭?> 筌ㅼ뮆? 筌ｋ???
                 hpShieldRatio = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
                 GetImage((int)Images.Img_Mana).fillAmount = 1f;
-                step = unit.CurrentUnitStat.Hp / 300f;
+                step = unit.CurrentUnitStat.Hp / HP_RATIO;
                 GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
             }
             else
             {
                 GetImage((int)Images.Img_Mana).fillAmount = (unit.CurrentUnitStat.Hp + sp) / unit.CurrentUnitStat.UnitStat.Hp;
                 hpShieldRatio = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
-                step = unit.CurrentUnitStat.Hp / 300f;
+                step = unit.CurrentUnitStat.Hp / HP_RATIO;
                 GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
             }
         }
         else
         {
             GetImage((int)Images.Img_Mana).fillAmount = 0f;
-            step = unit.CurrentUnitStat.UnitStat.Hp / 300f;
+            step = unit.CurrentUnitStat.UnitStat.Hp / HP_RATIO;
             hpShieldRatio = 1f;
             GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
         }

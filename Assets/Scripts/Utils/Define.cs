@@ -46,7 +46,7 @@ public class Define
     /// </summary>
     public enum UnitState
     {
-        NONE, IDLE, MOVE
+        NONE, IDLE, MOVE, SPELLQ, SPELLW, SPELLE, SPELLR
     }
 
     /// <summary>

@@ -1,10 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Yasuo : Unit
 {
-    private int spellQ_Count = 0;       // Q 스택 카운팅
+    private ParticleSystem spellEffect;
+
+    // Q 스킬
+    private IEnumerator co_SpellQ_OutTime;      // Q 스택 초기화 시간 코루틴
+    private int spellQ_Count = 0;               // Q 스택 카운트
+    private float spellQ_currentTimer = 0f;     // Q 스택 현재 유지 시간
+
+    #region 프로퍼티
 
     public override Define.UnitState CurrentState 
     { 
@@ -12,8 +20,6 @@ public class Yasuo : Unit
         set
         {
             base.CurrentState = value;
-
-            Animator anim = GetComponent<Animator>();
 
             switch(base.CurrentState)
             {
@@ -23,37 +29,281 @@ public class Yasuo : Unit
         }
     }
 
+    public int SpellQ_Count
+    {
+        get => spellQ_Count;
+        set
+        {
+            spellQ_Count = value;
+
+            if (spellQ_Count <= 0) return;
+
+            anim.SetBool("SpellQ", true);
+            anim.SetInteger("SpellQ_Count", spellQ_Count);
+
+            CountingSpellQ_Stack();
+
+            switch (spellQ_Count)
+            {
+                case 2: spellEffect.Play(); break;          // 2스택 이벤트 처리
+                case 3: spellEffect.Stop(); break;          // 3스택 이벤트 처리
+            }
+        }
+    }
+
+    #endregion
+
+    #region 상수
+
+    private const float SPELL_Q_STACK_TIME = 6f;            // Q 스택 유지 시간
+
+    #endregion
+
     public override void Init()
     {
         Debug.Log("야스오가 생성되었습니다.");
 
         unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Yasuo]);
         unitSkill = new UnitSkill(Define.UnitName.Yasuo);
+        spellEffect = GetComponentInChildren<ParticleSystem>(); 
 
         base.Init();
     }
 
+    public override void Move()
+    {
+        if (CurrentState == Define.UnitState.SPELLE) return;
+
+        base.Move();
+    }
+
+    #region 액티브 스킬
+
+    #region 액티브 Q
+
     protected override void CastActiveQ()
     {
-        spellQ_Count++;
+        if (anim.GetBool("SpellQ")) return;
+        SpellQ_Count++;
 
-        Animator anim = GetComponent<Animator>();
-        anim.SetBool("SpellQ", true);
-        anim.SetInteger("SpellQ_Count", spellQ_Count);
+        Debug.Log(anim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
 
-        Invoke("CancleQ", anim.GetCurrentAnimatorClipInfo(0).Length - 0.1f);
-        Debug.Log(anim.GetCurrentAnimatorClipInfo(0).Length - 0.1f);
-
-        base.CastActiveQ();     // 쿨타임
+        Invoke("Delay_CastActiveQ", anim.GetCurrentAnimatorClipInfo(0).Length - 0.1f);
     }
 
-    private void CancleQ()
+    private void Delay_CastActiveQ()
     {
-        Debug.Log("확인");
-
-        Animator anim = GetComponent<Animator>();
         anim.SetBool("SpellQ", false);
 
-        if (spellQ_Count >= 3) spellQ_Count = 0;
+        if (SpellQ_Count >= 3) SpellQ_Count = 0;
+
+        base.CastActiveQ();
     }
+
+    /// <summary>
+    /// 야스오 Q 스킬 스택 체크 함수
+    /// 김민섭_230921
+    /// </summary>
+    private void CountingSpellQ_Stack()
+    {
+        if (co_SpellQ_OutTime != null)
+        {
+            StopCoroutine(co_SpellQ_OutTime);
+        }
+
+        if (SpellQ_Count >= 3) return;          // 3스택에서는 바로 초기화
+
+        co_SpellQ_OutTime = Co_CheckSpellQ_OutTime();
+        StartCoroutine(co_SpellQ_OutTime);
+    }
+
+    /// <summary>
+    /// 야스오 Q 스킬 스택 초기화 체크 코루틴 함수
+    /// 김민섭_230921
+    /// </summary>
+    private IEnumerator Co_CheckSpellQ_OutTime()
+    {
+        spellQ_currentTimer = SPELL_Q_STACK_TIME;
+
+        while (true)
+        {
+            spellQ_currentTimer -= Time.deltaTime;
+
+            if (spellQ_currentTimer <= 0f)
+            {   // 6초가 지났으면 스택 초기화
+                spellQ_currentTimer = 0f;
+                SpellQ_Count = 0;
+                spellEffect.Stop();
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    #endregion
+
+    #region 액티브 W
+
+    protected override void CastActiveW()
+    {
+        if (anim.GetBool("SpellW")) return;
+
+        anim.SetBool("SpellW", true);
+
+        AnimatorClipInfo[] anims = anim.GetCurrentAnimatorClipInfo(0);
+
+        Invoke("Delay_CastActiveW", 0.667f);
+    }
+
+    private void Delay_CastActiveW()
+    {
+        anim.SetBool("SpellW", false);
+
+        base.CastActiveW();
+    }
+
+    #endregion
+
+    #region 액티브 E
+
+    private bool isDashing = false; // 돌진 중인지 여부를 나타내는 변수
+
+    protected override void CastActiveE()
+    {
+        if (anim.GetBool("SpellE")) return;
+
+        Vector3 mousePos = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object", "Unit_Blue", "Unit_Red")))
+        {
+            if (isDashing) return;
+
+            Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
+
+            targetPos = default;
+            CurrentState = Define.UnitState.SPELLE;
+
+            Vector3 goalPos = hit.transform.position;
+            goalPos.y = 0f;
+
+            // 타겟을 바라보게 회전
+            transform.LookAt(goalPos);
+
+            // 타겟을 향해 돌진 시작
+            StartCoroutine(Dash(goalPos, hit));
+        }
+    }
+
+    private IEnumerator Dash(Vector3 targetPosition, RaycastHit hit)
+    {
+        isDashing = true; // 돌진 중으로 설정
+
+        // 해당 스킬 애니메이션인지 딜레이
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("SPELL_E"))
+        {
+            anim.SetBool("SpellE", true);
+            yield return null;
+        }
+
+        Vector3 initialPosition = transform.position;
+        float dashDuration = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - 0.1f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < dashDuration)
+        {
+            // 계산된 위치로 이동 (일정한 속도로 이동)
+            float t = elapsedTime / dashDuration;
+            //Vector3 newPosition = Vector3.Lerp(initialPosition, targetPosition, t);
+
+            // 타겟의 위치와의 각도와 동일하게 일정 거리만큼 이동
+            Vector3 moveDirection = (targetPosition - initialPosition).normalized;
+            //Vector3 finalPosition = newPosition + moveDirection * distance;
+
+            // Y 좌표는 고정
+            //finalPosition.y = 0f;
+
+            transform.position = Vector3.Lerp(initialPosition, targetPosition + moveDirection * 10f, t);
+            elapsedTime += Time.deltaTime * 2f;
+            yield return null;
+        }
+
+        // 돌진이 끝나면 멈추고 애니메이션 리셋
+        isDashing = false;
+        anim.SetBool("SpellE", false);
+        CurrentState = Define.UnitState.IDLE;
+
+        base.CastActiveE();
+    }
+
+
+    //private IEnumerator Dash(Vector3 targetPosition, RaycastHit hit)
+    //{
+    //    isDashing = true; // 돌진 중으로 설정
+
+    //    Vector3 initialPosition = transform.position;
+    //    float distance = Vector3.Distance(initialPosition, targetPosition);
+
+    //    // 현재 위치에서 타겟의 위치로 이동한다.
+    //    // 타겟의 위치는 현재 위치와 타겟의 위치의 각도와 동일하게 일정 거리만큼 이동된다.
+    //    // 이 이동된 위치가 타겟의 위치가 된다.
+    //    Vector3 targetBackPosition = targetPosition - hit.normal * distance;
+    //    targetBackPosition.y = 0f;
+
+    //    Debug.Log("타겟 위치: " + targetPosition);
+    //    Debug.Log("타겟 등 위치: " + targetBackPosition);
+
+    //    float elapsedTime = 0f;
+    //    float dashDuration = anim.GetCurrentAnimatorClipInfo(0).Length - 0.1f;
+
+    //    while (elapsedTime < dashDuration)
+    //    {
+    //        // 계산된 위치로 이동
+    //        float t = elapsedTime / dashDuration;
+    //        transform.position = Vector3.Lerp(initialPosition, targetBackPosition, t);
+    //        elapsedTime += Time.deltaTime;
+    //        yield return null;
+    //    }
+
+    //    // 돌진이 끝나면 멈추고 애니메이션 리셋
+    //    isDashing = false;
+    //    anim.SetBool("SpellE", false);
+    //}
+
+
+
+    private void Delay_CastActiveE()
+    {
+        anim.SetBool("SpellE", false);
+
+        base.CastActiveE();
+    }
+
+    #endregion
+
+    #region 액티브 R
+
+    protected override void CastActiveR()
+    {
+        if (anim.GetBool("SpellR")) return;
+
+        anim.SetBool("SpellR", true);
+
+        AnimatorClipInfo[] anims = anim.GetCurrentAnimatorClipInfo(0);
+
+        Invoke("Delay_CastActiveR", anim.GetCurrentAnimatorClipInfo(0).Length - 0.1f);
+    }
+
+    private void Delay_CastActiveR()
+    {
+        anim.SetBool("SpellR", false);
+
+        base.CastActiveR();
+    }
+
+    #endregion
+
+    #endregion
 }

@@ -16,7 +16,7 @@
       "name_en": "Yasuo",
       "passive_cooltime": "0.0",
       "activeQ_cooltime": "0.1",
-      "activeW_cooltime": "25.0",
+      "activeW_cooltime": "1.0",
       "activeE_cooltime": "0.5",
       "activeR_cooltime": "70.0"
     }
