@@ -8,6 +8,8 @@ public class Dummy : Unit
     {
         Debug.Log("허수아비 생성");
 
+        unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Dummy_Puppet]);
+
         base.Init();
     }
 }

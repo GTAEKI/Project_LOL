@@ -12,10 +12,10 @@ public class PoolManager
         Queue<Poolable> poolQueue = new Queue<Poolable>();
 
         /// <summary>
-        /// Ç® ÃÊ±âÈ­ ÇÔ¼ö
+        /// í’€ ì´ˆê¸°í™” í•¨ìˆ˜
         /// </summary>
-        /// <param name="_original">¿øº» ¿ÀºêÁ§Æ®</param>
-        /// <param name="_count">Ç® »ı¼º½Ã ÃÊ±â »ı¼º °³¼ö</param>
+        /// <param name="_original">ì›ë³¸ ì˜¤ë¸Œì íŠ¸</param>
+        /// <param name="_count">í’€ ìƒì„±ì‹œ ì´ˆê¸° ìƒì„± ê°œìˆ˜</param>
         public void Init(GameObject _original, int _count = 5)
         {
             Original = _original;
@@ -29,7 +29,7 @@ public class PoolManager
         }
 
         /// <summary>
-        /// Ç® ¿ÀºêÁ§Æ® »ı¼ºÇÔ¼ö
+        /// í’€ ì˜¤ë¸Œì íŠ¸ ìƒì„±í•¨ìˆ˜
         /// </summary>
         /// <returns></returns>
         private Poolable Create()
@@ -40,9 +40,9 @@ public class PoolManager
         }
 
         /// <summary>
-        /// Ç® ¿ÀºêÁ§Æ® ÃÊ±âÈ­ ÇÔ¼ö
+        /// í’€ ì˜¤ë¸Œì íŠ¸ ì´ˆê¸°í™” í•¨ìˆ˜
         /// </summary>
-        /// <param name="_able">Ç® ¿ÀºêÁ§Æ®</param>
+        /// <param name="_able">í’€ ì˜¤ë¸Œì íŠ¸</param>
         public void Push(Poolable _able)
         {
             if (_able == null) return;
@@ -55,9 +55,9 @@ public class PoolManager
         }
 
         /// <summary>
-        /// Ç® ¿ÀºêÁ§Æ® »ç¿ëÇÏ´Â ÇÔ¼ö
+        /// í’€ ì˜¤ë¸Œì íŠ¸ ì‚¬ìš©í•˜ëŠ” í•¨ìˆ˜
         /// </summary>
-        /// <param name="_parent">ºÎ¸ğ</param>
+        /// <param name="_parent">ë¶€ëª¨</param>
         /// <returns></returns>
         public Poolable Pop(Transform _parent)
         {
@@ -75,7 +75,7 @@ public class PoolManager
             able.gameObject.SetActive(true);
 
             if(_parent == null)
-            {   // TODO: DontDestroyOnLoad ÇØÁ¦
+            {   // TODO: DontDestroyOnLoad í•´ì œ
                 able.transform.parent = Managers.Scene.CurrentScene.transform;
             }
 
@@ -98,9 +98,9 @@ public class PoolManager
     }
 
     /// <summary>
-    /// Ç®¿¡ Áı¾î³Ö´Â ÇÔ¼ö
+    /// í’€ì— ì§‘ì–´ë„£ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="_able">ÇØ´ç °´Ã¼</param>
+    /// <param name="_able">í•´ë‹¹ ê°ì²´</param>
     public void Push(Poolable _able)
     {
         string name = _able.name;
@@ -109,10 +109,23 @@ public class PoolManager
     }
 
     /// <summary>
-    /// Ç®¿¡¼­ ²¨³»¼­ »ç¿ëÇÏ´Â ÇÔ¼ö
+    /// í’€ì— ì§‘ì–´ë„£ëŠ” í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230924
     /// </summary>
-    /// <param name="_original">¿øº» ¿ÀºêÁ§Æ®</param>
-    /// <param name="_parent">ÇØ´ç ¿ÀºêÁ§Æ®ÀÇ ºÎ¸ğ</param>
+    /// <param name="able">í•´ë‹¹ ê°ì²´</param>
+    /// <param name="time">ì‚­ì œë˜ëŠ” ì‹œê°„</param>
+    public void Push(Poolable able, float time)
+    {
+        string name = able.name;
+        if (!pools.ContainsKey(name)) GameObject.Destroy(able.gameObject, time);
+        pools[name].Push(able);
+    }
+
+    /// <summary>
+    /// í’€ì—ì„œ êº¼ë‚´ì„œ ì‚¬ìš©í•˜ëŠ” í•¨ìˆ˜
+    /// </summary>
+    /// <param name="_original">ì›ë³¸ ì˜¤ë¸Œì íŠ¸</param>
+    /// <param name="_parent">í•´ë‹¹ ì˜¤ë¸Œì íŠ¸ì˜ ë¶€ëª¨</param>
     public Poolable Pop(GameObject _original, Transform _parent = null)
     {
         if(!pools.ContainsKey(_original.name)) CreatePool(_original);
@@ -128,9 +141,9 @@ public class PoolManager
     }
 
     /// <summary>
-    /// ¿øº» ¿ÀºêÁ§Æ® ¸®ÅÏ ÇÔ¼ö
+    /// ì›ë³¸ ì˜¤ë¸Œì íŠ¸ ë¦¬í„´ í•¨ìˆ˜
     /// </summary>
-    /// <param name="_name">¿ÀºêÁ§Æ® ÀÌ¸§</param>
+    /// <param name="_name">ì˜¤ë¸Œì íŠ¸ ì´ë¦„</param>
     /// <returns></returns>
     public GameObject GetOriginal(string _name)
     {

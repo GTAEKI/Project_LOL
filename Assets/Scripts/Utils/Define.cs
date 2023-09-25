@@ -46,7 +46,7 @@ public class Define
     /// </summary>
     public enum UnitState
     {
-        NONE, IDLE, MOVE
+        NONE, IDLE, MOVE, SPELLQ, SPELLW, SPELLE, SPELLR
     }
 
     /// <summary>
@@ -62,7 +62,8 @@ public class Define
 
     public enum UnitName
     {
-        Dummy_Puppet
+        Dummy_Puppet,
+        Yasuo = 100
     }
 
     #endregion
