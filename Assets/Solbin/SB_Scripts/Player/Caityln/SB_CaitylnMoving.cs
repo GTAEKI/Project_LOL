@@ -34,7 +34,6 @@ public class SB_CaitylnMoving : Unit
     {
         if (!skillAct)
         {
-            Debug.Log("Move 개입 중");
             caitylnMoving = true;
             animator.SetBool("Run", true);
             base.UpdateMove();
@@ -45,7 +44,6 @@ public class SB_CaitylnMoving : Unit
     {
         if (!skillAct && !normalAct)
         {
-            Debug.Log("Idle 개입 중");
             caitylnMoving = false;
             animator.SetBool("Run", false);
             base.UpdateIdle();

@@ -28,7 +28,10 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     Vector3 beforPos;
     Vector3 afterPos;
 
+    GameObject autoAttackPrefab;
     GameObject autoAttack;
+
+    SB_CaitylnHitAA hitAA;
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +39,12 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         caityln = transform.parent.gameObject;
         animator = caityln.GetComponent<Animator>();
 
-        autoAttack = caityln.transform.GetChild(5).gameObject;
-        autoAttack.GetComponent<ParticleSystem>().Stop();
+        autoAttackPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Solbin/SB_Prefabs/Auto Attack.prefab", typeof(GameObject));
+        autoAttack = Instantiate(autoAttackPrefab);
+        autoAttack.transform.position = new Vector3(0, 0, -10);
+        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+
+        hitAA = autoAttack.transform.GetChild(0).GetComponent <SB_CaitylnHitAA>();
     }
 
     /// <summary>
@@ -51,6 +58,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
             if (other.tag == "Player") // 평타
             {
                 enemy = (GameObject)other.gameObject; // 인식한 적을 담는 임시 컨테이너
+                hitAA.GetPlayerName(enemy);
                 enemyPoint = enemy.transform.position;
                 getTarget = true;
 
@@ -63,8 +71,8 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
         if (SB_CaitylnMoving.caitylnMoving)
         {
-            autoAttack.GetComponent<ParticleSystem>().Stop();
-            autoAttack.GetComponent<ParticleSystem>().Clear();
+            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
         }
     }
 
@@ -88,6 +96,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(dir); // 목표 방향
         caityln.transform.rotation = targetRotation;
+        autoAttack.transform.rotation = targetRotation;
 
         StartCoroutine(AutoAttack());
     }
@@ -105,16 +114,24 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
         animator.SetBool("Auto Attack", true);
 
+        Vector3 aaPos = caityln.transform.position;
+        aaPos.z += 1f;
+        aaPos.x += 0.6f;
+        aaPos.y += 3f;
+        autoAttack.transform.position = caityln.transform.position;
+        autoAttack.transform.position += new Vector3(0, 3, 1);
+
         yield return null;
         targetPoint = enemyPoint;
         targetPoint.y = 2.5f;
 
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.15f);
-        autoAttack.GetComponent<ParticleSystem>().Play();
+        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
+        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.75f);
         animator.SetBool("Auto Attack", false);
-        autoAttack.GetComponent<ParticleSystem>().Stop();
-        autoAttack.GetComponent<ParticleSystem>().Clear();
+        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
         isAttack = false; // 다시 평타
     }
 
@@ -125,8 +142,8 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         {
             SB_CaitylnMoving.normalAct = false;
             animator.SetBool("Auto Attack", false);
-            autoAttack.GetComponent<ParticleSystem>().Stop();
-            autoAttack.GetComponent<ParticleSystem>().Clear();
+            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
             getTarget = false;
         }
             
@@ -144,8 +161,8 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
 
         if (SB_CaitylnMoving.skillAct || SB_CaitylnMoving.caitylnMoving)
         {
-            autoAttack.GetComponent<ParticleSystem>().Stop();
-            autoAttack.GetComponent<ParticleSystem>().Clear();
+            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
         }
     }
 }

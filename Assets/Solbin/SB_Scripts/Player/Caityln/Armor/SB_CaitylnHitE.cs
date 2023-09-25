@@ -31,6 +31,8 @@ public class SB_CaitylnHitE : MonoBehaviour
     {
         if (other.tag == "Player" && !oneCheck && other.name != "Caityln")
         {
+            other.gameObject.GetComponent<Unit>().CurrentUnitStat.OnDamaged(8);
+
             oneCheck = true;
 
             targetPoint = transform.position;

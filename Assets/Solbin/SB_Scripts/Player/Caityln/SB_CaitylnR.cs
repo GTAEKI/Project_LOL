@@ -12,6 +12,7 @@ public class SB_CaitylnR : MonoBehaviour
     bool isAttack = false; // 공격을 시작했는가
     bool drawLaser = false; // 레이저 그리기
     bool fireBullet = false; // 총알 발사
+    bool traceBullet = false; // 유도탄 기능
 
     Vector3 targetPosition; // 타겟팅 위치 (적 위치)
     GameObject enemy; // 적
@@ -81,16 +82,23 @@ public class SB_CaitylnR : MonoBehaviour
         drawLaser = false;
         // 발사 시점 
         Vector3 bulletPos = caityln.position;
-        bulletPos.y = 2.5f;
-        rBullet.transform.position = bulletPos;
+        //bulletPos.z += 2f;
+        //bulletPos.y = 2.5f;
+        rBullet.transform.position = bulletPos; 
         rBullet.transform.GetComponent<ParticleSystem>().Play();
         fireBullet = true;
+        Invoke("TraceBullet", 1f);
 
         animator.SetTrigger("PressR_Idle");
         rEffect.transform.position = new Vector3(0, 0, -10);
 
         isAttack = false;
         SB_CaitylnMoving.skillAct = false;
+    }
+
+    private void TraceBullet()
+    {
+        traceBullet = true;
     }
 
     private void Update()
@@ -148,11 +156,20 @@ public class SB_CaitylnR : MonoBehaviour
         {
             targetPosition = enemy.transform.position;
 
-            Vector3 lookAtPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
-            transform.LookAt(lookAtPosition);
+            if (!traceBullet)
+            {
+                rBullet.transform.Translate(transform.forward * Time.deltaTime * 30f);
+            }
 
-            rBullet.transform.LookAt(lookAtPosition);
-            rBullet.transform.Translate(Vector3.forward * Time.deltaTime * 20f);
+            if (traceBullet)
+            {
+                Vector3 lookAtPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
+                transform.LookAt(lookAtPosition);
+
+                rBullet.transform.LookAt(lookAtPosition);
+
+                rBullet.transform.Translate(transform.forward * Time.deltaTime * 20f);
+            }
         }
     }
 }

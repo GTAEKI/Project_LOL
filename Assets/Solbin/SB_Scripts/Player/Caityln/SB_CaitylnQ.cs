@@ -87,6 +87,7 @@ public class SB_CaitylnQ : MonoBehaviour
         {
             yield break;
         }
+        caitylnAnimator.SetTrigger("PressQ_Idle");
 
         isAttack = false;
         SB_CaitylnMoving.skillAct = false;
