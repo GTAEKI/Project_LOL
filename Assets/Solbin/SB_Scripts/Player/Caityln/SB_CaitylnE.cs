@@ -11,7 +11,7 @@ public class SB_CaitylnE : MonoBehaviour
     Animator caitylnAnimator; // 캐릭터 
     Animator armorAnimator; // 총알
 
-    GameObject eAttackPrefab; // q스킬 프리팹
+    public GameObject eAttackPrefab; // q스킬 프리팹
     GameObject eAttack; // q스킬 총알
 
     bool isAttack = false;
@@ -25,9 +25,6 @@ public class SB_CaitylnE : MonoBehaviour
     {
         caityln = transform;
         caitylnAnimator = caityln.GetComponent<Animator>();
-
-        eAttackPrefab = (GameObject)AssetDatabase.LoadAssetAtPath
-            ("Assets/Solbin/SB_Prefabs/Attack_E.prefab", typeof(GameObject));
 
         eAttack = Instantiate(eAttackPrefab);
         eAttack.transform.position = new Vector3(caityln.position.x, 2.5f, caityln.position.z);

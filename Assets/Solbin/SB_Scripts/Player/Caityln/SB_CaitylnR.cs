@@ -17,9 +17,9 @@ public class SB_CaitylnR : MonoBehaviour
     Vector3 targetPosition; // 타겟팅 위치 (적 위치)
     GameObject enemy; // 적
 
-    GameObject rEffectPrefab; // 타겟팅 이펙트 프리팹
+    public GameObject rEffectPrefab; // 타겟팅 이펙트 프리팹
     GameObject rEffect; // 타겟팅 이펙트
-    GameObject rBulletPrefab;
+    public GameObject rBulletPrefab;
     GameObject rBullet;
 
     private Camera camera;
@@ -33,11 +33,9 @@ public class SB_CaitylnR : MonoBehaviour
         lineRenderer = caityln.GetComponent <LineRenderer>();
         lineRenderer.enabled = false;
 
-        rEffectPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Solbin/SB_Prefabs/rEffect.prefab", typeof(GameObject));
         rEffect = Instantiate(rEffectPrefab);
         rEffect.transform.position = new Vector3(0, 0, -10);
 
-        rBulletPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Solbin/SB_Prefabs/Attack_R.prefab", typeof(GameObject));
         rBullet = Instantiate(rBulletPrefab);
         rBullet.transform.position = new Vector3(0, 0, -10);
     }
