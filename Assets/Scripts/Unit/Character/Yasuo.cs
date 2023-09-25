@@ -72,7 +72,7 @@ public class Yasuo : Unit
         base.Init();
     }
 
-    public override void Move()
+    protected override void Move()
     {
         if (CurrentState == Define.UnitState.SPELLQ || CurrentState == Define.UnitState.SPELLW ||
             CurrentState == Define.UnitState.SPELLE || CurrentState == Define.UnitState.SPELLR) return;
