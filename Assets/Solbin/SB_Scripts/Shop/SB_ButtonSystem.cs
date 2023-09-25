@@ -39,7 +39,7 @@ public class SB_ButtonSystem : MonoBehaviour
         m_sellButton.interactable = false;
 
         invenrotySlot = GameObject.Find("Slot Group").transform.GetComponent<SB_InvenrotySlot>();
-        tabInventorySlot = GameObject.Find("TapUI").GetComponent<SB_TabInventorySlot>();
+        //tabInventorySlot = GameObject.Find("TapUI").GetComponent<SB_TabInventorySlot>();
         gold = GameObject.Find("Inven Gold").transform.GetComponent<SB_Gold>();
 
         content = GameObject.Find("Content");
