@@ -391,6 +391,8 @@ public class CurrentUnitStat
         if (Hp <= 0)
         {
             Hp = 0;
+            
         }
+        
     }
 }

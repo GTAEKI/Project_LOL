@@ -25,7 +25,7 @@ public class SB_FirstArcaneRange : MonoBehaviour
         secondRange = firstRange.transform.GetChild(0).gameObject;
         firstSprite = firstRange.GetComponent<SpriteRenderer>();
         secondSprite = secondRange.GetComponent<SpriteRenderer>();
-        arcaneCoolTime = GameObject.Find("Cool Time").transform.GetComponent<SB_ArcaneCoolTime>();
+        //arcaneCoolTime = GameObject.Find("Cool Time").transform.GetComponent<SB_ArcaneCoolTime>();
 
         firstRange.SetActive(false);
         secondRange.SetActive(false);

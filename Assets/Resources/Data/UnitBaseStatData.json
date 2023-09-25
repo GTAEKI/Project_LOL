@@ -1,34 +1,64 @@
 {
-    "unitStats": [
-      {
-        "index": "0",
-        "name_ko": "허수아비",
-        "name_en": "Dummy_Puppet",
-        "maxHp": "600.0",
-        "maxMp": "82.0",
-        "strength": "1.0",
-        "physicalDefense": "100.0",
-        "magicDefense": "50.0",
-        "attackSpeed": "1.0",
-        "movementSpeed": "100.0",
-        "hpRecovery": "1.2",
-        "mpRecovery": "0.8",
-        "attackRange": "0.0"
-      },
-      {
-        "index": "100",
-        "name_ko": "야스오",
-        "name_en": "Yasuo",
-        "maxHp": "590.0",
-        "maxMp": "0.0",
-        "strength": "60.0",
-        "physicalDefense": "30.0",
-        "magicDefense": "32.0",
-        "attackSpeed": "0.67",
-        "movementSpeed": "345.0",
-        "hpRecovery": "6.5",
-        "mpRecovery": "0.0",
-        "attackRange": "175.0"
-      }
-    ]
+  "unitStats": [
+    {
+      "index": "0",
+      "name_ko": "허수아비",
+      "name_en": "Dummy_Puppet",
+      "maxHp": "1000.0",
+      "maxMp": "0.0",
+      "strength": "61.0",
+      "physicalDefense": "36.0",
+      "magicDefense": "28.0",
+      "attackSpeed": "0.644",
+      "movementSpeed": "10.0",
+      "hpRecovery": "7.0",
+      "mpRecovery": "0.0",
+      "attackRange": "3.2"
+    },
+    {
+      "index": "1",
+      "name_ko": "럼블",
+      "name_en": "Rumble",
+      "maxHp": "625.0",
+      "maxMp": "0.0",
+      "strength": "61.0",
+      "physicalDefense": "36.0",
+      "magicDefense": "28.0",
+      "attackSpeed": "0.644",
+      "movementSpeed": "10.0",
+      "hpRecovery": "7.0",
+      "mpRecovery": "0.0",
+      "attackRange": "3.2"
+    },
+    {
+      "index": "2",
+      "name_ko": "애쉬",
+      "name_en": "Ashe",
+      "maxHp": "640.0",
+      "maxMp": "280.0",
+      "strength": "59.0",
+      "physicalDefense": "26.0",
+      "magicDefense": "30.0",
+      "attackSpeed": "0.658",
+      "movementSpeed": "10.0",
+      "hpRecovery": "3.5.0",
+      "mpRecovery": "6.97.0",
+      "attackRange": "11.0"
+    },
+    {
+      "index": "100",
+      "name_ko": "야스오",
+      "name_en": "Yasuo",
+      "maxHp": "590.0",
+      "maxMp": "0.0",
+      "strength": "60.0",
+      "physicalDefense": "30.0",
+      "magicDefense": "32.0",
+      "attackSpeed": "0.67",
+      "movementSpeed": "345.0",
+      "hpRecovery": "6.5",
+      "mpRecovery": "0.0",
+      "attackRange": "175.0"
+    }
+  ]
 }

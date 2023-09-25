@@ -46,7 +46,8 @@ public class Define
     /// </summary>
     public enum UnitState
     {
-        NONE, IDLE, MOVE, SPELLQ, SPELLW, SPELLE, SPELLR
+        NONE, IDLE, MOVE, SPELLQ, SPELLW, SPELLE, SPELLR, CastQ, CastW, CastE, CastR, Attack, Die
+        // 경택 q,w,e,r _230919
     }
 
     /// <summary>
@@ -63,6 +64,8 @@ public class Define
     public enum UnitName
     {
         Dummy_Puppet,
+        Rumble,
+        Ashe,
         Yasuo = 100
     }
 

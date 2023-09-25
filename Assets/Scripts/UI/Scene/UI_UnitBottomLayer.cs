@@ -72,6 +72,27 @@ public class UI_UnitBottomLayer : UI_Scene
     }
 
     /// <summary>
+    /// 스킬 아이콘 넣어주는 함수
+    /// 배경택_230918
+    /// </summary>
+    /// <param name="name"></param>
+    public void SetSkillIcon(Define.UnitName name)
+    {
+        CheckName(name);
+
+        switch (name)
+        {
+            case Define.UnitName.Dummy_Puppet:
+                break;
+        }
+    }
+
+    public void CheckName(Define.UnitName name)
+    {
+        
+    }
+
+    /// <summary>
     /// 게이지바 세팅 함수
     /// 김민섭_230915
     /// </summary>
