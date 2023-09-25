@@ -1,10 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class SB_GragasMoving : Unit
 {
     Animator animator;
+
+    GameObject barrelQPrefab;
+    GameObject barrelQ;
+
+    SB_GragasQ gragasQ;
+
     public override void Init()
     {
         unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Dummy_Puppet]);
@@ -27,24 +34,22 @@ public class SB_GragasMoving : Unit
         base.UpdateIdle();
     }
 
-    protected override void CastActiveQ() // 필트오버 피스메이커
+    protected override void CastActiveQ() // 술통 굴리기
     {
-        Debug.Log("그라거스 Q 확인");
-        animator.SetTrigger("PressQ");
         base.CastActiveQ();
     }
 
-    protected override void CastActiveW() // 요들잡이 덫 
+    protected override void CastActiveW() // 취중 분노
     {
         base.CastActiveW();
     }
 
-    protected override void CastActiveE() // 90구경 투망
+    protected override void CastActiveE() // 몸통 박치기
     {
         base.CastActiveE();
     }
 
-    protected override void CastActiveR() // 비장의 한 발
+    protected override void CastActiveR() // 술통 폭발
     {
         base.CastActiveR();
     }

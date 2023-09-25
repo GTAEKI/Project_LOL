@@ -721,6 +721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 812bdde181a5bb945a825efc7b7f3021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blueEffectPrefab: {fileID: 8562605997660151987, guid: fd8c1eae71c16e849987a2a12b6a9773, type: 3}
 --- !u!1 &7878867633480022982
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,7 +28,7 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
     Vector3 beforPos;
     Vector3 afterPos;
 
-    GameObject autoAttackPrefab;
+    public GameObject autoAttackPrefab;
     GameObject autoAttack;
 
     SB_CaitylnHitAA hitAA;
@@ -39,7 +39,6 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         caityln = transform.parent.gameObject;
         animator = caityln.GetComponent<Animator>();
 
-        autoAttackPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Solbin/SB_Prefabs/Auto Attack.prefab", typeof(GameObject));
         autoAttack = Instantiate(autoAttackPrefab);
         autoAttack.transform.position = new Vector3(0, 0, -10);
         autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
