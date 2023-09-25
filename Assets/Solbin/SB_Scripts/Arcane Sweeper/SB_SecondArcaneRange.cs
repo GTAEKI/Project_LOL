@@ -25,7 +25,7 @@ public class SB_SecondArcaneRange : MonoBehaviour
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit) &&
             !SB_UseArcaneSweeper.arcaneUsed)
         {
-            if (Vector3.Distance(hit.point, transform.position) < 12) // 12는 매직넘버
+            if (Vector3.Distance(hit.point, transform.position) < 6) // 12는 매직넘버
             {
                 Vector3 rangePosition = new Vector3(hit.point.x, hit.point.y + 1, hit.point.z);
                 Vector3 localPosition = transform.InverseTransformPoint(rangePosition);
