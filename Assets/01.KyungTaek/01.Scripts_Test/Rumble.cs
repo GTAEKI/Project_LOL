@@ -181,7 +181,7 @@ public class Rumble : Unit
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, RAY_DISTANCE))
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
         {
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
@@ -231,7 +231,7 @@ public class Rumble : Unit
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, RAY_DISTANCE))
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
             {
                 Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
@@ -250,6 +250,7 @@ public class Rumble : Unit
             Quaternion rotation = Quaternion.LookRotation(direction);
             // Effect_R을 계산된 위치와 회전값으로 생성
             GameObject skillR = Instantiate(Effect_R, startPosR, rotation);
+            skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk;
 
             Destroy(skillR, 3f);
 

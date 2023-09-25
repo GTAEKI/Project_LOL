@@ -6,18 +6,20 @@ public class Ashe : Unit
 {
     public Animator animator;
 
-    public GameObject RangeImg_Attack;
-    public GameObject ShotImg_R;
+    public GameObject rangeImg_Attack;
+    public GameObject shotImg_R;
 
-    public GameObject Effect_Attack;
-    public GameObject Effect_E;
-    public GameObject Effect_R;
+    public GameObject effect_Attack;
+    public GameObject effect_E;
+    public GameObject effect_R;
 
-    public GameObject Muzzle_Attack;
-    public GameObject Muzzle_Q;
-    public GameObject Muzzle_W;
-    public GameObject Muzzle_E;
-    public GameObject Muzzle_R;
+    public GameObject muzzle_Attack;
+    public GameObject muzzle_Q;
+    public GameObject muzzle_W;
+    public GameObject muzzle_E;
+    public GameObject muzzle_R;
+
+    public GameObject vision;
 
     private Vector3 startPosR;
 
@@ -90,7 +92,7 @@ public class Ashe : Unit
         }
         if (Input.GetKeyUp(KeyCode.A))
         {
-            RangeImg_Attack.SetActive(false);
+            rangeImg_Attack.SetActive(false);
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -118,14 +120,14 @@ public class Ashe : Unit
 
         if (Input.GetKeyUp(KeyCode.R))
         {
-            ShotImg_R.SetActive(false);
+            shotImg_R.SetActive(false);
         }
     }
 
     // 일반 공격을 위해 이동, 실제 공격처리는 UpdateMove()에서 처리함
     private void BasicAttackMove()
     {
-        RangeImg_Attack.SetActive(true); // 평타 범위 보이도록 변경
+        rangeImg_Attack.SetActive(true); // 평타 범위 보이도록 변경
         if (Managers.Input.CheckKeyEvent(0))
         {
             Vector3 mousePos = Input.mousePosition;
@@ -185,7 +187,7 @@ public class Ashe : Unit
         {
             float angle = startAngle + i * angleStep;
             Vector3 spawnDirection = Quaternion.Euler(0, angle, 0) * transform.forward;
-            GameObject skill_W = Instantiate(Effect_Attack, Muzzle_W.transform.position, Quaternion.LookRotation(spawnDirection));
+            GameObject skill_W = Instantiate(effect_Attack, muzzle_W.transform.position, Quaternion.LookRotation(spawnDirection));
             skill_W.GetComponent<CalculateDamage>().damage = unitStat.Atk; // 스킬 W 데미지 계산
             Destroy(skill_W, 0.7f);
         }
@@ -212,19 +214,21 @@ public class Ashe : Unit
 
             transform.rotation = Quaternion.LookRotation(direct);
         }
-        GameObject effect_E = Instantiate(Effect_E, Muzzle_E.transform.position, Muzzle_E.transform.rotation);
-        StartCoroutine(DetectionSight(effect_E,targetPos));
+        GameObject skill_E = Instantiate(effect_E, muzzle_E.transform.position, muzzle_E.transform.rotation);
+        StartCoroutine(DetectionSight(skill_E,targetPos));
         base.CastActiveE();
     }
 
-    IEnumerator DetectionSight(GameObject effect_E, Vector3 targetPos)
+    IEnumerator DetectionSight(GameObject skill_E, Vector3 targetPos)
     {
         while (true)
         {
             Debug.Log("스킬 들어왔다");
-            if(effect_E.transform.position.z >= targetPos.z)
+            if(skill_E.transform.position.z >= targetPos.z)
             {
-                Destroy(effect_E);
+                Destroy(skill_E);
+                GameObject _vision = Instantiate(vision, skill_E.transform.position,Quaternion.identity);
+                Destroy(_vision, 5f);
                 Debug.Log("시야 탐지");
                 yield break;
             }
@@ -236,7 +240,7 @@ public class Ashe : Unit
     // 스킬 R
     protected override void CastActiveR()
     {
-        ShotImg_R.SetActive(true);
+        shotImg_R.SetActive(true);
 
         startPosR = transform.position;
 
@@ -247,10 +251,10 @@ public class Ashe : Unit
         if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
         {
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
-            ShotImg_R.transform.position = hit.point;
+            shotImg_R.transform.position = hit.point;
             Vector3 direction = (hit.point-startPosR).normalized;
             Quaternion rotation = Quaternion.LookRotation(direction);
-            ShotImg_R.transform.rotation = rotation;
+            shotImg_R.transform.rotation = rotation;
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -261,11 +265,11 @@ public class Ashe : Unit
 
                 transform.LookAt(hit.point);
 
-                GameObject skillR = Instantiate(Effect_R, Muzzle_R.transform.position, Muzzle_R.transform.rotation);
+                GameObject skillR = Instantiate(effect_R, muzzle_R.transform.position, muzzle_R.transform.rotation);
                 skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk * 3; // 데미지 계산
                 Destroy(skillR, 10f);
 
-                ShotImg_R.SetActive(false);
+                shotImg_R.SetActive(false);
 
                 CurrentState = Define.UnitState.CastR;
 
@@ -314,7 +318,7 @@ public class Ashe : Unit
 
     private void AutoAttack()
     {
-        GameObject guidedArrow = Instantiate(Effect_Attack, Muzzle_Attack.transform.position, Muzzle_Attack.transform.rotation);
+        GameObject guidedArrow = Instantiate(effect_Attack, muzzle_Attack.transform.position, muzzle_Attack.transform.rotation);
         guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer;
         guidedArrow.GetComponent<CalculateDamage>().damage = unitStat.Atk;
         Debug.Log(unitStat.Atk);
@@ -335,10 +339,10 @@ public class Ashe : Unit
         for (int i = -2; i < 3; i++)
         {
             Vector3 localPosition = new Vector3(i * 0.3f, 0f, 0f);
-            Vector3 arrowPosition = Muzzle_Q.transform.TransformPoint(localPosition);
+            Vector3 arrowPosition = muzzle_Q.transform.TransformPoint(localPosition);
 
             // 화살 생성
-            GameObject guidedArrow = Instantiate(Effect_Attack, arrowPosition, Muzzle_Attack.transform.rotation);
+            GameObject guidedArrow = Instantiate(effect_Attack, arrowPosition, muzzle_Attack.transform.rotation);
             guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer; // Enemy값을 추가하여 화살이 대상을 따라가도록 함
             guidedArrow.GetComponent<CalculateDamage>().damage = unitStat.Atk / 3; // 데미지 계산
 
