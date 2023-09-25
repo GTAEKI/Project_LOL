@@ -13,7 +13,7 @@ public class SB_CaitylnW : MonoBehaviour
     Animator animator;
 
     GameObject range; // 케이틀린 범위
-    GameObject trapPrefab;
+    public GameObject trapPrefab;
     GameObject[] traps; // 트랩
 
     SphereCollider rangeCollider;
@@ -27,8 +27,6 @@ public class SB_CaitylnW : MonoBehaviour
         range = transform.GetChild(2).gameObject;
 
         animator = transform.GetComponent<Animator>();
-
-        trapPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Solbin/SB_Prefabs/Attack_W.prefab", typeof(GameObject));
         traps = new GameObject[3]; // 덫 최대 3개
         for (int i = 0; i < 3; i++)
         {

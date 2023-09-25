@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class SB_CaitylnHitE : MonoBehaviour
 {
-    GameObject blueEffectPrefab; // 충돌 시 이펙트
+    public GameObject blueEffectPrefab; // 충돌 시 이펙트
     GameObject blueEffect;
     bool oneCheck = false; // 중복 작동 금지
     Vector3 targetPoint; // 충돌 시 위치
@@ -20,8 +20,6 @@ public class SB_CaitylnHitE : MonoBehaviour
     {
         caityln = GameObject.Find("Caityln");
         Debug.Assert(caityln != null);
-        blueEffectPrefab = (GameObject)AssetDatabase.LoadAssetAtPath
-            ("Assets/Solbin/SB_Prefabs/eEffect.prefab", typeof(GameObject));
         blueEffect = Instantiate (blueEffectPrefab);
         blueEffect.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
         blueEffect.transform.position = new Vector3(0, 0, -10);
