@@ -1,17 +1,101 @@
-using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
-
 
 /// <summary>
 /// 게임매니저
 /// 배경택_230906
 /// </summary>
-public class GameManager : MonoBehaviour
+public class GameManager
 {
-    // 게임매니저 싱글톤_230906 배경택
-    public static GameManager instance;
+    /// <summary>
+    /// 현재 스테이지 종류 enum
+    /// 배경택_230906
+    /// </summary>
+    public enum CurrentStageMode
+    {
+        WAIT_STAGE, BATTLE_STAGE
+    }
+
+    /// <summary>
+    /// 대기 스테이지 enum
+    /// 배경택_230906
+    /// </summary>
+    public enum WaitStageMode
+    {
+        BASIC_MODE,
+        MONEY_1000_MODE,
+        MONEY_3000_MODE
+    }
+
+    /// <summary>
+    /// 전투 스테이지 enum
+    /// 배경택_230906
+    /// </summary>
+    public enum BattleStageMode
+    {
+        READY_MODE,
+        FIGHT_MODE,
+        MANETIC_FIGHT_MODE
+    }
+
+    // 라운드에 맞춰서 대기실 모드 결정(인스펙터창에서 변경 가능) _230906 배경택
+    private WaitStageMode[] waitStageModes = {
+        WaitStageMode.BASIC_MODE,
+        WaitStageMode.MONEY_1000_MODE,
+        WaitStageMode.BASIC_MODE,
+        WaitStageMode.MONEY_1000_MODE,
+        WaitStageMode.MONEY_3000_MODE,
+        WaitStageMode.BASIC_MODE,
+        WaitStageMode.MONEY_3000_MODE,
+        WaitStageMode.MONEY_3000_MODE,
+        WaitStageMode.BASIC_MODE,
+        WaitStageMode.MONEY_3000_MODE,
+        WaitStageMode.MONEY_3000_MODE,
+        WaitStageMode.BASIC_MODE,
+        WaitStageMode.MONEY_3000_MODE
+    };
+
+    private CurrentStageMode currentStage = CurrentStageMode.WAIT_STAGE;        // 스테이지 종류 (대기 / 전투)
+    private WaitStageMode waitStageMode = WaitStageMode.BASIC_MODE;             // 대기 스테이지 타입 (기본 / 1000원 지급 / 3000원 지급)
+    private BattleStageMode battleStageMode = BattleStageMode.READY_MODE;       // 전투 스테지이 타입 (대기 / 전투 / 자기장 전투)
+
+    private GameObject director;        // 카메라 관리자
+
+    private int roundNumber;            // 현재 라운드 번호
+    private float baseTimer;            // 게임 타이머
+
+    /// <summary>
+    /// 현재 스테이지 종류 프로퍼티
+    /// 김민섭_230925
+    /// </summary>
+    public CurrentStageMode CurrentStage
+    {
+        get => currentStage;
+        set
+        {
+            currentStage = value;
+
+            switch(currentStage)
+            {
+                case CurrentStageMode.WAIT_STAGE: director.transform.position = new Vector3(0f, 0f, WAITZONE_POSITION_Z); break;
+                case CurrentStageMode.BATTLE_STAGE: director.transform.position = new Vector3(0f, 0f, BATTLEZONE_POSITION_Z); break;
+            }
+        }
+    }
+
+    #region 상수
+
+    private const float WAIT_AREA_TIME = 5f;            // 40f
+    private const float BATTLE_READY_TIME = 1f;         // 5f
+    private const float START_MAGNETIC_TIME = 1f;       // 30f
+    private const float MAGNETIC_CYCLE = 5f;            // 5f
+    private const float WAITZONE_POSITION_Z = -93f;     // 대기존 카메라 z좌표       
+    private const float BATTLEZONE_POSITION_Z = 0f;     // 배틀존 카메라 z좌표
+
+    #endregion
+
+    ///////////////////////////////////////
 
     // 카메라 변수_230906 배경택
     public Camera cameraWaitArea;
@@ -21,13 +105,6 @@ public class GameManager : MonoBehaviour
     // 자기장 _230906 배경택
     public GameObject magneticField1;
     public GameObject magneticField2;
-
-    // 타이머 변수 _230906 배경택
-    private float baseTime;
-    private const float WAIT_AREA_TIME = 1f; //40f
-    private const float BATTLE_READY_TIME = 1f; //5f
-    private const float START_MAGNETIC_TIME = 1f; //30f
-    private const float MAGNETIC_CYCLE = 5f; //5f
 
     // 팀 체력 변수 _230906 배경택
     private const int TEAM_HP_20 = 20;
@@ -62,55 +139,11 @@ public class GameManager : MonoBehaviour
     // 게임종료, 한 팀만 살아남았을 경우 _230906 배경택
     private bool isGameOver;
 
-    // 라운드에 맞춰서 대기실 모드 결정(인스펙터창에서 변경 가능) _230906 배경택
-    public WaitStageMode[] waitStageModes = {
-        WaitStageMode.BASIC_MODE,
-        WaitStageMode.MONEY_1000_MODE,
-        WaitStageMode.CARD_MODE,
-        WaitStageMode.MONEY_1000_MODE,
-        WaitStageMode.MONEY_3000_MODE,
-        WaitStageMode.CARD_MODE,
-        WaitStageMode.MONEY_3000_MODE,
-        WaitStageMode.MONEY_3000_MODE,
-        WaitStageMode.CARD_MODE,
-        WaitStageMode.MONEY_3000_MODE,
-        WaitStageMode.MONEY_3000_MODE,
-        WaitStageMode.CARD_MODE,
-        WaitStageMode.MONEY_3000_MODE
-    };
-    private int roundNumber;
-
     // 자기장 움직임 변수 _230907 배경택
     private int magneticCount = 0;
     private Vector3 MoveTomagneticPos1;
     private Vector3 MoveTomagneticPos2;
     private bool isArriveMagnetic;
-
-    #region 게임 스테이지 및 모드 _230906 배경택
-    // 게임 스테이지 및 모드 _230906 배경택
-    private enum Stage
-    {
-        WAIT_STAGE,
-        BATTLE_STAGE
-    }
-    private Stage stage;
-    public enum WaitStageMode
-    {
-        BASIC_MODE,
-        MONEY_1000_MODE,
-        MONEY_3000_MODE,
-        CARD_MODE
-    }
-    private WaitStageMode waitStageMode;
-    private enum BattleStageMode
-    {
-        READY_MODE,
-        FIGHT_MODE,
-        MANETIC_FIGHT_MODE
-
-    }
-    private BattleStageMode battleStageMode;
-    #endregion
 
     // 캐릭터 리스폰 포인트를 위한 변수 _230907 배경택
     public GameObject[] waitAreaResPoint;
@@ -129,164 +162,228 @@ public class GameManager : MonoBehaviour
     public GameObject playerPrefab;
     private GameObject myPlayer;
 
-    private void Awake()
+    public void Init()
     {
-        //게임매니저 싱글톤_230906 배경택
-        if(instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+        director = GameObject.Find("Director");
 
-        #region 변수 초기화
-        //게임시작시 스테이지 대기모드로 초기화 _230906 배경택
-        stage = Stage.WAIT_STAGE;
         roundNumber = 0;
-        waitStageMode = waitStageModes[roundNumber];
+
+        CurrentStage = CurrentStageMode.WAIT_STAGE;
+        waitStageMode = WaitStageMode.BASIC_MODE;
         battleStageMode = BattleStageMode.READY_MODE;
-
-        //게임 시작시 bool값 초기화 _230906 배경택
-        isRoundOver = false;
-        isGameOver = false;
-
-        //게임 오브젝트를 담는 리스트 초기화 _230907 배경택
-        healFlowers = new List<GameObject>();
-        jumpFlowers = new List<GameObject>();
-
-        //게임 시작시 팀 체력 초기화
-        team1HP = TEAM_HP_20;
-        team2HP = TEAM_HP_20;
-        team3HP = TEAM_HP_20;
-        team4HP = TEAM_HP_20;
-
-        myPlayer = Instantiate(playerPrefab, waitAreaResPoint[0].transform.position, Quaternion.identity);
-        #endregion
     }
 
-    private void Update()
+    public void OnUpdate()
     {
-        GameFlow(); //게임 흐름 함수(시간에 따라 제어) _230906 배경택
+        //GameFlow(); //게임 흐름 함수(시간에 따라 제어) _230906 배경택
 
-        if (!isArriveMagnetic) // 자기장이 전부 줄어들었는가 _230907 배경택
+        //if (!isArriveMagnetic) // 자기장이 전부 줄어들었는가 _230907 배경택
+        //{
+        //    MoveUpMagneticField(); // 자기장 움직임 _230907 배경택
+        //}
+
+        baseTimer += Time.deltaTime;
+
+        switch(currentStage)
         {
-            MoveUpMagneticField(); // 자기장 움직임 _230907 배경택
+            case CurrentStageMode.WAIT_STAGE: UpdateWaitStage(); break;
+            case CurrentStageMode.BATTLE_STAGE: UpdateBattleStage(); break;
         }
     }
+
+    #region 업데이트 함수
 
     /// <summary>
-    /// 타이머 및 게임 스테이지 흐름 제어
-    /// 배경택 230906
+    /// 대기실 업데이트 함수
+    /// 김민섭_230925
     /// </summary>
-    private void GameFlow()
+    private void UpdateWaitStage()
     {
-        baseTime += Time.deltaTime;
+        Debug.Log("대기실입니다.");
 
-        switch (stage)
-        {
-            case Stage.WAIT_STAGE:
-                Debug.Log("대기실");
+        if(baseTimer >= WAIT_AREA_TIME)
+        {   // 대기실 시간이 다 지나면 배틀스테이지로 이동한다.
+            baseTimer = 0f;
 
-                if(baseTime >= WAIT_AREA_TIME) // 대기실 시간이 다 지나면 배틀스테이지로 이동
-                {
-                    baseTime = 0f;
-                    battleStageMode = BattleStageMode.READY_MODE;
-                    stage = Stage.BATTLE_STAGE;
-                    isRoundOver = false;
-                    Debug.Log("경기장 이동");
+            CurrentStage = CurrentStageMode.BATTLE_STAGE;
+            battleStageMode = BattleStageMode.READY_MODE;
 
-                    // 랜덤 한 위치로 카메라 이동
-                    int randomBattleArea = Random.Range(0, 2);
-                    if (randomBattleArea == 1)
-                    {
-                        //MoveToBattleArea1(); TODO
-                    }
-                    else
-                    {
-                        //MoveToBattlArea2(); TODO
-                    }
-                    break;
-                }
-
-                switch (waitStageMode) // 라운드 수에 따라 모드에 맞게 실행
-                {
-                    case WaitStageMode.BASIC_MODE:
-                        Debug.Log("대기실_기본");
-
-                        break;
-
-                    case WaitStageMode.MONEY_1000_MODE:
-                        Debug.Log("대기실_1000_돈");
-
-                        break;
-
-                    case WaitStageMode.MONEY_3000_MODE:
-                        Debug.Log("대기실_3000_돈");
-
-                        break;
-
-                    case WaitStageMode.CARD_MODE:
-                        Debug.Log("대기실_카드");
-
-                        break;
-                }
-                break;
-
-            case Stage.BATTLE_STAGE:
-
-                if (isRoundOver) // 라운드가 종료되었다면 라운드 수를 높이고 대기실로 이동
-                {
-                    baseTime = 0f;
-                    RoundOver(); //라운드 종료시 실행
-                    break;
-                }
-
-                switch (battleStageMode) // 배틀스테이지 모드 시간에 따라 수행
-                {
-                    case BattleStageMode.READY_MODE:
-
-                        CreateGameObject();
-
-                        if(baseTime >= BATTLE_READY_TIME)
-                        {
-                            baseTime = 0f;
-                            battleStageMode = BattleStageMode.FIGHT_MODE;
-                        }
-                        Debug.Log("준비모드");
-                        break;
-
-                    case BattleStageMode.FIGHT_MODE:
-                        if (baseTime >= START_MAGNETIC_TIME)
-                        {
-                            baseTime = 0f;
-                            battleStageMode = BattleStageMode.MANETIC_FIGHT_MODE;
-                            StartMagneticField();
-                        }
-                        Debug.Log("전투모드");
-                        break;
-
-                    case BattleStageMode.MANETIC_FIGHT_MODE: //자기장 시작됨
-                        if (baseTime >= MAGNETIC_CYCLE) // 자기장 주기에 맞춰서 실행
-                        {
-                            baseTime = 0f;
-
-                            if(magneticCount < 3) // Test : 3번 자기장 위로 움직이게 실행
-                            {
-                                MagneticCycle(); // Cycle마다 자기장의 다음 움직일 위치 계산
-                            }
-                            else if(magneticCount == 3) // Test : 자기장 일정높이 도달시 라운드종료 할 수 있도록
-                            {
-                                EndMagneticField(); // 자기장 모드 종료시 실행
-                            }
-                        }
-                        Debug.Log("자기장 모드");
-                        break;
-                }
-                break;
+            Debug.Log("경기장으로 이동합니다.");
+            return;
         }
+    }
+
+    private void UpdateBattle_ReadyMode()
+    {
+        // TODO: 전투에서 사용될 오브젝트 관리자 활성화
+
+        if(baseTimer >= BATTLE_READY_TIME)
+        {   // 전투 대기 시간이 종료되면 실행
+            baseTimer = 0f;
+            battleStageMode = BattleStageMode.FIGHT_MODE;
+
+            Debug.Log("전투가 시작됩니다.");
+
+            return;
+        }
+    }
+
+    private void UpdateBattle_FightMode()
+    {
+        if(baseTimer >= START_MAGNETIC_TIME)
+        {
+            baseTimer = 0f;
+            battleStageMode = BattleStageMode.MANETIC_FIGHT_MODE;
+
+            Debug.Log("자기장이 생성됩니다.");
+
+            return;
+        }
+    }
+
+    private void UpdateBattle_Manetic()
+    {
+        if(baseTimer >= MAGNETIC_CYCLE)
+        {
+            baseTimer = 0f;
+
+            if (magneticCount < 3) // Test : 3번 자기장 위로 움직이게 실행
+            {
+                MagneticCycle(); // Cycle마다 자기장의 다음 움직일 위치 계산
+            }
+            else if (magneticCount == 3) // Test : 자기장 일정높이 도달시 라운드종료 할 수 있도록
+            {
+                EndMagneticField(); // 자기장 모드 종료시 실행
+            }
+        }
+    }
+
+    private void UpdateBattleStage()
+    {
+        Debug.Log("전투 중입니다.");
+
+        // TODO: 라운드 종료 처리
+
+        switch (battleStageMode)
+        {
+            case BattleStageMode.READY_MODE: UpdateBattle_ReadyMode(); break;
+            case BattleStageMode.FIGHT_MODE: UpdateBattle_FightMode(); break;
+            case BattleStageMode.MANETIC_FIGHT_MODE: UpdateBattle_Manetic(); break;
+        }
+    }
+
+        #endregion
+
+        /// <summary>
+        /// 타이머 및 게임 스테이지 흐름 제어
+        /// 배경택 230906
+        /// </summary>
+        private void GameFlow()
+    {
+        //baseTimer += Time.deltaTime;
+
+        //switch (currentStage)
+        //{
+        //    case Stage.WAIT_STAGE:
+        //        Debug.Log("대기실");
+
+        //        if(baseTime >= WAIT_AREA_TIME) // 대기실 시간이 다 지나면 배틀스테이지로 이동
+        //        {
+        //            baseTime = 0f;
+        //            battleStageMode = BattleStageMode.READY_MODE;
+        //            stage = Stage.BATTLE_STAGE;
+        //            isRoundOver = false;
+        //            Debug.Log("경기장 이동");
+
+        //            // 랜덤 한 위치로 카메라 이동
+        //            int randomBattleArea = Random.Range(0, 2);
+        //            if (randomBattleArea == 1)
+        //            {
+        //                //MoveToBattleArea1(); TODO
+        //            }
+        //            else
+        //            {
+        //                //MoveToBattlArea2(); TODO
+        //            }
+        //            break;
+        //        }
+
+        //        switch (waitStageMode) // 라운드 수에 따라 모드에 맞게 실행
+        //        {
+        //            case WaitStageMode.BASIC_MODE:
+        //                Debug.Log("대기실_기본");
+
+        //                break;
+
+        //            case WaitStageMode.MONEY_1000_MODE:
+        //                Debug.Log("대기실_1000_돈");
+
+        //                break;
+
+        //            case WaitStageMode.MONEY_3000_MODE:
+        //                Debug.Log("대기실_3000_돈");
+
+        //                break;
+
+        //            case WaitStageMode.CARD_MODE:
+        //                Debug.Log("대기실_카드");
+
+        //                break;
+        //        }
+        //        break;
+
+        //    case Stage.BATTLE_STAGE:
+
+        //        if (isRoundOver) // 라운드가 종료되었다면 라운드 수를 높이고 대기실로 이동
+        //        {
+        //            baseTime = 0f;
+        //            RoundOver(); //라운드 종료시 실행
+        //            break;
+        //        }
+
+        //        switch (battleStageMode) // 배틀스테이지 모드 시간에 따라 수행
+        //        {
+        //            case BattleStageMode.READY_MODE:
+
+        //                CreateGameObject();
+
+        //                if(baseTime >= BATTLE_READY_TIME)
+        //                {
+        //                    baseTime = 0f;
+        //                    battleStageMode = BattleStageMode.FIGHT_MODE;
+        //                }
+        //                Debug.Log("준비모드");
+        //                break;
+
+        //            case BattleStageMode.FIGHT_MODE:
+        //                if (baseTime >= START_MAGNETIC_TIME)
+        //                {
+        //                    baseTime = 0f;
+        //                    battleStageMode = BattleStageMode.MANETIC_FIGHT_MODE;
+        //                    StartMagneticField();
+        //                }
+        //                Debug.Log("전투모드");
+        //                break;
+
+        //            case BattleStageMode.MANETIC_FIGHT_MODE: //자기장 시작됨
+        //                if (baseTime >= MAGNETIC_CYCLE) // 자기장 주기에 맞춰서 실행
+        //                {
+        //                    baseTime = 0f;
+
+        //                    if(magneticCount < 3) // Test : 3번 자기장 위로 움직이게 실행
+        //                    {
+        //                        MagneticCycle(); // Cycle마다 자기장의 다음 움직일 위치 계산
+        //                    }
+        //                    else if(magneticCount == 3) // Test : 자기장 일정높이 도달시 라운드종료 할 수 있도록
+        //                    {
+        //                        EndMagneticField(); // 자기장 모드 종료시 실행
+        //                    }
+        //                }
+        //                Debug.Log("자기장 모드");
+        //                break;
+        //        }
+        //        break;
+        //}
     }
 
 
@@ -355,17 +452,17 @@ public class GameManager : MonoBehaviour
     }
     private void CreateHealFlower() // 체력을 채워주는 꽃 생성 _ 230907 배경택
     {
-        foreach(GameObject healPoint in healFlowerPoints)
-        {
-            healFlowers.Add(Instantiate(healFlower, healPoint.transform.position, Quaternion.identity));
-        }
+        //foreach(GameObject healPoint in healFlowerPoints)
+        //{
+        //    healFlowers.Add(Instantiate(healFlower, healPoint.transform.position, Quaternion.identity));
+        //}
     }
     private void CreateJumpFlower() // 터지면 점프하게 하는 꽃 생성 _ 230907 배경택
     {
-        foreach (GameObject jumpPoint in jumpFlowerPoints)
-        {
-            jumpFlowers.Add(Instantiate(jumpFlower, jumpPoint.transform.position, Quaternion.identity));
-        }
+        //foreach (GameObject jumpPoint in jumpFlowerPoints)
+        //{
+        //    jumpFlowers.Add(Instantiate(jumpFlower, jumpPoint.transform.position, Quaternion.identity));
+        //}
     }
 
     private void DestroyGameObject() // 게임오브젝트 삭제 _ 230907 배경택
@@ -375,17 +472,17 @@ public class GameManager : MonoBehaviour
     }
     private void DestroyHealFlower() // 체력을 채워주는 꽃 파괴 _ 230907 배경택
     {
-        foreach(GameObject healFlower in healFlowers)
-        {
-            Destroy(healFlower);
-        }
+        //foreach(GameObject healFlower in healFlowers)
+        //{
+        //    Destroy(healFlower);
+        //}
     }
     private void DestroyJumpFlower() // 점프를 하게만드는 꽃 파괴 _ 230907 배경택
     {
-        foreach(GameObject jumpFlower in jumpFlowers)
-        {
-            Destroy(jumpFlower);
-        }
+        //foreach(GameObject jumpFlower in jumpFlowers)
+        //{
+        //    Destroy(jumpFlower);
+        //}
     }
     #endregion 게임 오브젝트 생성
 
@@ -399,7 +496,7 @@ public class GameManager : MonoBehaviour
         waitStageMode = waitStageModes[roundNumber]; //라운드별 스테이지 모드 적용
         Team4amage = teamRoundDamages[roundNumber]; //라운드별 체력감소량 적용
 
-        stage = Stage.WAIT_STAGE;
+        //stage = Stage.WAIT_STAGE;
         RoundResult(); // 캐릭터 및 팀 체력계산되면서 수정필요
         GameResult(); // 게임 결과 계산 내용 수정필요 
         DestroyGameObject();
