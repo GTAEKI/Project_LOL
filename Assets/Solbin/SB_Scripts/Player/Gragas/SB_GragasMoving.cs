@@ -29,6 +29,8 @@ public class SB_GragasMoving : Unit
 
     protected override void CastActiveQ() // 필트오버 피스메이커
     {
+        Debug.Log("그라거스 Q 확인");
+        animator.SetTrigger("PressQ");
         base.CastActiveQ();
     }
 
