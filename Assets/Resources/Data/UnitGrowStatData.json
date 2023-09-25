@@ -14,6 +14,21 @@
       "growHpRecovery": "1.2",
       "growMpRecovery": "0.8",
       "growAttackRange": "0.0"
+    },
+    {
+      "index": "100",
+      "name_ko": "야스오",
+      "name_en": "Yasuo",
+      "growHp": "110.0",
+      "growMp": "0.0",
+      "growStrength": "3.0",
+      "growDefense": "4.6",
+      "growMagicDefense": "2.05",
+      "growAttackSpeed": "3.5",
+      "growMovementSpeed": "0.0",
+      "growHpRecovery": "0.9",
+      "growMpRecovery": "0.0",
+      "growAttackRange": "0.0"
     }
   ]
 }
