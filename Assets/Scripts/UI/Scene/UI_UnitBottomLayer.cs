@@ -90,8 +90,8 @@ public class UI_UnitBottomLayer : UI_Scene
         GetImage((int)Images.Img_IconPassiveBG).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_passive");
 
         // 액티브 Q
-        GetImage((int)Images.Img_IconActiveQ).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_q1");
-        GetImage((int)Images.Img_IconActiveQBG).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_q1");
+        GetImage((int)Images.Img_IconActiveQ).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_q");
+        GetImage((int)Images.Img_IconActiveQBG).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_q");
 
         // 액티브 W
         GetImage((int)Images.Img_IconActiveW).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_w");

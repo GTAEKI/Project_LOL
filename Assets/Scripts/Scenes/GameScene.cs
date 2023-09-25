@@ -11,7 +11,7 @@ public class GameScene : BaseScene
         SceneType = Define.Scene.Game;
 
         // 기본 Scene UI
-        Managers.UI.ShowSceneUI<UI_UnitBottomLayer>().SetTarget(Define.UnitName.Yasuo); // 플레이어 하단 UI 생성
+        Managers.UI.ShowSceneUI<UI_UnitBottomLayer>().SetTarget(Define.UnitName.Rumble); // 플레이어 하단 UI 생성
     }
 
     public override void Clear()

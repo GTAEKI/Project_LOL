@@ -14,25 +14,35 @@ public class SpriteManager
     {
         if(unitSkill_IconDict.Count > 0) unitSkill_IconDict.Clear();
 
-        Sprite[] iconSprites = Resources.LoadAll<Sprite>("Sprites/UI/UnitSkill/Yasuo");
-        Dictionary<string, Sprite> iconDict = new Dictionary<string, Sprite>();
-
-        for(int i = 0; i < iconSprites.Length; i++)
+        // 유닛 스킬 아이콘
+        for(int i = (int)Define.UnitName.Rumble; i <= (int)Define.UnitName.Yasuo; i++)
         {
-            iconDict.Add(iconSprites[i].name, iconSprites[i]);
+            string pathUnitName = ((Define.UnitName)i).ToString();
+            Sprite[] iconSprites = Managers.Resource.LoadAll<Sprite>($"Sprites/UI/UnitSkill/{pathUnitName}");
+            Dictionary<string, Sprite> iconDict = new Dictionary<string, Sprite>();
+
+            for(int j = 0; j < iconSprites.Length; j++)
+            {
+                iconDict.Add(iconSprites[j].name, iconSprites[j]);
+            }
+
+            unitSkill_IconDict.Add((Define.UnitName)i, iconDict);
         }
 
-        unitSkill_IconDict.Add(Define.UnitName.Yasuo, iconDict);
-
-        Sprite[] frameSprites = Resources.LoadAll<Sprite>("Sprites/UI/UnitFrame/Yasuo");
-        Dictionary<string, Sprite> frameDict = new Dictionary<string, Sprite>();
-
-        for(int i = 0; i < frameSprites.Length; i++)
+        // 유닛 초상화 아이콘
+        for(int i = (int)Define.UnitName.Rumble; i <= (int)Define.UnitName.Yasuo; i++)
         {
-            frameDict.Add(frameSprites[i].name, frameSprites[i]);
-        }
+            string pathUnitName = ((Define.UnitName)i).ToString();
+            Sprite[] frameSprites = Resources.LoadAll<Sprite>($"Sprites/UI/UnitFrame/{pathUnitName}");
+            Dictionary<string, Sprite> frameDict = new Dictionary<string, Sprite>();
 
-        unitFrame_IconDict.Add(Define.UnitName.Yasuo, frameDict);
+            for(int j = 0; j < frameSprites.Length; j++)
+            {
+                frameDict.Add(frameSprites[j].name, frameSprites[j]);
+            }
+
+            unitFrame_IconDict.Add((Define.UnitName)i, frameDict);
+        }
     }
 
     public Sprite GetSkillIcon(Define.UnitName unitName, string iconName)
