@@ -248,6 +248,9 @@ public class Yasuo : Unit
 
             // 타겟을 향해 돌진 시작
             StartCoroutine(Dash(goalPos));
+
+            // 타겟에게 데미지 부여
+            StartCoroutine(SpellDamage(hit.transform));
         }
     }
 
@@ -270,7 +273,8 @@ public class Yasuo : Unit
             Vector3 moveDirection = (targetPosition - initialPosition).normalized;
 
             transform.position = Vector3.Lerp(initialPosition, targetPosition + moveDirection * 10f, t);
-            elapsedTime += Time.deltaTime * 2f;
+            elapsedTime += Time.deltaTime * 2.2f;
+
             yield return null;
         }
 
@@ -278,6 +282,33 @@ public class Yasuo : Unit
         CurrentState = Define.UnitState.IDLE;
 
         base.CastActiveE();
+    }
+
+    private IEnumerator SpellDamage(Transform target)
+    {
+        CurrentUnitStat targetStat = target.GetComponent<Unit>().CurrentUnitStat;       // 타겟의 현재 스탯
+
+        // 60 + (0.2 물리계수) + (0.6 주문력계수)
+
+        float atk = currentUnitStat.Atk * 0.2f;
+        float apk = currentUnitStat.Apk * 0.6f;
+        float totalDamage = 60 + atk + apk;
+
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("SPELL_E"))
+        {
+            yield return null;
+        }
+
+        float dashDuration = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - 0.1f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < dashDuration / 3.5f)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        targetStat.OnDamaged(totalDamage);
     }
 
     #endregion
