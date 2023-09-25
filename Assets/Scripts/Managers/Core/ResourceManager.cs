@@ -20,6 +20,11 @@ public class ResourceManager
         return Resources.Load<T>(_path);
     }
 
+    public T[] LoadAll<T>(string _filePath) where T : Object
+    {
+        return Resources.LoadAll<T>(_filePath);
+    }
+
     /// <summary>
     /// 프리팹 생성 함수
     /// </summary>
