@@ -6,13 +6,16 @@ using UnityEngine.UI;
 
 public class UI_UnitBottomLayer : UI_Scene
 {
-    private enum Images
+    protected enum Images
     {
         Img_IconActiveQ,Img_IconActiveW,Img_IconActiveE,Img_IconActiveR,
         Img_IconPassive,
         Img_IconSpellD,Img_IconSpellF,
         Img_Hpbar, Img_Mpbar,
-        Img_Portrait
+        Img_Portrait,
+
+        Img_IconActiveQBG, Img_IconActiveWBG, Img_IconActiveEBG, Img_IconActiveRBG,
+        Img_IconPassiveBG
     }
 
     private enum Texts
@@ -49,6 +52,10 @@ public class UI_UnitBottomLayer : UI_Scene
         ActiveQ, ActiveW, ActiveE, ActiveR, Passvie
     }
 
+    protected Define.UnitName targetUnit;     // 타겟 유닛
+
+    public void SetTarget(Define.UnitName targetUnit) => this.targetUnit = targetUnit;
+
     public override void Init()
     {
         if (isInit) return;
@@ -65,10 +72,8 @@ public class UI_UnitBottomLayer : UI_Scene
             GetTMP(i).text = "";
         }
 
-        //for(int i = (int)Images.Img_IconPassive; i <= (int)Images.Img_IconActiveR; i++)
-        //{
-        //    GetImage(i).fillAmount = 0f;
-        //}
+        SetSkillIcon();
+        SetFrame();
     }
 
     /// <summary>
@@ -76,20 +81,37 @@ public class UI_UnitBottomLayer : UI_Scene
     /// 배경택_230918
     /// </summary>
     /// <param name="name"></param>
-    public void SetSkillIcon(Define.UnitName name)
+    public void SetSkillIcon()
     {
-        CheckName(name);
+        string unitName = targetUnit.ToString().ToLower();
 
-        switch (name)
-        {
-            case Define.UnitName.Dummy_Puppet:
-                break;
-        }
+        // 패시브
+        GetImage((int)Images.Img_IconPassive).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_passive");
+        GetImage((int)Images.Img_IconPassiveBG).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_passive");
+
+        // 액티브 Q
+        GetImage((int)Images.Img_IconActiveQ).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_q1");
+        GetImage((int)Images.Img_IconActiveQBG).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_q1");
+
+        // 액티브 W
+        GetImage((int)Images.Img_IconActiveW).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_w");
+        GetImage((int)Images.Img_IconActiveWBG).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_w");
+
+        // 액티브 E
+        GetImage((int)Images.Img_IconActiveE).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_e");
+        GetImage((int)Images.Img_IconActiveEBG).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_e");
+
+        // 액티브 R
+        GetImage((int)Images.Img_IconActiveR).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_r");
+        GetImage((int)Images.Img_IconActiveRBG).sprite = Managers.Sprite.GetSkillIcon(targetUnit, $"{unitName}_r");
     }
 
-    public void CheckName(Define.UnitName name)
+    public void SetFrame()
     {
-        
+        string unitName = targetUnit.ToString().ToLower();
+
+        // 초상화
+        GetImage((int)Images.Img_Portrait).sprite = Managers.Sprite.GetFrame(targetUnit, $"{unitName}_circle");
     }
 
     /// <summary>
