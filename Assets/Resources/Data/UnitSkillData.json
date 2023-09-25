@@ -1,14 +1,44 @@
 {
   "unitSkill": [
     {
-      "index": "0",
-      "name_ko": "허수아비",
-      "name_en": "Dummy_Puppet",
+        "index": "0",
+        "name_ko": "허수아비",
+        "name_en": "Dummy_Puppet",
+        "passive_cooltime": "0.0",
+        "activeQ_cooltime": "8.0",
+        "activeW_cooltime": "2.0",
+        "activeE_cooltime": "17.0",
+        "activeR_cooltime": "75.0"
+    },
+    {
+        "index": "1",
+        "name_ko": "럼블",
+        "name_en": "Rumble",
+        "passive_cooltime": "0.0",
+        "activeQ_cooltime": "10.0",
+        "activeW_cooltime": "6.0",
+        "activeE_cooltime": "6.0",
+        "activeR_cooltime": "130.0"
+    },
+    {
+        "index": "2",
+        "name_ko": "애쉬",
+        "name_en": "Ashe",
+        "passive_cooltime": "5.0",
+        "activeQ_cooltime": "6.0",
+        "activeW_cooltime": "18.0",
+        "activeE_cooltime": "90.0",
+        "activeR_cooltime": "100.0"
+    },
+    {
+      "index": "100",
+      "name_ko": "야스오",
+      "name_en": "Yasuo",
       "passive_cooltime": "0.0",
-      "activeQ_cooltime": "8.0",
-      "activeW_cooltime": "2.0",
-      "activeE_cooltime": "17.0",
-      "activeR_cooltime": "75.0"
+      "activeQ_cooltime": "0.1",
+      "activeW_cooltime": "1.0",
+      "activeE_cooltime": "0.5",
+      "activeR_cooltime": "1.0"
     }
   ]
 }

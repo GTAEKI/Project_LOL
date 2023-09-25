@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class ResourceManager
 {
     public T Load<T>(string _path) where T : Object
     {
         if(typeof(T) == typeof(GameObject))
-        {   // TODO: ÀÌ¹Ì ¿øº» ¿ÀºêÁ§Æ®¸¦ µé°í ÀÖ´Ù¸é ¹Ù·Î »ç¿ë
+        {   // TODO: ì´ë¯¸ ì›ë³¸ ì˜¤ë¸Œì íŠ¸ë¥¼ ë“¤ê³  ìˆë‹¤ë©´ ë°”ë¡œ ì‚¬ìš©
             string name = _path;
             int index = name.LastIndexOf('\\');
             if(index >= 0) name = name.Substring(index + 1);
@@ -19,23 +20,28 @@ public class ResourceManager
         return Resources.Load<T>(_path);
     }
 
+    public T[] LoadAll<T>(string _filePath) where T : Object
+    {
+        return Resources.LoadAll<T>(_filePath);
+    }
+
     /// <summary>
-    /// ÇÁ¸®ÆÕ »ı¼º ÇÔ¼ö
+    /// í”„ë¦¬íŒ¹ ìƒì„± í•¨ìˆ˜
     /// </summary>
-    /// <param name="_path">ÇÁ¸®ÆÕ °æ·Î {Default: Prefabs/}</param>
-    /// <param name="_parent">ÇÁ¸®ÆÕ ºÎ¸ğ</param>
+    /// <param name="_path">í”„ë¦¬íŒ¹ ê²½ë¡œ {Default: Prefabs/}</param>
+    /// <param name="_parent">í”„ë¦¬íŒ¹ ë¶€ëª¨</param>
     /// <returns></returns>
     public GameObject Instantiate(string _path, Transform _parent = null)
     {
         GameObject prefab = Load<GameObject>($"Prefabs/{_path}");
         if(prefab == null)
         {
-            Debug.LogWarning($"ÇÁ¸®ÆÕÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù. {_path}");
+            Debug.LogWarning($"í”„ë¦¬íŒ¹ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. {_path}");
             return null;
         }
 
         if(prefab.GetComponent<Poolable>() != null)
-        {   // Ç®¸µ ¾È¿¡ ÀÖ´Â ¿ÀºêÁ§Æ®ÀÎÁö Ã¼Å©
+        {   // í’€ë§ ì•ˆì— ìˆëŠ” ì˜¤ë¸Œì íŠ¸ì¸ì§€ ì²´í¬
             return Managers.Pool.Pop(prefab, _parent).gameObject;
         }
 
@@ -49,12 +55,12 @@ public class ResourceManager
         GameObject prefab = Load<GameObject>($"Prefabs/{_path}");
         if (prefab == null)
         {
-            Debug.LogWarning($"ÇÁ¸®ÆÕÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù. {_path}");
+            Debug.LogWarning($"í”„ë¦¬íŒ¹ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. {_path}");
             return null;
         }
 
         if (prefab.GetComponent<Poolable>() != null)
-        {   // Ç®¸µ ¾È¿¡ ÀÖ´Â ¿ÀºêÁ§Æ®ÀÎÁö Ã¼Å©
+        {   // í’€ë§ ì•ˆì— ìˆëŠ” ì˜¤ë¸Œì íŠ¸ì¸ì§€ ì²´í¬
             return Managers.Pool.Pop(prefab, _parent).gameObject;
         }
 
@@ -69,10 +75,29 @@ public class ResourceManager
 
         Poolable able = _target.GetComponent<Poolable>();
         if(able != null)
-        {   // TODO: Ç®¸µ¿¡¼­ »ç¿ëµÇ´Â ¿ÀºêÁ§Æ®ÀÎÁö Ã¼Å©
+        {   // TODO: í’€ë§ì—ì„œ ì‚¬ìš©ë˜ëŠ” ì˜¤ë¸Œì íŠ¸ì¸ì§€ ì²´í¬
             Managers.Pool.Push(able);
             return;
         }
         Object.Destroy(_target);
+    }
+
+    /// <summary>
+    /// ì˜¤ë¸Œì íŠ¸ ì‚­ì œ í•¨ìˆ˜
+    /// ê¹€ë¯¼ì„­_230924
+    /// </summary>
+    /// <param name="target">ì˜¤ë¸Œì íŠ¸</param>
+    /// <param name="time">ì‚­ì œë˜ëŠ” ì‹œê°„</param>
+    public void Destroy(GameObject target, float time)
+    {
+        if (target == null) return;
+
+        Poolable able = target.GetComponent<Poolable>();
+        if (able != null)
+        {   // TODO: í’€ë§ì—ì„œ ì‚¬ìš©ë˜ëŠ” ì˜¤ë¸Œì íŠ¸ì¸ì§€ ì²´í¬
+            Managers.Pool.Push(able);
+            return;
+        }
+        Object.Destroy(target, time);
     }
 }

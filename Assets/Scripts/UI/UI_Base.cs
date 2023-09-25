@@ -18,24 +18,24 @@ public abstract class UI_Base : MonoBehaviour
     }
 
     /// <summary>
-    /// UI ¿ÀºêÁ§Æ®¸¦ Ã£¾Æ¼­ ¹è¿­¿¡ ÀúÀåÇÏ´Â ÇÔ¼ö
+    /// UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     /// </summary>
-    /// <typeparam name="T">UI ¿ÀºêÁ§Æ® Å¸ÀÔ</typeparam>
-    /// <param name="_type">enum Å¸ÀÔ</param>
+    /// <typeparam name="T">UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Å¸ï¿½ï¿½</typeparam>
+    /// <param name="_type">enum Å¸ï¿½ï¿½</param>
     protected void Bind<T>(Type _type) where T : UnityEngine.Object
     {
-        string[] names = Enum.GetNames(_type);
-        UnityEngine.Object[] objs = new UnityEngine.Object[names.Length];
+        string[] names = Enum.GetNames(_type); //Enumì— ìˆëŠ” ë…€ì„ë“¤ ë‹¤ ê°€ì ¸ì™€ì„œ ë°°ì—´ë¡œ ë§Œë“¤ìˆ˜ ìˆìŒ _ ê¸°ë³¸ì ìœ¼ë¡œ ì œê³µí•˜ëŠ” ê¸°ëŠ¥ 
+        UnityEngine.Object[] objs = new UnityEngine.Object[names.Length]; //ìœ ë‹ˆí‹° Engineì— ìˆëŠ” Objectì™€ Systemì— ìˆëŠ” Objectêµ¬ë³„ì„ ìœ„í•´
         objDict.Add(typeof(T), objs);
 
         for (int i = 0; i < names.Length; i++)
         {
-            if (typeof(T) == typeof(GameObject))
-            {   // °ÔÀÓ¿ÀºêÁ§Æ® Å¸ÀÔÀÏ °æ¿ì
+            if (typeof(T) == typeof(GameObject)) //ê²Œì„ì˜¤ë¸Œì íŠ¸ëŠ” ì»´í¬ë„ŒíŠ¸ íƒ€ì…ì´ ì•„ë‹ˆë¯€ë¡œ ë‹¤ë¥¸ë°©ì‹ìœ¼ë¡œ ê°€ì ¸ì™€ì•¼í•¨
+            {   // 
                 objs[i] = Util.FindChild(gameObject, names[i], true);
             }
             else
-            {   // ±× ¿ÜÀÇ Å¸ÀÔÀÏ °æ¿ì
+            {   // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
                 objs[i] = Util.FindChild<T>(gameObject, names[i], true);
             }
 
@@ -47,24 +47,24 @@ public abstract class UI_Base : MonoBehaviour
     }
 
     /// <summary>
-    /// UI ¿ÀºêÁ§Æ®¸¦ ²¨³»¼­ ¾²´Â ÇÔ¼ö
+    /// UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     /// </summary>
-    /// <typeparam name="T">UI ¿ÀºêÁ§Æ® Å¸ÀÔ</typeparam>
-    /// <param name="_index">UI ¿ÀºêÁ§Æ®ÀÇ ÀÎµ¦½º</param>
+    /// <typeparam name="T">UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Å¸ï¿½ï¿½</typeparam>
+    /// <param name="_index">UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½</param>
     /// <returns></returns>
     protected T Get<T>(int _index) where T : UnityEngine.Object
     {
         UnityEngine.Object[] objects = null;
         if (!objDict.TryGetValue(typeof(T), out objects)) return null;
-        return objects[_index] as T;
+        return objects[_index] as T; //objDictì— ìˆëŠ” ê°’ë“¤ì´ objectsë¡œ ë°°ì—´ë¡œ ë“¤ì–´ê°
     }
 
     /// <summary>
-    /// ÀÌº¥Æ® Å¸ÀÔ¿¡ µû¶ó UI ¿ÀºêÁ§Æ®¿¡ ÀÌº¥Æ®¸¦ ºÎ¿©
+    /// ï¿½Ìºï¿½Æ® Å¸ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½Î¿ï¿½
     /// </summary>
-    /// <param name="_target">¸ñÇ¥ ¿ÀºêÁ§Æ®</param>
-    /// <param name="_action">ÀÌº¥Æ®</param>
-    /// <param name="_type">ÀÌº¥Æ® Å¸ÀÔ</param>
+    /// <param name="_target">ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®</param>
+    /// <param name="_action">ï¿½Ìºï¿½Æ®</param>
+    /// <param name="_type">ï¿½Ìºï¿½Æ® Å¸ï¿½ï¿½</param>
     public static void BindEvent(GameObject _target, Action<PointerEventData> _action, Define.UIEvent _type = Define.UIEvent.Click)
     {
         UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(_target);

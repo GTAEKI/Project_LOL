@@ -26,11 +26,11 @@ public class InputManager
     /// </summary>
     public void OnUpdate()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;      // UI 터치 방지
+        if (EventSystem.current.IsPointerOverGameObject()) return;   // UI 터치 방지
 
         playerUnit?.OnUpdate();
 
-        if(Input.GetKeyDown(KeyCode.A))
+        if(Input.GetKeyDown(KeyCode.Z))
         {
             Managers.UI.ShowPopupUI<UI_DummyController>();
         }

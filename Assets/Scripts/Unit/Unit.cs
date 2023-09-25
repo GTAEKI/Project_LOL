@@ -14,6 +14,12 @@ public class Unit : MonoBehaviour
     [Header("Game Team Type")]
     [SerializeField] protected Define.GameTeam unitTeam;             // Unit's Team Type
 
+    // 스펠 쿨타임 체크 변수
+    [SerializeField] protected bool isCool_SpellQ = false;
+    [SerializeField] protected bool isCool_SpellW = false;
+    [SerializeField] protected bool isCool_SpellE = false;
+    [SerializeField] protected bool isCool_SpellR = false;
+
     public Define.GameTeam UnitTeam
     {
         get => unitTeam;
@@ -35,21 +41,17 @@ public class Unit : MonoBehaviour
     [Header("Player Current State")]
     [SerializeField] protected Define.UnitState currentState = Define.UnitState.IDLE;
 
-    #region ?醫롫짗??용쐻??덉굲?醫롫짗??됰뼒
+    protected Animator anim;            // 유닛 애니메이터
+
+    #region 프로퍼티
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫짗??됰뼒
-    /// ?醫롫짗??낅퓳??230906
-    /// </summary>
+    /// 현재 상태에 따라 처리하는 프로퍼티
+    /// 김민섭_230906
     public virtual Define.UnitState CurrentState
     {
         get => currentState;
-        set
-        {
-            currentState = value;
-
-            //testText.text = currentState.ToString();
-        }
+        set => currentState = value;
     }
 
     public CurrentUnitStat CurrentUnitStat
@@ -63,10 +65,10 @@ public class Unit : MonoBehaviour
 
     #endregion
 
-    #region ?醫롫짗??용쐻?
+    #region 상수
 
-    private const float ROTATE_SPEED = 20f;     // ?醫롫짗??용쐻??덉굲 ???쐻??덉굲?醫롫셽?紐꾩굲
-    private const float RAY_DISTANCE = 100f;     // ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫뻿筌뤿슣??
+    protected const float ROTATE_SPEED = 20f;     // 유닛 회전 속도
+    protected const float RAY_DISTANCE = 100f;     // 레이 사거리
 
     #endregion
 
@@ -75,37 +77,37 @@ public class Unit : MonoBehaviour
         Init();
     }
 
-    /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫뼏繹먮씮????醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230911
-    /// </summary>
+    /// 유닛 초기화 함수
+    /// 김민섭_230911
     public virtual void Init()
     {
         // Data
         currentUnitStat = new CurrentUnitStat(unitStat);
 
         // UI
-        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);       // ?醫롫짗??용쐻??덉굲 HUD ?醫롫짗??용쐻??덉굲
+        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform); 
+
+        anim = GetComponent<Animator>();
     }
 
     /// <summary>
-    /// InputManager ??룸쐻??덉굲?醫롫짗??용쐻??덉굲 OnUpdate ?醫롫셾??뚯굲?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??삳솇???醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
-    /// </summary>
-    public void OnUpdate()
+    /// InputManager 에서 사용하는 OnUpdate 함수
+    /// 김민섭_230906
+    public virtual void OnUpdate()
     {
         Move();
         Select();
 
         CastActiveSkill();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // Test: 데미지 테스트 코드
+        if (Input.GetKeyDown(KeyCode.K))
         {
             currentUnitStat.OnDamaged(10);
         }
     }
 
-    public void Update()
+    public virtual void Update()
     {
         switch (CurrentState)
         {
@@ -114,20 +116,20 @@ public class Unit : MonoBehaviour
         }
     }
 
-    #region ?醫롫짗??용쐻?諛명닰???醫롫짗??용쐻??덉굲?醫롫짗??됰뱜 ?醫롫셾??뚯굲
+    #region 업데이트 함수
 
     /// <summary>
-    /// ?醫롫짗??용쐻?諛대???IDLE?醫롫짗???醫롫짗???醫롫짗??용쐻??덉굲?遺룸쐻??醫롫짗??용쐻??덉굲?醫롫짗??됰뱜 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void UpdateIdle()
     {
-        // TODO: ?醫롫짗??용쐻??덉굲
+        // TODO: 
     }
 
     /// <summary>
-    /// ?醫롫짗??용쐻?諛대???MOVE?醫롫짗???醫롫짗???醫롫짗??용쐻??덉굲?遺룸쐻??醫롫짗??용쐻??덉굲?醫롫짗??됰뱜 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void UpdateMove()
     {
@@ -145,7 +147,8 @@ public class Unit : MonoBehaviour
         }
         else
         {
-            float moveDistance = Mathf.Clamp(unitStat.MoveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
+            // 이동속도 비율 조정 0.03f
+            float moveDistance = Mathf.Clamp((currentUnitStat.MoveMentSpeed * 0.03f) * Time.deltaTime, 0f, direct.magnitude);
             transform.position += direct.normalized * moveDistance;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), ROTATE_SPEED * Time.deltaTime);
         }
@@ -154,10 +157,10 @@ public class Unit : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
-    private void Select()
+    public void Select()
     {
         if(Managers.Input.CheckKeyEvent(0))
         {
@@ -168,7 +171,7 @@ public class Unit : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(mousePos);
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit")))
+                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")))
                 {
                     Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
                 }
@@ -177,10 +180,10 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲?醫롫짗??筌ｋ똾寃??醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
-    public void Move()
+    protected virtual void Move()
     {
         if (Managers.Input.CheckKeyEvent(1))
         {
@@ -202,39 +205,42 @@ public class Unit : MonoBehaviour
             }
         }
     }
-
+     
     #region 스킬 관련 함수
 
     /// <summary>
-    /// ???醫롫셾?關????醫롫짗??용쐻??덉굲 ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 ?醫롫짗??용쐻??덉굲?醫롫뼣?癒?굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     public virtual void CastActiveSkill()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        // 기본 상태 및 움직임 
+        if (!(CurrentState == Define.UnitState.MOVE || CurrentState == Define.UnitState.IDLE)) return;
+
+        if (!isCool_SpellQ && Input.GetKeyDown(KeyCode.Q))
         {
             CastActiveQ();
         }
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (!isCool_SpellW && Input.GetKeyDown(KeyCode.W))
         {
             CastActiveW();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!isCool_SpellE && Input.GetKeyDown(KeyCode.E))
         {
             CastActiveE();
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (!isCool_SpellR && Input.GetKeyDown(KeyCode.R))
         {
             CastActiveR();
         }
     }
 
     /// <summary>
-    /// ?醫롫뼦??뺥닰???醫롫짗??됯텢 ?醫롫짗??용쐻??덉굲?醫롫뼣?癒?굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     public virtual void CastPassiveSkill()
     {
@@ -242,8 +248,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ???醫롫셾?關????醫롫짗??용쐻??덉굲 ?醫롫짗??용쐻??덉굲 ?醫롫짗??됯텢 ?醫롫짗??용쐻??덉굲?醫롫뼣?癒?굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     /// <param name="key"></param>
     public virtual void CastSpellSkill()
@@ -262,6 +268,46 @@ public class Unit : MonoBehaviour
     #region 액티브 스킬 함수
 
     /// <summary>
+    /// 쿨타임 체크 함수
+    /// 김민섭_230917
+    /// </summary>
+    /// <param name="index">스킬 인덱스</param>
+    private IEnumerator CoolActive(int index)
+    {
+        UI_UnitBottomLayer unitBottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
+        if (unitBottomLayer?.GetCooltime((UI_UnitBottomLayer.CooltimeType)index) > 0f) yield break;
+
+        switch (index)
+        {
+            case 0: isCool_SpellQ = true; break;
+            case 1: isCool_SpellW = true; break;
+            case 2: isCool_SpellE = true; break;
+            case 3: isCool_SpellR = true; break;
+        }
+
+        float currentTime = unitSkill.Actives[index].Cooltime;
+        unitBottomLayer?.SetCooltime((UI_UnitBottomLayer.CooltimeType)index, currentTime, unitSkill.Actives[index].Cooltime);
+
+        while (unitBottomLayer?.GetCooltime((UI_UnitBottomLayer.CooltimeType)index) > 0f)
+        {
+            currentTime -= Time.deltaTime;
+            unitBottomLayer?.SetCooltime((UI_UnitBottomLayer.CooltimeType)index, currentTime, unitSkill.Actives[index].Cooltime);
+
+            yield return null;
+        }
+
+        switch (index)
+        {
+            case 0: isCool_SpellQ = false; break;
+            case 1: isCool_SpellW = false; break;
+            case 2: isCool_SpellE = false; break;
+            case 3: isCool_SpellR = false; break;
+        }
+
+        yield break;
+    }
+
+    /// <summary>
     /// 액티브 스킬 Q 실행 함수
     /// 김민섭_230906
     /// </summary>
@@ -272,28 +318,6 @@ public class Unit : MonoBehaviour
         StartCoroutine(CoolActive(0));
     }
 
-    private IEnumerator CoolActive(int index)
-    {
-        UI_UnitBottomLayer unitBottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
-        if (unitBottomLayer?.GetCooltime((UI_UnitBottomLayer.CooltimeType)index) > 0f) yield break;
-
-        float currentTime = unitSkill.Actives[index].Cooltime;
-        unitBottomLayer?.SetCooltime((UI_UnitBottomLayer.CooltimeType)index, currentTime, unitSkill.Actives[index].Cooltime);        
-
-        while (unitBottomLayer?.GetCooltime((UI_UnitBottomLayer.CooltimeType)index) > 0f)
-        {
-            currentTime -= Time.deltaTime;
-            unitBottomLayer?.SetCooltime((UI_UnitBottomLayer.CooltimeType)index, currentTime, unitSkill.Actives[index].Cooltime);
-
-            yield return null;
-        }
-        yield break;
-    }
-
-    /// <summary>
-    /// ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 W ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
-    /// </summary>
     protected virtual void CastActiveW()
     {
         Debug.Log("W 스킬 사용");
@@ -302,8 +326,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 E ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void CastActiveE()
     {
@@ -313,8 +337,8 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// ?醫롫짗??됰뼒?醫롫짗???醫롫짗??됯텢 R ?醫롫짗??용쐻??덉굲 ?醫롫셾??뚯굲
-    /// ?醫롫짗??낅퓳??230906
+    /// 
+    /// 
     /// </summary>
     protected virtual void CastActiveR()
     {
@@ -325,25 +349,25 @@ public class Unit : MonoBehaviour
 
     #endregion
 
-    #region ?醫롫뼦??뺥닰???醫롫짗??됯텢
+    #region 
 
     protected virtual void CastPassive()
     {
-        Debug.Log("?醫롫뼦??뺥닰???醫롫짗??됯텢");
+        Debug.Log("패시브 스킬 사용");
     }
 
     #endregion
 
-    #region ?醫롫짗??용쐻??덉굲 ?醫롫짗??됯텢
+    #region D,F스킬
 
     protected virtual void CastSpellD()
     {
-        Debug.Log("D ?醫롫짗??용쐻??덉굲 ?醫롫솯?紐꾩굲");
+        Debug.Log("D 스킬 사용");
     }
 
     protected virtual void CastSpellF()
     {
-        Debug.Log("F ?醫롫짗??용쐻??덉굲 ?醫롫솯?紐꾩굲");
+        Debug.Log("F 스킬 사용");
     }
 
     #endregion

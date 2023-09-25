@@ -23,24 +23,25 @@ public class UI_UnitHUD : UI_Base
     private static readonly int floatWidth = Shader.PropertyToID(WIDTH);
     private static readonly int floatThickness = Shader.PropertyToID(THICKNESS);
 
-    private float hpShieldRatio;        // ??삳굡 筌ｋ?????쑴??
+    private float hpShieldRatio;        // HP Shield
     private float rectWidth = 100f;
     private float thickness = 2f;
 
     private Collider col;
 
-    #region ?怨몃땾
+    #region 쉐이더 프로퍼티
 
     private const string STEP = "_Steps";
     private const string RATIO = "_HSRatio";
     private const string WIDTH = "_Width";
     private const string THICKNESS = "_Thickness";
+    private const float HP_RATIO = 100f;
 
     #endregion
 
-    #region ???뮞??癰궰??
+    #region 쉴드 테스트 변수
 
-    private float sp = 0f;
+    private float sp = 0f;      // 쉴드
     private float speed = 3f;
 
     #endregion
@@ -59,8 +60,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// ?癒?뵠???믩챸?싩뵳?堉???밴쉐 ??λ땾
-    /// 繹먃沃섏눘苑?230911
+    /// HUD의 머티리얼을 생성합니다.
+    /// 김민섭_230911
     /// </summary>
     private void CreateMaterial()
     {
@@ -74,8 +75,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// ?袁⑹삺 gameview 燁삳?李??깅퓠 筌띿쉸????袁⑺뒄?? 揶쏄낮猷꾤몴??④쑴沅??뺣뼄.
-    /// 繹먃沃섏눘苑?230911
+    /// GameView를 기준으로 HUD의 위치와 회전을 업데이트합니다.
+    /// 김민섭 _ 230911
     /// </summary>
     private void UpdateTransformHUD()
     {
@@ -84,8 +85,8 @@ public class UI_UnitHUD : UI_Base
     }
 
     /// <summary>
-    /// HUD ??륂뒄 ?④쑴沅???λ땾
-    /// 繹먃沃섏눘苑?230911
+    /// HUD 체력바와 관련된 값을 업데이트합니다.
+    /// 김민섭 _ 230911
     /// </summary>
     private void UpdateValueHUD()
     {
@@ -96,47 +97,47 @@ public class UI_UnitHUD : UI_Base
 
         float step;
 
-        // ??諭뜹첎? 鈺곕똻??????
+        // 쉴드가 있을 경우 처리
         if (sp > 0)
         {
             if (unit.CurrentUnitStat.Hp + sp > unit.CurrentUnitStat.UnitStat.Hp)
-            {   // ?袁⑹삺 筌ｋ???+ ??諭?> 筌ㅼ뮆? 筌ｋ???
+            {   // 현재 체력 + 쉴드 > 최대 체력일 경우
                 hpShieldRatio = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
                 GetImage((int)Images.Img_Mana).fillAmount = 1f;
-                step = unit.CurrentUnitStat.Hp / 300f;
+                step = unit.CurrentUnitStat.Hp / HP_RATIO;
                 GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / (unit.CurrentUnitStat.Hp + sp);
             }
             else
             {
                 GetImage((int)Images.Img_Mana).fillAmount = (unit.CurrentUnitStat.Hp + sp) / unit.CurrentUnitStat.UnitStat.Hp;
                 hpShieldRatio = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
-                step = unit.CurrentUnitStat.Hp / 300f;
+                step = unit.CurrentUnitStat.Hp / HP_RATIO;
                 GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
             }
         }
         else
         {
             GetImage((int)Images.Img_Mana).fillAmount = 0f;
-            step = unit.CurrentUnitStat.UnitStat.Hp / 300f;
+            step = unit.CurrentUnitStat.UnitStat.Hp / HP_RATIO;     // 체력 칸 나누는 기준
             hpShieldRatio = 1f;
             GetImage((int)Images.Img_Hp).fillAmount = unit.CurrentUnitStat.Hp / unit.CurrentUnitStat.UnitStat.Hp;
         }
 
         GetImage((int)Images.Img_Damaged).fillAmount = Mathf.Lerp(GetImage((int)Images.Img_Damaged).fillAmount, GetImage((int)Images.Img_Hp).fillAmount, Time.deltaTime * speed);
-        GetImage((int)Images.Img_Separator).material.SetFloat(floatSteps, step);
-        GetImage((int)Images.Img_Separator).material.SetFloat(floatRatio, hpShieldRatio);
+        GetImage((int)Images.Img_Separator).material.SetFloat(floatSteps, step); // floatSteps처럼 float 변수에 쉐이더 값을 조절하는 변수
+        GetImage((int)Images.Img_Separator).material.SetFloat(floatRatio, hpShieldRatio); // int가 Enum 앞에 있으면 index 번호대로 들어감
         GetImage((int)Images.Img_Separator).material.SetFloat(floatWidth, rectWidth);
         GetImage((int)Images.Img_Separator).material.SetFloat(floatThickness, thickness);
     }
 
-    #region ???뮞???꾨뗀諭?
+    #region Coroutine Test
 
     private IEnumerator CoroutineTest()
     {
         yield return new WaitForSeconds(2f);
 
-        //hp = 1500;
-        //maxHp = 1500;
+        // hp = 1500;
+        // maxHp = 1500;
         sp = 400;
 
         while (sp > 0)
@@ -163,7 +164,7 @@ public class UI_UnitHUD : UI_Base
             yield return new WaitForSeconds(1f);
         }
 
-        //UnityEditor.EditorApplication.isPlaying = false;
+        // UnityEditor.EditorApplication.isPlaying = false;
     }
 
     #endregion

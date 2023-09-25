@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bush
+  - HealFlowerSpawnPoint
+  - ExplosionFlowerSpawnPoint
+  - FxTemporaire
+  - Dummy
   layers:
   - Default
   - TransparentFX
@@ -14,7 +18,7 @@ TagManager:
   - UI
   - Obstacle
   - Target
-  - 
+  - Bullet
   - Vision
   - Floor
   - 
@@ -30,7 +34,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - AsheBird
   - 
   - 
   - 
@@ -53,4 +57,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 4155621595
+    locked: 0
+  - name: Skill_Effect
+    uniqueID: 3299370701
     locked: 0
