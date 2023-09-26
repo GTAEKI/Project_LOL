@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 /// <summary>
 /// 럼블 캐릭터를 위한 스크립트
@@ -26,6 +28,8 @@ public class Rumble : Unit
     // 다른 플레이어를 담아줄 게임오브젝트
     private GameObject otherPlayer;
 
+    private PhotonView pv;
+
     // 럼블 객체 Init
     public override void Init()
     {
@@ -35,6 +39,7 @@ public class Rumble : Unit
             Managers.Data.UnitBaseStatDict[Define.UnitName.Rumble]);
         unitSkill = new UnitSkill(Define.UnitName.Rumble);
         animator = GetComponent<Animator>();
+        pv = GetComponent<PhotonView>();
         base.Init();
     }
 
@@ -75,7 +80,7 @@ public class Rumble : Unit
                     targetPos = hit.point;
 
                     CurrentState = Define.UnitState.MOVE;
-                }                
+                }
             }
         }
     }
@@ -92,24 +97,25 @@ public class Rumble : Unit
             RangeImg_Attack.SetActive(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (!isCool_SpellQ && Input.GetKeyDown(KeyCode.Q))
         {
-            
+
             CastActiveQ();
+            pv.RPC("CastActiveQ", RpcTarget.Others);
         }
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (!isCool_SpellW && Input.GetKeyDown(KeyCode.W))
         {
             CastActiveW();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!isCool_SpellE && Input.GetKeyDown(KeyCode.E))
         {
             CurrentState = Define.UnitState.CastE;
             CastActiveE();
         }
 
-        if (Input.GetKey(KeyCode.R))
+        if (!isCool_SpellR && Input.GetKey(KeyCode.R))
         {
             CastActiveR();
         }
@@ -149,13 +155,14 @@ public class Rumble : Unit
     }
 
     // 스킬 Q
+    [PunRPC]
     protected override void CastActiveQ()
     {
         StartCoroutine(SkillQ()); //스킬 Q 보였다가 꺼지도록
         base.CastActiveQ();
     }
 
-    IEnumerator  SkillQ()
+    IEnumerator SkillQ()
     {
         Effect_Q.SetActive(true);
         Effect_Q.GetComponent<CalculateDamage>().damage = unitStat.Atk;
@@ -175,8 +182,9 @@ public class Rumble : Unit
     // 스킬 E
     protected override void CastActiveE()
     {
-        
-        Invoke("InstantiateSkillE",0.2f);
+        InvokeSkillE();
+        pv.RPC("InvokeSkillE", RpcTarget.Others);
+        //Invoke("InstantiateSkillE",0.2f);
         Vector3 mousePos = Input.mousePosition;
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
@@ -194,6 +202,12 @@ public class Rumble : Unit
         }
 
         base.CastActiveE();
+    }
+
+    [PunRPC]
+    private void InvokeSkillE()
+    {
+        Invoke("InstantiateSkillE", 0.2f);
     }
 
     // 애니메이션 모션에 맞춰 스킬 E를 나가게 하기 위한 함수_Invoke에 사용
@@ -249,17 +263,25 @@ public class Rumble : Unit
             Vector3 direction = (rotationR - startPosR).normalized;
             Quaternion rotation = Quaternion.LookRotation(direction);
             // Effect_R을 계산된 위치와 회전값으로 생성
-            GameObject skillR = Instantiate(Effect_R, startPosR, rotation);
-            skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk;
-
-            Destroy(skillR, 3f);
+            //GameObject skillR = Instantiate(Effect_R, startPosR, rotation);
+            //skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk;
+            InstantiateSkillR(startPosR, rotation);
+            pv.RPC("InstantiateSkillR", RpcTarget.Others, startPosR, rotation);
+            //Destroy(skillR, 3.5f);
 
             RangeImg_R.SetActive(false);
             ShotImg.SetActive(false);
-            
+
             base.CastActiveR();
         }
     }
+    [PunRPC]
+    private void InstantiateSkillR(Vector3 startPosR, Quaternion rotation)
+    {
+        GameObject skillR = Instantiate(Effect_R, startPosR, rotation);
+        skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk;
+    }
+
 
     protected override void CastPassive()
     {
@@ -277,15 +299,12 @@ public class Rumble : Unit
 
         float minDistance = direct.magnitude;
 
-        
-        if(isAttack == true && unitStat.AttackRange >= direct.magnitude)
+
+        if (isAttack == true && unitStat.AttackRange >= direct.magnitude)
         {
             targetPos = default;
             transform.rotation = Quaternion.LookRotation(direct);
             CurrentState = Define.UnitState.Attack;
-
-
-
             return;
         }
         else if (minDistance <= 1f && CurrentState != Define.UnitState.Attack)
@@ -294,9 +313,9 @@ public class Rumble : Unit
             CurrentState = Define.UnitState.IDLE;
             return;
         }
-        else if(currentState == Define.UnitState.MOVE)
+        else if (currentState == Define.UnitState.MOVE)
         {
-            float moveDistance = Mathf.Clamp(unitStat.MoveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
+            float moveDistance = Mathf.Clamp((currentUnitStat.MoveMentSpeed * 0.03f) * Time.deltaTime, 0f, direct.magnitude);
             transform.position += direct.normalized * moveDistance;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), ROTATE_SPEED * Time.deltaTime);
         }
@@ -330,12 +349,12 @@ public class Rumble : Unit
             {
                 case Define.UnitState.IDLE:
                     animator.SetBool("Move", false);
-                    animator.SetBool("Attack",false);
+                    animator.SetBool("Attack", false);
                     break;
 
                 case Define.UnitState.MOVE:
                     animator.SetBool("Move", true);
-                    animator.SetBool("Attack",false);
+                    animator.SetBool("Attack", false);
 
                     break;
 
@@ -357,9 +376,9 @@ public class Rumble : Unit
                     animator.SetTrigger("R");
                     break;
 
-                case Define.UnitState.Attack:                 
+                case Define.UnitState.Attack:
                     animator.SetTrigger("AttackTR"); // AnyState에서 Transition을 원활하게 하기 위한 Trigger
-                    animator.SetBool("Attack",true);
+                    animator.SetBool("Attack", true);
                     animator.SetBool("Move", false);
                     break;
 
