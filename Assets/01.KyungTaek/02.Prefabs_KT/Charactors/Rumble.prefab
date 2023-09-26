@@ -1735,7 +1735,7 @@ GameObject:
   - component: {fileID: 2974705261332782904}
   - component: {fileID: 2080766980}
   - component: {fileID: 2080766984}
-  m_Layer: 14
+  m_Layer: 13
   m_Name: Rumble
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1825,6 +1825,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitTeam: 0
+  isCool_SpellQ: 0
+  isCool_SpellW: 0
+  isCool_SpellE: 0
+  isCool_SpellR: 0
   currentState: 1
   animator: {fileID: 0}
   RangeImg_R: {fileID: 1807432505659584250}
@@ -4666,6 +4670,10 @@ PrefabInstance:
     - target: {fileID: 5933476039719894934, guid: 0052c21590acb48609710b6831479224, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8423390772738981119, guid: 0052c21590acb48609710b6831479224, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0052c21590acb48609710b6831479224, type: 3}

@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private GameObject player;                  // target
+    public GameObject player;                  // target
     private bool isFollow = true;               // Camera Follow Player
     private float camSpeed = 20f;               // Camera movementSpeed
     private float screenSizeThickness = 10;     // Screen Side
-    private float camFOV;                       // Camera Field of View
+    public  float camFOV;                       // Camera Field of View
     private float zoomSpeed = 10f;              // Zoom speed
     private float mouseScrollInput;             // Mouse Scroll Input
     private  Vector3 delta;
 
     private void Start()
     {
-        player = GameObject.FindWithTag("Player");
+        //player = GameObject.FindWithTag("Player");
         delta = new Vector3(0, 15, -9f); //230914 배경택 값 수정
 
-        camFOV = GetComponent<Camera>().fieldOfView;        
-        transform.position = player.transform.position + delta;
+        //camFOV = GetComponent<Camera>().fieldOfView;        
+        //transform.position = player.transform.position + delta;
     }
 
     private void LateUpdate()
@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour
 
         Vector3 pos = transform.position;
 
-        if(isFollow)
+        if(isFollow && player != null)
         {   // Follow Target Player
             pos = player.transform.position + delta;
             transform.LookAt(player.transform);

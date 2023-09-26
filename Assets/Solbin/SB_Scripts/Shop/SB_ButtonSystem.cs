@@ -1,13 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 using TMPro;
 using System;
-using System.Threading;
-using static UnityEditor.Progress;
 
 public class SB_ButtonSystem : MonoBehaviour
 {

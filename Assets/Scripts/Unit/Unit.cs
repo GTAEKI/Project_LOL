@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviourPun
 {
     // 데이터
     protected UnitStat unitStat;                    // 유닛 기본 베이스 스탯

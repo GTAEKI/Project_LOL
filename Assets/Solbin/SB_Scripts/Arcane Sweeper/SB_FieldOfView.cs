@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public delegate void VisibilityChange(List<Transform> newTargets);
 

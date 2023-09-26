@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266736086}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 1.1}
+  m_LocalPosition: {x: 0, y: 1.1, z: 1.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -958,7 +958,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2213110085295150631
 Transform:
   m_ObjectHideFlags: 0
@@ -1045,19 +1045,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitTeam: 0
+  isCool_SpellQ: 0
+  isCool_SpellW: 0
+  isCool_SpellE: 0
+  isCool_SpellR: 0
   currentState: 1
   animator: {fileID: 0}
-  rangeImg_Attack: {fileID: 0}
-  shotImg_R: {fileID: 0}
-  effect_Attack: {fileID: 0}
-  effect_E: {fileID: 0}
-  effect_R: {fileID: 0}
-  muzzle_Attack: {fileID: 0}
-  muzzle_Q: {fileID: 0}
-  muzzle_W: {fileID: 0}
-  muzzle_E: {fileID: 0}
-  muzzle_R: {fileID: 0}
-  vision: {fileID: 0}
+  rangeImg_Attack: {fileID: 3280638027590248753}
+  shotImg_R: {fileID: 1790548885128730414}
+  effect_Attack: {fileID: 8204489965885779932, guid: d255404e5c0c241a4adedc8dfd4d036a, type: 3}
+  effect_E: {fileID: 7763693222232303948, guid: f7521ce45090540b4b152551af393feb, type: 3}
+  effect_R: {fileID: 1768030640663406479, guid: c2c245c1bf2e34608b616a93343f4223, type: 3}
+  muzzle_Attack: {fileID: 266736086}
+  muzzle_Q: {fileID: 3444282165393009399}
+  muzzle_W: {fileID: 266736086}
+  muzzle_E: {fileID: 430979100}
+  muzzle_R: {fileID: 266736086}
+  vision: {fileID: 3982423139661996830, guid: 9d9ed8385b3e64596bb93d15483d401e, type: 3}
 --- !u!1 &1667382760812884816
 GameObject:
   m_ObjectHideFlags: 0
@@ -4558,5 +4562,10 @@ PrefabInstance:
 --- !u!4 &1790548885128730409 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8790582561523188555, guid: 76bec48f2e5ab44c9823043b7f9ad157, type: 3}
+  m_PrefabInstance: {fileID: 7000602605311530082}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1790548885128730414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8790582561523188556, guid: 76bec48f2e5ab44c9823043b7f9ad157, type: 3}
   m_PrefabInstance: {fileID: 7000602605311530082}
   m_PrefabAsset: {fileID: 0}

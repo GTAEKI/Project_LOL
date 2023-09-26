@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class Managers : MonoBehaviour
+public class Managers : MonoBehaviourPun
 {
     private static Managers s_instance; // 매니저 인스턴스 생성
 
