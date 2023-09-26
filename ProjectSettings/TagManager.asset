@@ -9,6 +9,7 @@ TagManager:
   - ExplosionFlowerSpawnPoint
   - FxTemporaire
   - Dummy
+  - Enemy
   layers:
   - Default
   - TransparentFX
