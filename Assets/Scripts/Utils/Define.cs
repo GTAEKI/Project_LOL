@@ -64,6 +64,8 @@ public class Define
     {
         Dummy_Puppet,
         Fiora,
+        Rumble,
+        Ashe
     }
 
     #endregion
