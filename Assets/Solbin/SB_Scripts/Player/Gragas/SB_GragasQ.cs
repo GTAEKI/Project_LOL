@@ -21,6 +21,7 @@ public class SB_GragasQ : MonoBehaviour
     Vector3 barrelDes; // q1의 목적지
 
     Collider collider;
+    ParticleSystem particle;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,7 @@ public class SB_GragasQ : MonoBehaviour
         q1Animator = q1.GetComponent<Animator>();
         q2Animator = q2.GetComponent<Animator>();
         collider = q2.transform.GetChild(2).GetComponent<Collider>();
+        particle = q2.transform.GetChild(3).GetComponent<ParticleSystem>();
     }
 
     public void SkillQ()
@@ -96,12 +98,16 @@ public class SB_GragasQ : MonoBehaviour
     private IEnumerator Bomb()
     {
         yield return new WaitForSeconds(q2Animator.GetCurrentAnimatorStateInfo(0).length);
-        // 폭발 애니메이션 재생 
+        q2.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        particle.Play();
         collider.enabled = true;
+        yield return new WaitForSeconds(1); // 파티클 재생 시간 대기
+        q2.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().enabled = true;
         q2Animator.enabled = false;
         q2Animator.Rebind();
         q2.transform.position = new Vector3(0, 0, -10);
-        // 폭탄 애니메이션 재생 끝날 때까지 대기
+        yield return new WaitForSeconds(0.3f);
         collider.enabled = false;
+        SB_GragasMoving.gragasSkill = false;
     }
 }

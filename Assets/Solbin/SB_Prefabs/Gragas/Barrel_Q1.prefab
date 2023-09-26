@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8611440816987547137}
   - component: {fileID: 8611440816987547136}
-  - component: {fileID: 8611440816987547139}
   - component: {fileID: 4730502006137167216}
   m_Layer: 0
   m_Name: Barrel_Q1
@@ -49,18 +48,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.7, y: 1, z: 1}
   m_Center: {x: -0.1, y: 0, z: 0}
---- !u!114 &8611440816987547139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8611440816987547149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afed0537276663a448c1e8aa6a00afc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &4730502006137167216
 Animator:
   serializedVersion: 5

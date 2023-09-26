@@ -54,7 +54,7 @@ public class SB_GragasR : MonoBehaviour
         {
             orbitJump = false;
             rb.useGravity = true;
-            rb.AddForce(Vector3.up * 20f, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * 23f, ForceMode.Impulse);
         }
 
         if (orbitForward) // 폭탄 앞으로 이동
@@ -64,8 +64,20 @@ public class SB_GragasR : MonoBehaviour
             if (Vector3.Distance(barrel.transform.position, targetPosition) <= 0.1f)
             {
                 orbitForward = false;
+                rb.velocity = Vector3.zero;
                 rb.useGravity = false;
+
+                barrel.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().enabled = false;
+                barrel.transform.GetChild(2).gameObject.SetActive(true);
+                Invoke("ReturnPool", 3f);
             }
         }
     }
+
+    private void ReturnPool() 
+    {
+        barrel.transform.position = new Vector3(0, 0, -10);
+        barrel.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().enabled = true;
+    }
+
 }
