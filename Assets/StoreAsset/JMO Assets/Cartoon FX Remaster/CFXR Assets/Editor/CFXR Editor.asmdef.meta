@@ -1,7 +1,14 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/StoreAsset/JMO Assets/Cartoon FX Remaster/CFXR Assets/Editor/CFXR Editor.asmdef.meta
 guid: eb5cb7c323a395242a81960087292f3c
 AssemblyDefinitionImporter:
   externalObjects: {}
+========
+guid: 4bc1b44303d69474d980d49171ab9824
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+>>>>>>>> origin/JK_CharacterFiora_230919:Assets/JungKeun/Lobby/BackGround.controller.meta
   userData: 
   assetBundleName: 
   assetBundleVariant: 

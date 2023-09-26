@@ -52,7 +52,7 @@ public class SetStatUIManager : MonoBehaviour
     private void Start()
     {
 
-        itemStatus = GameObject.Find("Inventory").GetComponent<SB_GatherStatus>();
+        //itemStatus = GameObject.Find("Inventory").GetComponent<SB_GatherStatus>();
 
     }
 
