@@ -4,9 +4,21 @@ using UnityEngine;
 
 public class PlayerController
 {
-    private int gold = 0;                                       // 플레이어 보유 골드
+    private int gold;       // 플레이어 보유 골드
 
     public Unit PlayerUnit { private set; get; }            // 플레이어 유닛 (캐릭터)
+    public int Gold
+    {
+        get => gold;
+        set
+        {
+            gold = value;
+
+            // UI
+            UI_UnitBottomLayer bottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
+            bottomLayer?.SetGold(gold);
+        }
+    }
     public int Hp { private set; get; }                     // 플레이어 체력 (캐릭터 체력과 다름)
     public bool IsDie { private set; get; } = false;        // 플레이어 탈락 유무 체크
 
@@ -17,11 +29,9 @@ public class PlayerController
     /// <param name="value"></param>
     public void OnChangeGold(int value)
     {
-        gold += value;
+        Gold += value;
 
-        if (gold < 0) gold = 0;
-
-        Debug.Log($"{PlayerUnit.gameObject.name}의 {gold} 골드");
+        if (Gold < 0) Gold = 0;
     }
 
     /// <summary>
@@ -40,6 +50,10 @@ public class PlayerController
     {
         Hp -= dmg;
 
-        if (Hp < 0) Hp = 0;
+        if (Hp < 0)
+        {
+            Hp = 0;
+            IsDie = true;
+        }
     }
 }
