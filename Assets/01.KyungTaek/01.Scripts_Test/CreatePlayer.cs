@@ -19,9 +19,11 @@ public class CreatePlayer : MonoBehaviourPun
         switch (loadMyCharactor.myCharactor)
         {
             case Define.UnitName.Rumble:
-                PhotonNetwork.Instantiate("Rumble_Photon", respawnPoint.transform.position, Quaternion.identity);
+                GameObject rumblePrefab = Resources.Load<GameObject>("Unit/Rumble/Rumble_Photon");
+                PhotonNetwork.Instantiate(rumblePrefab.name, respawnPoint.transform.position, Quaternion.identity);
                 break;
             case Define.UnitName.Ashe:
+                GameObject ashePrefab = Resources.Load<GameObject>("Unit/Ashe_Photon");
                 PhotonNetwork.Instantiate("Ashe_Photon", respawnPoint.transform.position, Quaternion.identity);
                 break;
             case Define.UnitName.Caityln:

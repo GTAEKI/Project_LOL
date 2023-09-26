@@ -2,16 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class FogCoverable : MonoBehaviour
+public class FogCoverable : MonoBehaviourPun
 {
-    Renderer renderer;
+    //Renderer renderer;
+    SkinnedMeshRenderer skinnedMeshRenderer;
 
 
     void Start()
     {
-        renderer = GetComponent<Renderer>();
-        FieldOfView.OnTargetsVisibilityChange += FieldOfViewOnTargetsVisibilityChange;
+        //renderer = GetComponent<Renderer>();
+        //if (!photonView.IsMine)
+        {
+            skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
+            FieldOfView.OnTargetsVisibilityChange += FieldOfViewOnTargetsVisibilityChange;
+        }
     }
 
     void OnDestroy()
@@ -21,6 +28,10 @@ public class FogCoverable : MonoBehaviour
 
     void FieldOfViewOnTargetsVisibilityChange(List<Transform> newTargets)
     {
-        renderer.enabled = newTargets.Contains(transform);
+        Debug.Log("왜 못찾니");
+        //renderer.enabled = newTargets.Contains(transform);
+        skinnedMeshRenderer.enabled = newTargets.Contains(transform);
+        //skinnedMeshRenderer.enabled = true;
+
     }
 }

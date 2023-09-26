@@ -432,7 +432,7 @@ MonoBehaviour:
   Effect_Q: {fileID: 1030043734691017076}
   MuzzleE: {fileID: 2668046215483159120}
   Effect_E: {fileID: 4145901978685869423, guid: c648d33ccda124f078299d095fdf92a7, type: 3}
-  Effect_R: {fileID: 1492342625783669635, guid: 642278783192b41dfad4579de6f6a624, type: 3}
+  Effect_R: {fileID: 1492342625783669635, guid: 8e0b55036b0194768a25a63a0d3a9893, type: 3}
 --- !u!114 &7380151708957307008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -535,7 +535,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2354369021195375418}
   - component: {fileID: 6918458998331563035}
-  m_Layer: 0
+  - component: {fileID: 8008303928294286579}
+  - component: {fileID: 3305690562140033830}
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -691,6 +693,32 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.05197806, y: 0.06306331, z: -0.025769167}
     m_Extent: {x: 0.2558924, y: 0.22129859, z: 0.27247846}
   m_DirtyAABB: 0
+--- !u!114 &8008303928294286579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516115000851201041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76254c70e8004c1f8c545d104fc802d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &3305690562140033830
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516115000851201041}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.69209486
+  m_Height: 1.1242675
+  m_Direction: 1
+  m_Center: {x: 0.1320328, y: 0.56341326, z: 0.04331185}
 --- !u!1 &723683661017913194
 GameObject:
   m_ObjectHideFlags: 0
