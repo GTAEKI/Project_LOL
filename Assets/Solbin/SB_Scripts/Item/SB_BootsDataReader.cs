@@ -7,14 +7,11 @@ using UnityEngine;
 public class SB_BootsDataReader : MonoBehaviour
 {
     Transform m_sideDownContainer;
-    private GameObject m_itemPrefab; // 아이템 선택 효과 등을 담은 프리팹
+    public GameObject m_itemPrefab; // 아이템 선택 효과 등을 담은 프리팹
 
     private void Awake()
     {
         m_sideDownContainer = GameObject.Find("Side Shop_Down").transform;
-
-        m_itemPrefab = (GameObject)AssetDatabase.LoadAssetAtPath
-            ("Assets/Solbin/SB_Prefabs/Item Select.prefab", typeof(GameObject));
         Debug.Assert(m_itemPrefab != null);
     }
 

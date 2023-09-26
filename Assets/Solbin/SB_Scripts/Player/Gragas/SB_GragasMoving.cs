@@ -10,14 +10,23 @@ public class SB_GragasMoving : Unit
     GameObject barrelQPrefab;
     GameObject barrelQ;
 
-    SB_GragasQ gragasQ;
+    SB_GragasQ gragasQ; // Q스킬
+    SB_GragasW gragasW; // W스킬
+    SB_GragasE gragasE; // E스킬 
+    SB_GragasR gragasR; // R스킬 
+
+    public static bool gragasSkill = false;
 
     public override void Init()
     {
-        unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Dummy_Puppet]);
-        unitSkill = new UnitSkill(Define.UnitName.Dummy_Puppet);
+        unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Gragas]);
+        unitSkill = new UnitSkill(Define.UnitName.Gragas);
 
         animator = GetComponent<Animator>();
+        gragasQ = transform.GetComponent<SB_GragasQ>();
+        gragasW = transform.GetComponent<SB_GragasW>();
+        gragasE = transform.GetComponent<SB_GragasE>();
+        gragasR = transform.GetComponent<SB_GragasR>();
 
         base.Init();   
     }
@@ -36,21 +45,45 @@ public class SB_GragasMoving : Unit
 
     protected override void CastActiveQ() // 술통 굴리기
     {
-        base.CastActiveQ();
+        if (!gragasSkill)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            gragasQ.SkillQ();
+
+            base.CastActiveQ();
+        }
     }
 
     protected override void CastActiveW() // 취중 분노
     {
-        base.CastActiveW();
+        if (!gragasSkill)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            gragasW.SkillW();
+
+            base.CastActiveW();
+        }
     }
 
     protected override void CastActiveE() // 몸통 박치기
     {
-        base.CastActiveE();
+        if (!gragasSkill)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            gragasE.SkillE();
+
+            base.CastActiveE();
+        }
     }
 
     protected override void CastActiveR() // 술통 폭발
     {
-        base.CastActiveR();
+        if (!gragasSkill)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            gragasR.SkillR();
+
+            base.CastActiveR();
+        }
     }
 }

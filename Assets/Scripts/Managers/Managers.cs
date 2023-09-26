@@ -28,6 +28,11 @@ public class Managers : MonoBehaviour
     public static UIManager UI => Instance._ui;
     public static SpriteManager Sprite => Instance._sprite;
 
+    // Contents
+    private GameManager _game = new GameManager();
+
+    public static GameManager Game => Instance._game; 
+
     private void Start()
     {
         Init();
@@ -35,8 +40,11 @@ public class Managers : MonoBehaviour
 
     private void Update()
     {
-        //_game.OnUpdate();
+        // Core
         _input.OnUpdate();
+        
+        // Contents
+        _game.OnUpdate();
     }
 
     private static void Init()
@@ -59,7 +67,9 @@ public class Managers : MonoBehaviour
             s_instance._sound.Init();
             s_instance._input.Init();
             s_instance._ui.Init();
-            //s_instance._game.Init();
+            
+            // Contents
+            s_instance._game.Init();
         }
     }
 
