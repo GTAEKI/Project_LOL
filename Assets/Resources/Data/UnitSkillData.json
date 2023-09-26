@@ -31,6 +31,26 @@
         "activeR_cooltime": "100.0"
     },
     {
+      "index": "3",
+      "name_ko": "케이틀린",
+      "name_en": "Caityln",
+      "passive_cooltime": "0.0",
+      "activeQ_cooltime": "10.0",
+      "activeW_cooltime": "30.0",
+      "activeE_cooltime": "16.0",
+      "activeR_cooltime": "90.0"
+    },
+    {
+      "index": "4",
+      "name_ko": "그라가스",
+      "name_en": "Gragas",
+      "passive_cooltime": "12.0",
+      "activeQ_cooltime": "10.0",
+      "activeW_cooltime": "5.0",
+      "activeE_cooltime": "14.0",
+      "activeR_cooltime": "120.0"
+    },
+    {
       "index": "100",
       "name_ko": "야스오",
       "name_en": "Yasuo",

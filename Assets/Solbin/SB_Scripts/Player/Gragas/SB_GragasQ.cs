@@ -1,70 +1,112 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using TMPro;
-//using UnityEditor;
-//using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEditor;
+using UnityEngine;
 
-//public class SB_GragasQ : MonoBehaviour
-//{
-//    GameObject q1;
-//    GameObject q2;
+public class SB_GragasQ : MonoBehaviour
+{
+    public GameObject q1Prefab;
+    GameObject q1;
+    public GameObject q2Prefab;
+    GameObject q2;
 
-//    Camera camera;
+    Camera camera;
+    Vector3 targetPosition;
+    Animator animator;
+    Animator q1Animator;
+    Animator q2Animator;
 
-//    bool isAttack = false;
-//    Vector3 targetPosition;
+    bool isAttack = false;
+    Vector3 barrelDes; // q1의 목적지
 
-//    Animator animator;
+    Collider collider;
+    ParticleSystem particle;
 
-//    // Start is called before the first frame update
-//    void Start()
-//    {
-//        GameObject q1Prefab = (GameObject)AssetDatabase.LoadAssetAtPath
-//            ("Assets/Solbin/SB_Prefabs/Gragas/Barrel_Q1.prefab", typeof(GameObject));
-//        q1 = Instantiate(q1Prefab);
-//        q1.transform.position = new Vector3(0, 0, -10);
+    // Start is called before the first frame update
+    void Start()
+    {
+        q1 = Instantiate(q1Prefab);
+        q1.transform.position = new Vector3(0, 0, -10);
 
-//        GameObject q2Prefab = (GameObject)AssetDatabase.LoadAssetAtPath
-//            ("Assets/Solbin/SB_Prefabs/Gragas/Barrel_Q2.prefab", typeof(GameObject));
-//        q2 = Instantiate(q2Prefab);
-//        q2.transform.position = new Vector3 (0, 0, -10);
+        q2 = Instantiate(q2Prefab);
+        q2.transform.position = new Vector3(0, 0, -10);
 
 //        camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
+        animator = GetComponent<Animator>();
+        q1Animator = q1.GetComponent<Animator>();
+        q2Animator = q2.GetComponent<Animator>();
+        collider = q2.transform.GetChild(2).GetComponent<Collider>();
+        particle = q2.transform.GetChild(3).GetComponent<ParticleSystem>();
+    }
 
-//        animator = GetComponent<Animator>();
-//    }
+    public void SkillQ()
+    {
+        int layerMask = 1 << LayerMask.NameToLayer("Floor");
 
-//    // Update is called once per frame
-//    void Update()
-//    {
-        
-//    }
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-//    public void SkillQ()
-//    {
-//        if (!isAttack)
-//        {
-//            int layerMask = 1 << LayerMask.NameToLayer("Floor");
+        RaycastHit hit;
 
-//            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        if (!SB_GragasMoving.gragasSkill)
+        {
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask) && !isAttack)
+            {
+                targetPosition = hit.point;
+                transform.LookAt(targetPosition);
+                StartCoroutine(RollingQ());
+                SB_GragasMoving.gragasSkill = true;
+            }
+        }
+    }
 
-//            RaycastHit hit;
+    private IEnumerator RollingQ()
+    {
+        isAttack = true;
 
-//            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
-//            {
-//                targetPosition = hit.point;
-//                StartCoroutine(RollingQ());
-//            }
-//        }
-//    }
+        q1.transform.rotation = transform.rotation;
+        Vector3 firstPos = transform.position + transform.forward * 3.5f;
+        firstPos.y = 1.55f;
+        q1.transform.position = firstPos;
+        barrelDes = q1.transform.position + q1.transform.forward * 7f; // 술통 목적지
+        animator.SetTrigger("PressQ");
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        animator.SetTrigger("Back Idle");
+    }
 
-//    private IEnumerator RollingQ()
-//    {
-//        transform.LookAt(targetPosition);
-//        animator.SetTrigger("PressQ");
-//        //q1.transform.LookAt(targetPosition);
-//        //q1.transform.position = transform.position + new Vector3 (0, 0, 5);
+    private void FixedUpdate()
+    {
+        if (isAttack)
+        {
+            q1Animator.enabled = true;
+            q1.transform.position = Vector3.MoveTowards(q1.transform.position, barrelDes, Time.deltaTime * 15f);
 
-//        yield return null;
-//    }
-//}
+            if (Vector3.Distance(q1.transform.position, barrelDes) <= 0.1f)
+            {
+                isAttack = false;
+                q1Animator.enabled = false;
+                q1Animator.Rebind();
+                q1.transform.position = new Vector3(0, 0, -10);
+                q2.transform.position = barrelDes;
+                q2Animator.enabled = true;
+                StartCoroutine(Bomb());
+            }
+        }
+    }
+
+    private IEnumerator Bomb()
+    {
+        yield return new WaitForSeconds(q2Animator.GetCurrentAnimatorStateInfo(0).length);
+        q2.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        particle.Play();
+        collider.enabled = true;
+        yield return new WaitForSeconds(1); // 파티클 재생 시간 대기
+        q2.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        q2Animator.enabled = false;
+        q2Animator.Rebind();
+        q2.transform.position = new Vector3(0, 0, -10);
+        yield return new WaitForSeconds(0.3f);
+        collider.enabled = false;
+        SB_GragasMoving.gragasSkill = false;
+    }
+}

@@ -1,56 +1,89 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEditor;
-//using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
-//public class SB_GragasMoving : Unit
-//{
-//    Animator animator;
+public class SB_GragasMoving : Unit
+{
+    Animator animator;
 
-//    GameObject barrelQPrefab;
-//    GameObject barrelQ;
+    GameObject barrelQPrefab;
+    GameObject barrelQ;
 
-//    SB_GragasQ gragasQ;
+    SB_GragasQ gragasQ; // Q스킬
+    SB_GragasW gragasW; // W스킬
+    SB_GragasE gragasE; // E스킬 
+    SB_GragasR gragasR; // R스킬 
 
-//    public override void Init()
-//    {
-//        unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Dummy_Puppet]);
-//        unitSkill = new UnitSkill(Define.UnitName.Dummy_Puppet);
+    public static bool gragasSkill = false;
 
-//        animator = GetComponent<Animator>();
+    public override void Init()
+    {
+        unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Gragas]);
+        unitSkill = new UnitSkill(Define.UnitName.Gragas);
 
-//        base.Init();   
-//    }
+        animator = GetComponent<Animator>();
+        gragasQ = transform.GetComponent<SB_GragasQ>();
+        gragasW = transform.GetComponent<SB_GragasW>();
+        gragasE = transform.GetComponent<SB_GragasE>();
+        gragasR = transform.GetComponent<SB_GragasR>();
 
-//    protected override void UpdateMove()
-//    {
-//        animator.SetBool("Run", true);
-//        base.UpdateMove();
-//    }
+        base.Init();   
+    }
 
-//    protected override void UpdateIdle()
-//    {
-//        animator.SetBool("Run", false);
-//        base.UpdateIdle();
-//    }
+    protected override void UpdateMove()
+    {
+        animator.SetBool("Run", true);
+        base.UpdateMove();
+    }
 
-//    protected override void CastActiveQ() // 술통 굴리기
-//    {
-//        base.CastActiveQ();
-//    }
+    protected override void UpdateIdle()
+    {
+        animator.SetBool("Run", false);
+        base.UpdateIdle();
+    }
 
-//    protected override void CastActiveW() // 취중 분노
-//    {
-//        base.CastActiveW();
-//    }
+    protected override void CastActiveQ() // 술통 굴리기
+    {
+        if (!gragasSkill)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            gragasQ.SkillQ();
 
-//    protected override void CastActiveE() // 몸통 박치기
-//    {
-//        base.CastActiveE();
-//    }
+            base.CastActiveQ();
+        }
+    }
 
-//    protected override void CastActiveR() // 술통 폭발
-//    {
-//        base.CastActiveR();
-//    }
-//}
+    protected override void CastActiveW() // 취중 분노
+    {
+        if (!gragasSkill)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            gragasW.SkillW();
+
+            base.CastActiveW();
+        }
+    }
+
+    protected override void CastActiveE() // 몸통 박치기
+    {
+        if (!gragasSkill)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            gragasE.SkillE();
+
+            base.CastActiveE();
+        }
+    }
+
+    protected override void CastActiveR() // 술통 폭발
+    {
+        if (!gragasSkill)
+        {
+            CurrentState = Define.UnitState.IDLE;
+            gragasR.SkillR();
+
+            base.CastActiveR();
+        }
+    }
+}

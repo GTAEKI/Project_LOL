@@ -18,8 +18,8 @@ public class SB_CaitylnMoving : Unit
 
     public override void Init()
     {
-        unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Dummy_Puppet]);
-        unitSkill = new UnitSkill(Define.UnitName.Dummy_Puppet);
+        unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Caityln]);
+        unitSkill = new UnitSkill(Define.UnitName.Caityln);
 
         base.Init();
 

@@ -66,7 +66,10 @@ public class Define
         Dummy_Puppet,
         Rumble,
         Ashe,
-        Yasuo = 100
+        Caityln,
+        Gragas,
+        Yasuo = 100,
+        
     }
 
     #endregion
