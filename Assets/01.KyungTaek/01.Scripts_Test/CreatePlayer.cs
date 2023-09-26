@@ -10,12 +10,26 @@ using UnityEngine.EventSystems;
 public class CreatePlayer : MonoBehaviourPun
 {
     public GameObject respawnPoint;
+    public PlayerInfo loadMyCharactor;
 
     public void Start()
     {
-        Debug.Log("캐릭터 생성 ING");
+        loadMyCharactor = GameObject.Find("PlayerInfo").GetComponent<PlayerInfo>();
 
-        PhotonNetwork.Instantiate("Ashe_Photon", respawnPoint.transform.position, respawnPoint.transform.rotation);
-        Debug.Log("캐릭터 생성완료");
+        switch (loadMyCharactor.myCharactor)
+        {
+            case Define.UnitName.Rumble:
+                PhotonNetwork.Instantiate("Rumble_Photon", respawnPoint.transform.position, Quaternion.identity);
+                break;
+            case Define.UnitName.Ashe:
+                PhotonNetwork.Instantiate("Ashe_Photon", respawnPoint.transform.position, Quaternion.identity);
+                break;
+            case Define.UnitName.Caityln:
+                break;
+            case Define.UnitName.Gragas:
+                break;
+            case Define.UnitName.Yasuo:
+                break;
+        }
     }
 }

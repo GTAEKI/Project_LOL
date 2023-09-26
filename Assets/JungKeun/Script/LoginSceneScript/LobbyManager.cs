@@ -78,15 +78,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public TMP_Text[] Ready;
     private int[] CharacterReadyState;
 
-
-
-
     //public scrollview RoomScrollView;
     public Button RoomGameStart;
     public Button Roomback;
 
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
+
+    //캐릭터 이름정보
+    public PlayerInfo saveMyCharactor;
+    //Define.UnitName myPlayerUnit;
+    //Dictionary<>
 
     //프로그램을 실행하자마자
     private void Awake()
@@ -98,6 +100,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     //프로그램을 실행하면
     void Start()
     {
+        saveMyCharactor = GameObject.Find("PlayerInfo").GetComponent<PlayerInfo>(); //다음 씬으로 플레이어 이름 넘기기용
+
         PhotonNetwork.GameVersion = gameVersion;
         Login.gameObject.SetActive(true);
 
@@ -394,6 +398,35 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             if (myPlayerIndex >= 0 && myPlayerIndex < MyCharacter.Length)
             {
                 MyCharacter[myPlayerIndex].sprite = Characters[characterIndex].image.sprite;
+
+                //선택한 캐릭터 번호에 맞춰서 캐릭터 이름 저장 _ 230926 배경택 
+                switch (characterIndex)
+                {
+                    case 0:
+                        saveMyCharactor.myCharactor = Define.UnitName.Ashe;
+                        Debug.Log(saveMyCharactor.myCharactor);
+                        break;
+                    case 1:
+                        saveMyCharactor.myCharactor = Define.UnitName.Caityln;
+                        Debug.Log(saveMyCharactor.myCharactor);
+
+                        break;
+                    case 2:
+                        saveMyCharactor.myCharactor = Define.UnitName.Gragas;
+                        Debug.Log(saveMyCharactor.myCharactor);
+
+                        break;
+                    case 3:
+                        saveMyCharactor.myCharactor = Define.UnitName.Rumble;
+                        Debug.Log(saveMyCharactor.myCharactor);
+
+                        break;
+                    case 4:
+                        saveMyCharactor.myCharactor = Define.UnitName.Yasuo;
+                        Debug.Log(saveMyCharactor.myCharactor);
+
+                        break;
+                }
             }
 
             // 선택한 캐릭터 인덱스 저장
@@ -435,9 +468,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             {
                 Characters[i].interactable = true;
                 Roomback.interactable = false;
-                CharacterReadyState[myPlayerIndex] = 1; // "준비중"으로 설정
+                CharacterReadyState[myPlayerIndex] = 1; // "준비완료"으로 설정
 
             }
+
             // characterReadyState에 따라 Ready 텍스트 업데이트
             if (i >= 0 && i < Ready.Length)
             {
@@ -489,12 +523,14 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         // 다른 플레이어에게 캐릭터 준비 상태에 따라 Ready 텍스트 업데이트
         Ready[characterIndex].text = (readyState == 0) ? "준비중" : "준비완료";
     }
+
+
     public void StartGame()
     {
         if (PhotonNetwork.IsMasterClient)
         {
             bool allPlayersReady = true;
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++) //Ready.Length가 계속해서 4로 들어옴.
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
                 Debug.Log(Ready.Length);
                 if (Ready[i].text != "준비완료")
