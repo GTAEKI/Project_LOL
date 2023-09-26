@@ -2,12 +2,28 @@ using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
-    public Define.UnitName SelectedCharacter { get; private set; }
+    public static PlayerData Instance { get; private set; }
+
+    public string SelectedCharacterName { get; private set; } // 캐릭터 이름을 저장
+
     public string Nickname { get; private set; }
 
-    public void SetCharacterAndNickName(Define.UnitName character, string nickname)
+    private void Awake()
     {
-        SelectedCharacter = character;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void SetCharacterAndNickName(string characterName, string nickname)
+    {
+        SelectedCharacterName = characterName;
         Nickname = nickname;
     }
 }

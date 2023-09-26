@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
@@ -78,21 +76,23 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public TMP_Text[] Ready;
     private int[] CharacterReadyState;
 
-
+    private string[] lastPlayerNames;
+    private Sprite[] lastPlayerCharacterImages;
 
 
     //public scrollview RoomScrollView;
     public Button RoomGameStart;
     public Button Roomback;
-
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
 
     //프로그램을 실행하자마자
     private void Awake()
     {
+
         Screen.SetResolution(1920, 1080, false);
         PhotonNetwork.AutomaticallySyncScene = true;
+
     }
 
     //프로그램을 실행하면
@@ -494,35 +494,25 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             bool allPlayersReady = true;
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++) //Ready.Length가 계속해서 4로 들어옴.
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
-                Debug.Log(Ready.Length);
                 if (Ready[i].text != "준비완료")
                 {
-                    Debug.Log("준비가 안됬어");
-                    Debug.Log(i);
                     allPlayersReady = false;
                     break;
                 }
             }
+
             if (allPlayersReady)
             {
-                    Debug.Log("준비는 됬는데 시작은 아직");
-
-                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                {
-                    Debug.Log(i);
-
-                    // 다음 Scene으로 이동하고 선택한 캐릭터 정보를 전달합니다.
-                    //PlayerPrefs.SetString("SelectedCharacterName", CharacterName[i]);
-                    //PlayerPrefs.SetString("NickName", NickName[i]);
-
-                }
+                // 선택한 캐릭터 이름과 닉네임을 PlayerData에 설정
+                PlayerData.Instance.SetCharacterAndNickName(CharacterName[selectedCharacterIndex], PhotonNetwork.LocalPlayer.NickName);
 
                 PhotonNetwork.LoadLevel("KyungTaek_Player");
             }
         }
     }
+
 
     public override void OnLeftRoom()
     {
@@ -641,7 +631,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             }
 
         }
-        
+
     }
 
     public void Send()
