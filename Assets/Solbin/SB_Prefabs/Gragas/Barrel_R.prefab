@@ -10061,6 +10061,7 @@ GameObject:
   - component: {fileID: 1211775036969879595}
   - component: {fileID: 2375339803155896641}
   - component: {fileID: 2922903648253599382}
+  - component: {fileID: 2246124114730013253}
   m_Layer: 0
   m_Name: Hit Effect
   m_TagString: Untagged
@@ -14947,3 +14948,15 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 2.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2246124114730013253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7548994221573263761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8582b84f4c8cf0a47a2f5938be198344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
