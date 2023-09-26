@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -56,14 +57,21 @@ public class GameManager
         WaitStageMode.MONEY_3000_MODE
     };
 
-    private CurrentStageMode currentStage = CurrentStageMode.WAIT_STAGE;        // 스테이지 종류 (대기 / 전투)
-    private WaitStageMode waitStageMode = WaitStageMode.BASIC_MODE;             // 대기 스테이지 타입 (기본 / 1000원 지급 / 3000원 지급)
-    private BattleStageMode battleStageMode = BattleStageMode.READY_MODE;       // 전투 스테지이 타입 (대기 / 전투 / 자기장 전투)
+    private CurrentStageMode currentStage;         // 스테이지 종류 (대기 / 전투)
+    private WaitStageMode waitStageMode;           // 대기 스테이지 타입 (기본 / 1000원 지급 / 3000원 지급)
+    private BattleStageMode battleStageMode;       // 전투 스테지이 타입 (대기 / 전투 / 자기장 전투)
 
-    private GameObject director;        // 카메라 관리자
+    private Dictionary<string, PlayerController> originPlayerDict = new Dictionary<string, PlayerController>();     // 플레이어 정보 원본 데이터 변수
+    private List<PlayerController> players = new List<PlayerController>();                                          // 현재 플레이가 가능한 플레이어 정보 데이터 변수
+
+    private Transform[] waitAreaResPoint;       // 웨이팅존 스폰 포인트
+    private Transform[] battleResPoint;         // 배틀존 스폰 포인트
+    private GameObject director;                // 카메라 관리자
 
     private int roundNumber;            // 현재 라운드 번호
     private float baseTimer;            // 게임 타이머
+
+    #region 프로퍼티
 
     /// <summary>
     /// 현재 스테이지 종류 프로퍼티
@@ -78,14 +86,49 @@ public class GameManager
 
             switch(currentStage)
             {
-                case CurrentStageMode.WAIT_STAGE: director.transform.position = new Vector3(0f, 0f, WAITZONE_POSITION_Z); break;
-                case CurrentStageMode.BATTLE_STAGE: director.transform.position = new Vector3(0f, 0f, BATTLEZONE_POSITION_Z); break;
+                case CurrentStageMode.WAIT_STAGE: OnWaitStage(); break;
+                case CurrentStageMode.BATTLE_STAGE: OnBattleStage();  break;
             }
         }
     }
 
+    /// <summary>
+    /// 웨이팅존 전환시 발동 함수
+    /// 김민섭_230926
+    /// </summary>
+    private void OnWaitStage()
+    {
+        director.transform.position = new Vector3(0f, 0f, WAITZONE_POSITION_Z);     // 카메라 이동
+
+        // 살아남은 플레이어 웨이팅존으로 이동
+        for(int i = 0; i < players.Count; i++)
+        {
+            players[i].PlayerUnit.transform.position = waitAreaResPoint[i].position;
+            players[i].PlayerUnit.transform.SetParent(waitAreaResPoint[i]);
+        }
+    }
+
+    /// <summary>
+    /// 배틀존 전환시 발동 함수
+    /// 김민섭_230926
+    /// </summary>
+    private void OnBattleStage()
+    {
+        director.transform.position = new Vector3(0f, 0f, BATTLEZONE_POSITION_Z);       // 카메라 이동
+
+        // 살아남은 플레이어 배틀존으로 이동
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].PlayerUnit.transform.position = battleResPoint[i].position;
+            players[i].PlayerUnit.transform.SetParent(battleResPoint[i]);
+        }
+    }
+
+    #endregion
+
     #region 상수
 
+    private const int PLAYER_COUNT = 4;                 // 플레이어 수
     private const float WAIT_AREA_TIME = 5f;            // 40f
     private const float BATTLE_READY_TIME = 1f;         // 5f
     private const float START_MAGNETIC_TIME = 1f;       // 30f
@@ -96,6 +139,8 @@ public class GameManager
     #endregion
 
     ///////////////////////////////////////
+
+
 
     // 카메라 변수_230906 배경택
     public Camera cameraWaitArea;
@@ -146,7 +191,6 @@ public class GameManager
     private bool isArriveMagnetic;
 
     // 캐릭터 리스폰 포인트를 위한 변수 _230907 배경택
-    public GameObject[] waitAreaResPoint;
     public GameObject[] battle1ResPoint;
     public GameObject[] battle2ResPoint;
 
@@ -164,6 +208,12 @@ public class GameManager
 
     public void Init()
     {
+        // TODO: 스폰 포인트 세팅 -> 플레이어 세팅 -> 오브젝트 세팅
+        SettingSpawnPoint();
+
+        // TODO: 서버에서 받아온 플레이어 정보를 가져와서 세팅하도록 수정해야함
+        SettingPlayer();
+
         director = GameObject.Find("Director");
 
         roundNumber = 0;
@@ -171,6 +221,55 @@ public class GameManager
         CurrentStage = CurrentStageMode.WAIT_STAGE;
         waitStageMode = WaitStageMode.BASIC_MODE;
         battleStageMode = BattleStageMode.READY_MODE;
+    }
+
+    /// <summary>
+    /// 스폰 포인트 세팅 함수
+    /// 김민섭_230926
+    /// </summary>
+    private void SettingSpawnPoint()
+    {
+        // 웨이팅존 세팅
+        waitAreaResPoint = new Transform[PLAYER_COUNT];
+
+        GameObject waitAreaZone = GameObject.Find("WaitAreaZone");
+        for(int i = 0; i < waitAreaZone.transform.childCount; i++)
+        {
+            Transform spawnPoint = waitAreaZone.transform.GetChild(i).Find("SpawnPoint");
+            waitAreaResPoint[i] = spawnPoint;
+        }
+
+        // 배틀존 세팅
+        battleResPoint = new Transform[PLAYER_COUNT];
+
+        GameObject battleAreaZone = GameObject.Find("BattleAreaZone/RespawnPoints");
+        for (int i = 0; i < battleAreaZone.transform.childCount; i++)
+        {
+            Transform spawnPoint = battleAreaZone.transform.GetChild(i);
+            battleResPoint[i] = spawnPoint;
+        }
+    }
+
+    /// <summary>
+    /// 게임에 참여하는 플레이어 세팅 함수
+    /// 김민섭_230926
+    /// </summary>
+    private void SettingPlayer()
+    {
+        for(int i = 0; i < PLAYER_COUNT; i++)
+        {
+            PlayerController player = new PlayerController();
+            originPlayerDict.Add(i.ToString(), player);
+            players.Add(player);
+        }
+
+        // TODO: 서버에서 받아온 플레이어 유닛 생성
+        for(int i = 0; i < PLAYER_COUNT; i++)
+        {
+            // TEST: 임시로 야스오 4마리 생성
+            GameObject player = Managers.Resource.Instantiate("Unit/Yasuo/Player_Yasuo", waitAreaResPoint[i]);
+            players[i].SettingUnit(player.GetComponent<Yasuo>());
+        }
     }
 
     public void OnUpdate()
@@ -194,7 +293,7 @@ public class GameManager
     #region 업데이트 함수
 
     /// <summary>
-    /// 대기실 업데이트 함수
+    /// 대기존 업데이트 함수
     /// 김민섭_230925
     /// </summary>
     private void UpdateWaitStage()
@@ -208,8 +307,25 @@ public class GameManager
             CurrentStage = CurrentStageMode.BATTLE_STAGE;
             battleStageMode = BattleStageMode.READY_MODE;
 
-            Debug.Log("경기장으로 이동합니다.");
             return;
+        }
+    }
+
+    /// <summary>
+    /// 배틀존 업데이트 함수
+    /// 김민섭_230925
+    /// </summary>
+    private void UpdateBattleStage()
+    {
+        Debug.Log("전투 중입니다.");
+
+        // TODO: 라운드 종료 처리
+
+        switch (battleStageMode)
+        {
+            case BattleStageMode.READY_MODE: UpdateBattle_ReadyMode(); break;
+            case BattleStageMode.FIGHT_MODE: UpdateBattle_FightMode(); break;
+            case BattleStageMode.MANETIC_FIGHT_MODE: UpdateBattle_Manetic(); break;
         }
     }
 
@@ -247,28 +363,16 @@ public class GameManager
         {
             baseTimer = 0f;
 
-            if (magneticCount < 3) // Test : 3번 자기장 위로 움직이게 실행
-            {
-                MagneticCycle(); // Cycle마다 자기장의 다음 움직일 위치 계산
-            }
-            else if (magneticCount == 3) // Test : 자기장 일정높이 도달시 라운드종료 할 수 있도록
-            {
-                EndMagneticField(); // 자기장 모드 종료시 실행
-            }
-        }
-    }
+            CurrentStage = CurrentStageMode.WAIT_STAGE;
 
-    private void UpdateBattleStage()
-    {
-        Debug.Log("전투 중입니다.");
-
-        // TODO: 라운드 종료 처리
-
-        switch (battleStageMode)
-        {
-            case BattleStageMode.READY_MODE: UpdateBattle_ReadyMode(); break;
-            case BattleStageMode.FIGHT_MODE: UpdateBattle_FightMode(); break;
-            case BattleStageMode.MANETIC_FIGHT_MODE: UpdateBattle_Manetic(); break;
+            //if (magneticCount < 3) // Test : 3번 자기장 위로 움직이게 실행
+            //{
+            //    MagneticCycle(); // Cycle마다 자기장의 다음 움직일 위치 계산
+            //}
+            //else if (magneticCount == 3) // Test : 자기장 일정높이 도달시 라운드종료 할 수 있도록
+            //{
+            //    EndMagneticField(); // 자기장 모드 종료시 실행
+            //}
         }
     }
 
