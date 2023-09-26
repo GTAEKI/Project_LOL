@@ -13,8 +13,8 @@ public class SB_BootsDataReader : MonoBehaviour
     {
         m_sideDownContainer = GameObject.Find("Side Shop_Down").transform;
 
-        m_itemPrefab = (GameObject)AssetDatabase.LoadAssetAtPath
-            ("Assets/Solbin/SB_Prefabs/Item Select.prefab", typeof(GameObject));
+        //m_itemPrefab = (GameObject)AssetDatabase.LoadAssetAtPath
+            //("Assets/Solbin/SB_Prefabs/Item Select.prefab", typeof(GameObject));
         Debug.Assert(m_itemPrefab != null);
     }
 

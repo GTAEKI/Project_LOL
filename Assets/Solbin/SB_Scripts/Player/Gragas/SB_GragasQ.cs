@@ -19,14 +19,14 @@ public class SB_GragasQ : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject q1Prefab = (GameObject)AssetDatabase.LoadAssetAtPath
-            ("Assets/Solbin/SB_Prefabs/Gragas/Barrel_Q1.prefab", typeof(GameObject));
-        q1 = Instantiate(q1Prefab);
+        //GameObject q1Prefab = (GameObject)AssetDatabase.LoadAssetAtPath
+            //("Assets/Solbin/SB_Prefabs/Gragas/Barrel_Q1.prefab", typeof(GameObject));
+        //q1 = Instantiate(q1Prefab);
         q1.transform.position = new Vector3(0, 0, -10);
 
-        GameObject q2Prefab = (GameObject)AssetDatabase.LoadAssetAtPath
-            ("Assets/Solbin/SB_Prefabs/Gragas/Barrel_Q2.prefab", typeof(GameObject));
-        q2 = Instantiate(q2Prefab);
+        //GameObject q2Prefab = (GameObject)AssetDatabase.LoadAssetAtPath
+            //("Assets/Solbin/SB_Prefabs/Gragas/Barrel_Q2.prefab", typeof(GameObject));
+        //q2 = Instantiate(q2Prefab);
         q2.transform.position = new Vector3 (0, 0, -10);
 
         camera = GameObject.Find("GameView Camera").GetComponent<Camera>();

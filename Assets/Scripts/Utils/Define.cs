@@ -66,6 +66,8 @@ public class Define
         Dummy_Puppet,
         Rumble,
         Ashe,
+        Caitlyn,
+        Gragas,
         Yasuo = 100
     }
 

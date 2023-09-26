@@ -18,8 +18,8 @@ public class SB_ItemDataReader : MonoBehaviour
         m_legendContainer = GameObject.Find("Container_Legend").transform; // 전설 아이템 목록
         m_mythContainer = GameObject.Find("Container_Myth").transform; // 신화 아이템 목록
 
-        m_itemPrefab = (GameObject)AssetDatabase.LoadAssetAtPath
-            ("Assets/Solbin/SB_Prefabs/Item Select.prefab", typeof(GameObject));
+        //m_itemPrefab = (GameObject)AssetDatabase.LoadAssetAtPath
+            //("Assets/Solbin/SB_Prefabs/Item Select.prefab", typeof(GameObject));
         Debug.Assert(m_itemPrefab != null);
     }
 
