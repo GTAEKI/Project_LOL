@@ -89,6 +89,8 @@ public class GameManager
         {
             currentStage = value;
 
+            Debug.Log($"{currentStage}가 되었습니다.");
+
             switch (currentStage)
             {
                 case CurrentStageMode.WAIT_STAGE: OnWaitStage(); break;
@@ -149,6 +151,8 @@ public class GameManager
                 players[i].OnDamaged(teamRoundDamages[roundNumber]);            // 라운드 별 데미지를 입힘 (플레이어)
             }
         }
+
+        CurrentStage = CurrentStageMode.WAIT_STAGE;
     }
 
     #endregion
@@ -183,10 +187,11 @@ public class GameManager
     /// <param name="value"></param>
     private void OnGetMoney(int value)
     {
-        for (int i = 0; i < players.Count; i++)
-        {
-            players[i].OnChangeGold(value);
-        }
+        //for (int i = 0; i < players.Count; i++)
+        //{
+        //    players[i].OnChangeGold(value);
+        //}
+        players[0].OnChangeGold(value);
     }
 
     #endregion
@@ -224,6 +229,11 @@ public class GameManager
     private void OnManetic()
     {
         magneticField.Generate();
+    }
+
+    public List<PlayerController> Players
+    {
+        get => players;
     }
 
     #endregion
@@ -331,6 +341,7 @@ public class GameManager
             baseTimer = 0f;
 
             CurrentStage = CurrentStageMode.BATTLE_STAGE;
+            BattleStage = BattleStageMode.READY_MODE;
             return;
         }
     }
@@ -386,7 +397,7 @@ public class GameManager
             baseTimer = 0f;
 
             roundNumber++;
-            CurrentStage = CurrentStageMode.WAIT_STAGE;
+            CurrentStage = CurrentStageMode.RESULT_STAGE;
             return;
         }
     }

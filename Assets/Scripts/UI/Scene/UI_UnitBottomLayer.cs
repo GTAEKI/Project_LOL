@@ -35,6 +35,8 @@ public class UI_UnitBottomLayer : UI_Scene
         Text_ActiveECooltime,
         Text_ActiveRCooltime,
         Text_PassiveCooltime,
+
+        Text_Gold
     }
 
     private enum GameObjects
@@ -74,6 +76,11 @@ public class UI_UnitBottomLayer : UI_Scene
 
         SetSkillIcon();
         SetFrame();
+
+        // 골드 이벤트 처리
+        SB_ButtonSystem.returnItem += new EventHandler(ReturnMoney);
+        SB_ButtonSystem.buyItem += new EventHandler(SpendMoney);
+        SB_ButtonSystem.sellItem += new EventHandler(SellMoney);
     }
 
     /// <summary>
@@ -174,4 +181,53 @@ public class UI_UnitBottomLayer : UI_Scene
     }
 
     public float GetCooltime(CooltimeType type) => GetImage((int)type).fillAmount;
+
+    #region 골드 처리 함수
+
+    /// <summary>
+    /// 보유 골드 세팅 함수
+    /// 김민섭_230926
+    /// </summary>
+    /// <param name="value">세팅값</param>
+    public void SetGold(int value)
+    {
+        GetTMP((int)Texts.Text_Gold).text = value.ToString();
+    }
+
+    /// <summary>
+    /// 아이템 구매시 골드 소모
+    /// 노솔빈
+    /// </summary>
+    private void SpendMoney(object sender, EventArgs e)
+    {
+        //m_gold -= 3000;
+        //m_goldText.text = m_gold.ToString();
+    }
+
+    /// <summary>
+    /// 아이템 되돌리기 & 판매 시 골드 회복
+    /// 노솔빈
+    /// </summary>
+    private void ReturnMoney(object sender, EventArgs e)
+    {
+        //m_gold += 3000;
+        //m_goldText.text = m_gold.ToString();
+    }
+
+    /// <summary>
+    /// 아이템 되팔기
+    /// 노솔빈
+    /// </summary>
+    private void SellMoney(object sender, EventArgs e)
+    {
+        //m_gold += Mathf.RoundToInt(3000 * 0.7f);
+        //m_goldText.text = m_gold.ToString();
+    }
+
+    public void ReturnMoney()
+    {
+        
+    }
+
+    #endregion
 }
