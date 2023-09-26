@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,8 @@ public class Ashe : Unit
     // 다른 플레이어를 담아줄 게임오브젝트
     private GameObject otherPlayer;
 
+    private PhotonView pv;
+
     // 애쉬 객체 Init
     public override void Init()
     {
@@ -38,6 +41,7 @@ public class Ashe : Unit
             Managers.Data.UnitBaseStatDict[Define.UnitName.Ashe]);
         unitSkill = new UnitSkill(Define.UnitName.Ashe);
         animator = GetComponent<Animator>();
+        pv = GetComponent<PhotonView>();
         base.Init();
     }
 
@@ -57,12 +61,13 @@ public class Ashe : Unit
                 Vector3 direct = targetPos - transform.position;
                 direct.y = 0f;
 
-                // 맞은 상대가 Object일 경우 기본공격을 위해 isAttack을 true로 변경함
-                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")))
+                // 맞은 상대가 Object일 경우 기본공격을 위해 isAttack을 true로 변경함 +  나를 선택한것이 아니라면
+                if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")) && hit.transform.gameObject != pv.IsMine)
                 {
                     isAttack = true;
                     otherPlayer = hit.transform.gameObject;
                     Debug.Log("상대 선택");
+
                 }
                 else
                 {
@@ -95,25 +100,25 @@ public class Ashe : Unit
             rangeImg_Attack.SetActive(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (!isCool_SpellQ && Input.GetKeyDown(KeyCode.Q))
         {
 
             CastActiveQ();
         }
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (!isCool_SpellW && Input.GetKeyDown(KeyCode.W))
         {
             CurrentState = Define.UnitState.CastW;
             CastActiveW();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!isCool_SpellE && Input.GetKeyDown(KeyCode.E))
         {
             CurrentState = Define.UnitState.CastE;
             CastActiveE();
         }
 
-        if (Input.GetKey(KeyCode.R))
+        if (!isCool_SpellR && Input.GetKey(KeyCode.R))
         {
             CastActiveR();
         }
@@ -134,15 +139,14 @@ public class Ashe : Unit
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")))
+            // 유닛 오브젝트를 선택했으며 + 나를 선택한것이 아니라면
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")) && (hit.transform != pv.IsMine))
             {
                 isAttack = true;
 
                 otherPlayer = hit.transform.gameObject;
 
                 Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
-
-                hit.transform.GetComponent<MeshRenderer>().material.color = Color.red;
 
                 targetPos = hit.point;
 
@@ -203,7 +207,7 @@ public class Ashe : Unit
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, RAY_DISTANCE,LayerMask.GetMask("Floor")))
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
         {
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
@@ -215,7 +219,7 @@ public class Ashe : Unit
             transform.rotation = Quaternion.LookRotation(direct);
         }
         GameObject skill_E = Instantiate(effect_E, muzzle_E.transform.position, muzzle_E.transform.rotation);
-        StartCoroutine(DetectionSight(skill_E,targetPos));
+        StartCoroutine(DetectionSight(skill_E, targetPos));
         base.CastActiveE();
     }
 
@@ -224,10 +228,10 @@ public class Ashe : Unit
         while (true)
         {
             Debug.Log("스킬 들어왔다");
-            if(skill_E.transform.position.z >= targetPos.z)
+            if (skill_E.transform.position.z >= targetPos.z)
             {
                 Destroy(skill_E);
-                GameObject _vision = Instantiate(vision, skill_E.transform.position,Quaternion.identity);
+                GameObject _vision = Instantiate(vision, skill_E.transform.position, Quaternion.identity);
                 Destroy(_vision, 5f);
                 Debug.Log("시야 탐지");
                 yield break;
@@ -252,7 +256,7 @@ public class Ashe : Unit
         {
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
             shotImg_R.transform.position = hit.point;
-            Vector3 direction = (hit.point-startPosR).normalized;
+            Vector3 direction = (hit.point - startPosR).normalized;
             Quaternion rotation = Quaternion.LookRotation(direction);
             shotImg_R.transform.rotation = rotation;
         }
@@ -310,7 +314,7 @@ public class Ashe : Unit
         }
         else if (currentState == Define.UnitState.MOVE)
         {
-            float moveDistance = Mathf.Clamp(unitStat.MoveMentSpeed * Time.deltaTime, 0f, direct.magnitude);
+            float moveDistance = Mathf.Clamp((currentUnitStat.MoveMentSpeed * 0.03f) * Time.deltaTime, 0f, direct.magnitude);
             transform.position += direct.normalized * moveDistance;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direct), ROTATE_SPEED * Time.deltaTime);
         }
@@ -322,6 +326,7 @@ public class Ashe : Unit
         guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer;
         guidedArrow.GetComponent<CalculateDamage>().damage = unitStat.Atk;
         Debug.Log(unitStat.Atk);
+
     }
 
     /// <summary>
@@ -388,7 +393,7 @@ public class Ashe : Unit
                     break;
 
                 case Define.UnitState.CastQ:
-                    animator.SetBool("Q", true); 
+                    animator.SetBool("Q", true);
                     animator.SetTrigger("QTR");
                     animator.SetBool("Attack", true);
                     break;
