@@ -46,6 +46,36 @@
         "growAttackRange": "0.0"
     },
     {
+      "index": "3",
+      "name_ko": "케이틀린",
+      "name_en": "Caityln",
+      "growHp": "107.0",
+      "growMp": "40.0",
+      "growStrength": "3.4",
+      "growDefense": "4.7",
+      "growMagicDefense": "1.3",
+      "growAttackSpeed": "4",
+      "growMovementSpeed": "0.0",
+      "growHpRecovery": "0.55",
+      "growMpRecovery": "0.7",
+      "growAttackRange": "0.0"
+    },
+    {
+      "index": "4",
+      "name_ko": "그라가스",
+      "name_en": "Gragas",
+      "growHp": "109.0",
+      "growMp": "47.0",
+      "growStrength": "3.5",
+      "growDefense": "4.8",
+      "growMagicDefense": "2.05",
+      "growAttackSpeed": "2.05",
+      "growMovementSpeed": "0.0",
+      "growHpRecovery": "0.5",
+      "growMpRecovery": "0.8",
+      "growAttackRange": "0.0"
+  },
+    {
       "index": "100",
       "name_ko": "야스오",
       "name_en": "Yasuo",

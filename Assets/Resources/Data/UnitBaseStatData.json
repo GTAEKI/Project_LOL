@@ -46,6 +46,36 @@
       "attackRange": "11.0"
     },
     {
+      "index": "3",
+      "name_ko": "케이틀린",
+      "name_en": "Caityln",
+      "maxHp": "580",
+      "maxMp": "315.0",
+      "strength": "60.0",
+      "physicalDefense": "27.0",
+      "magicDefense": "30.0",
+      "attackSpeed": "0.568",
+      "movementSpeed": "325.0",
+      "hpRecovery": "3.5.0",
+      "mpRecovery": "7.4.0",
+      "attackRange": "650.0"
+    },
+    {
+      "index": "4",
+      "name_ko": "그라가스",
+      "name_en": "Gragas",
+      "maxHp": "670",
+      "maxMp": "400.0",
+      "strength": "64.0",
+      "physicalDefense": "38.0",
+      "magicDefense": "32.0",
+      "attackSpeed": "0.625",
+      "movementSpeed": "330.0",
+      "hpRecovery": "5.5.0",
+      "mpRecovery": "6.0.0",
+      "attackRange": "125.0"
+    },
+    {
       "index": "100",
       "name_ko": "야스오",
       "name_en": "Yasuo",
