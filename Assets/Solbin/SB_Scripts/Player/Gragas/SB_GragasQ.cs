@@ -32,8 +32,7 @@ public class SB_GragasQ : MonoBehaviour
         q2 = Instantiate(q2Prefab);
         q2.transform.position = new Vector3(0, 0, -10);
 
-        camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
-
+//        camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
         animator = GetComponent<Animator>();
         q1Animator = q1.GetComponent<Animator>();
         q2Animator = q2.GetComponent<Animator>();

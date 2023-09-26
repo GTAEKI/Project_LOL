@@ -519,7 +519,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
                 }
 
-                PhotonNetwork.LoadLevel("Prototype_Scene");
+                PhotonNetwork.LoadLevel("KyungTaek_Player");
             }
         }
     }

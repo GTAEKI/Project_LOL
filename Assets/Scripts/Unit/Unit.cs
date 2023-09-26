@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviourPun
 {
     // 데이터
     protected UnitStat unitStat;                    // 유닛 기본 베이스 스탯
@@ -27,7 +29,7 @@ public class Unit : MonoBehaviour
         {
             unitTeam = value;
 
-            switch(unitTeam)
+            switch (unitTeam)
             {
                 case Define.GameTeam.BLUE: break;
                 case Define.GameTeam.RED: break;
@@ -85,7 +87,7 @@ public class Unit : MonoBehaviour
         currentUnitStat = new CurrentUnitStat(unitStat);
 
         // UI
-        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform); 
+        unitHUD = Managers.UI.MakeWordSpaceUI<UI_UnitHUD>(transform);
 
         anim = GetComponent<Animator>();
     }
@@ -162,7 +164,7 @@ public class Unit : MonoBehaviour
     /// </summary>
     public void Select()
     {
-        if(Managers.Input.CheckKeyEvent(0))
+        if (Managers.Input.CheckKeyEvent(0))
         {
             UI_DummyController ui_dummy = Managers.UI.GetPopupUI<UI_DummyController>();
             if (ui_dummy == null || (ui_dummy != null && !ui_dummy.IsCreate))
@@ -205,7 +207,7 @@ public class Unit : MonoBehaviour
             }
         }
     }
-     
+
     #region 스킬 관련 함수
 
     /// <summary>
