@@ -60,7 +60,7 @@ public class SB_GragasE : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && isAttack && other.name !="Gragas")
+        if (other.CompareTag("Player") && isAttack && other.name != "Gragas")
         {
             Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
 
@@ -85,6 +85,19 @@ public class SB_GragasE : MonoBehaviour
         }
 
         if (other.name == "Dummy" && isAttack && other.name != "Gragas")
+        {
+            Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
+
+            Vector3 originPos = other.gameObject.transform.position;
+            Vector3 gragasPos = transform.position;
+            gragasPos.y = originPos.y;
+            Vector3 dir = other.gameObject.transform.position - gragasPos;
+            dir = dir.normalized;
+            GameObject target = other.gameObject;
+        }
+
+
+        if (other.name == "Dummy" && isAttack)
         {
             Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
 
@@ -137,7 +150,7 @@ public class SB_GragasE : MonoBehaviour
             {
                 isAttack = false;
                 animator.SetTrigger("Back Idle");
-            } 
+            }
         }
 
         if (apply)
@@ -151,5 +164,5 @@ public class SB_GragasE : MonoBehaviour
                 }
             }
         }
-    }   
+    }
 }

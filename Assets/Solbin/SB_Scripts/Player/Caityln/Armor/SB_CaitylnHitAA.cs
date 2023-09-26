@@ -27,6 +27,6 @@ public class SB_CaitylnHitAA : MonoBehaviour
 
     private void OnParticleTrigger()
     {
-        target.GetComponent<Unit>().CurrentUnitStat.OnDamaged(0.8f);
+        target.GetComponent<Unit>().CurrentUnitStat.OnDamaged(6f);
     }
 }

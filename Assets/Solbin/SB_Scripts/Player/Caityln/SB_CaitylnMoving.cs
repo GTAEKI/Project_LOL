@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using Photon.Pun;
 
 public class SB_CaitylnMoving : Unit
 {
@@ -16,6 +17,8 @@ public class SB_CaitylnMoving : Unit
     SB_CaitylnE caitylnE; // E
     SB_CaitylnR caitylnR; // R
 
+    private PhotonView pv;
+
     public override void Init()
     {
         unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Caityln]);
@@ -28,6 +31,8 @@ public class SB_CaitylnMoving : Unit
         caitylnW = transform.GetComponent<SB_CaitylnW>();
         caitylnE = transform.GetComponent<SB_CaitylnE>();
         caitylnR = transform.GetComponent<SB_CaitylnR>();
+
+        pv = GetComponent<PhotonView>();
     }
 
     protected override void UpdateMove()
@@ -38,6 +43,7 @@ public class SB_CaitylnMoving : Unit
             animator.SetBool("Run", true);
             base.UpdateMove();
         }
+
     }
 
     protected override void UpdateIdle()
@@ -48,11 +54,11 @@ public class SB_CaitylnMoving : Unit
             animator.SetBool("Run", false);
             base.UpdateIdle();
         }
+
     }
 
     protected override void CastActiveQ() // 필트오버 피스메이커
     {
-        
         if (!skillAct)
         {
             CurrentState = Define.UnitState.IDLE;
@@ -64,35 +70,44 @@ public class SB_CaitylnMoving : Unit
 
     protected override void CastActiveW() // 요들잡이 덫 
     {
-        if (!skillAct)
+        if (photonView.IsMine)
         {
-            CurrentState = Define.UnitState.IDLE;
-            caitylnW.SkillW();
+            if (!skillAct)
+            {
+                CurrentState = Define.UnitState.IDLE;
+                caitylnW.SkillW();
 
-            base.CastActiveW();
+                base.CastActiveW();
+            }
         }
     }
 
     protected override void CastActiveE() // 90구경 투망
     {
-        if (!skillAct)
+        if (photonView.IsMine)
         {
-            CurrentState = Define.UnitState.IDLE;
-            caitylnE.SkillE();
+            if (!skillAct)
+            {
+                CurrentState = Define.UnitState.IDLE;
+                caitylnE.SkillE();
 
-            base.CastActiveE();
+                base.CastActiveE();
+            }
         }
     }
 
     protected override void CastActiveR() // 비장의 한 발
     {
-        if (!skillAct)
+        if (photonView.IsMine)
         {
-            CurrentState = Define.UnitState.IDLE;
-            caitylnR.SkillR();
+            if (!skillAct)
+            {
+                CurrentState = Define.UnitState.IDLE;
+                caitylnR.SkillR();
 
-            // 스킬 구현
-            base.CastActiveR();
+                // 스킬 구현
+                base.CastActiveR();
+            }
         }
     }
 }

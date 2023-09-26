@@ -42,9 +42,9 @@ public class Managers : MonoBehaviour
     {
         // Core
         _input.OnUpdate();
-        
+
         // Contents
-        _game.OnUpdate();
+        //_game.OnUpdate();
     }
 
     private static void Init()
@@ -67,9 +67,9 @@ public class Managers : MonoBehaviour
             s_instance._sound.Init();
             s_instance._input.Init();
             s_instance._ui.Init();
-            
+
             // Contents
-            s_instance._game.Init();
+            //s_instance._game.Init();
         }
     }
 

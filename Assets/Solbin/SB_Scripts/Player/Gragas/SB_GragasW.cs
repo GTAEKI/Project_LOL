@@ -28,14 +28,4 @@ public class SB_GragasW : MonoBehaviour
         isAttack = false;
         SB_GragasMoving.gragasSkill = false;
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player" && isAttack) // 플레이어 충격 시 
-        {
-            GameObject player = other.gameObject;
-
-        }
-    }
-
 }

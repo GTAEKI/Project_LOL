@@ -117,8 +117,9 @@ public class SB_CaitylnAutoAttack : MonoBehaviour
         aaPos.z += 1f;
         aaPos.x += 0.6f;
         aaPos.y += 3f;
-        autoAttack.transform.position = caityln.transform.position;
-        autoAttack.transform.position += new Vector3(0, 3, 1);
+        Vector3 bulletPos = caityln.transform.position + caityln.transform.forward * 2f + 
+            caityln.transform.up * 3f - caityln.transform.right * 0.5f;
+        autoAttack.transform.position = bulletPos;
 
         yield return null;
         targetPoint = enemyPoint;

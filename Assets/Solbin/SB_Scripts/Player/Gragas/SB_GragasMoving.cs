@@ -16,6 +16,7 @@ public class SB_GragasMoving : Unit
     SB_GragasR gragasR; // R스킬 
 
     public static bool gragasSkill = false;
+    public static bool gragasMoving = false;
 
     public override void Init()
     {
@@ -33,12 +34,14 @@ public class SB_GragasMoving : Unit
 
     protected override void UpdateMove()
     {
+        gragasMoving = true;
         animator.SetBool("Run", true);
         base.UpdateMove();
     }
 
     protected override void UpdateIdle()
     {
+        gragasMoving = false;
         animator.SetBool("Run", false);
         base.UpdateIdle();
     }
