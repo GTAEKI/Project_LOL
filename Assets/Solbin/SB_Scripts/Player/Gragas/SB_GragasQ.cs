@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using Photon.Pun;
 
 public class SB_GragasQ : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class SB_GragasQ : MonoBehaviour
     Collider collider;
     ParticleSystem particle;
 
+    PhotonView pv;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,12 +35,14 @@ public class SB_GragasQ : MonoBehaviour
         q2 = Instantiate(q2Prefab);
         q2.transform.position = new Vector3(0, 0, -10);
 
-//        camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
+        camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
         animator = GetComponent<Animator>();
         q1Animator = q1.GetComponent<Animator>();
         q2Animator = q2.GetComponent<Animator>();
         collider = q2.transform.GetChild(2).GetComponent<Collider>();
         particle = q2.transform.GetChild(3).GetComponent<ParticleSystem>();
+
+        pv = GetComponent<PhotonView>();
     }
 
     public void SkillQ()
@@ -65,12 +70,18 @@ public class SB_GragasQ : MonoBehaviour
         isAttack = true;
 
         q1.transform.rotation = transform.rotation;
-        Vector3 firstPos = transform.position + transform.forward * 3.5f;
+        Vector3 firstPos = transform.position + transform.forward * 3.5f; // 술통 발사 위치 세팅
         firstPos.y = 1.55f;
         q1.transform.position = firstPos;
-        barrelDes = q1.transform.position + q1.transform.forward * 7f; // 술통 목적지
+        //barrelDes = q1.transform.position + q1.transform.forward * 7f; // 술통 목적지
         animator.SetTrigger("PressQ");
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        pv.RPC("AnimationQSync", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void AnimationQSync()
+    {
         animator.SetTrigger("Back Idle");
     }
 
@@ -79,15 +90,15 @@ public class SB_GragasQ : MonoBehaviour
         if (isAttack)
         {
             q1Animator.enabled = true;
-            q1.transform.position = Vector3.MoveTowards(q1.transform.position, barrelDes, Time.deltaTime * 15f);
+            q1.transform.position = Vector3.MoveTowards(q1.transform.position, targetPosition, Time.deltaTime * 15f);
 
-            if (Vector3.Distance(q1.transform.position, barrelDes) <= 0.1f)
+            if (Vector3.Distance(q1.transform.position, targetPosition) <= 0.1f)
             {
                 isAttack = false;
                 q1Animator.enabled = false;
                 q1Animator.Rebind();
                 q1.transform.position = new Vector3(0, 0, -10);
-                q2.transform.position = barrelDes;
+                q2.transform.position = targetPosition;
                 q2Animator.enabled = true;
                 StartCoroutine(Bomb());
             }

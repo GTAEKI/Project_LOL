@@ -5,163 +5,176 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static UnityEngine.GraphicsBuffer;
+using Photon.Pun;
 
 /// <summary>
 /// 케이틀린: 평타
 /// </summary>
 
-public class SB_CaitylnAutoAttack : MonoBehaviour
+public class SB_CaitylnAutoAttack : MonoBehaviourPun
 {
-    GameObject caityln; // 케이틀린
-    Animator animator;
-    Vector3 enemyPoint;
-    Vector3 targetPoint; // 총알 발사 위치
+    //GameObject caityln; // 케이틀린
+    //Animator animator;
+    //Vector3 enemyPoint;
+    //Vector3 targetPoint; // 총알 발사 위치
 
-    bool getTarget = false; // 적이 범위 내에 있는지 체크
-    bool isAttack = false; // 공격 진행 중 
-    bool bulletFire = false; // 총알 이동
-    //bool trace = false; // 적을 쫓는 중
+    //bool getTarget = false; // 적이 범위 내에 있는지 체크
+    //bool isAttack = false; // 공격 진행 중 
+    //bool bulletFire = false; // 총알 이동
+    ////bool trace = false; // 적을 쫓는 중
 
-    GameObject enemy; // 타겟팅 한 적 챔피언
-    GameObject targetEnemy; // 적 저장
+    //GameObject enemy; // 타겟팅 한 적 챔피언
+    //GameObject targetEnemy; // 적 저장
 
-    Vector3 beforPos;
-    Vector3 afterPos;
+    //Vector3 beforPos;
+    //Vector3 afterPos;
+    //GameObject autoAttack;
 
-    public GameObject autoAttackPrefab;
-    GameObject autoAttack;
+    //SB_CaitylnHitAA hitAA;
 
-    SB_CaitylnHitAA hitAA;
+    //private PhotonView pv;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        caityln = transform.parent.gameObject;
-        animator = caityln.GetComponent<Animator>();
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+    //    if (photonView.IsMine)
+    //    {
+    //        caityln = transform.parent.gameObject;
+    //        animator = caityln.GetComponent<Animator>();
 
-        autoAttack = Instantiate(autoAttackPrefab);
-        autoAttack.transform.position = new Vector3(0, 0, -10);
-        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+    //        Vector3 pool = new Vector3(0, 0, -10);
+    //        string autoAttackPath = "Prefabs/Caityln/Auto Attack";
 
-        hitAA = autoAttack.transform.GetChild(0).GetComponent <SB_CaitylnHitAA>();
-    }
+    //        autoAttack = PhotonNetwork.Instantiate(autoAttackPath, pool, Quaternion.identity);
+    //        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
 
-    /// <summary>
-    /// 적이 범위 내 있음
-    /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerStay(Collider other)
-    {
-        if (!SB_CaitylnMoving.skillAct)
-        {
-            if (other.tag == "Player") // 평타
-            {
-                enemy = (GameObject)other.gameObject; // 인식한 적을 담는 임시 컨테이너
-                hitAA.GetPlayerName(enemy);
-                enemyPoint = enemy.transform.position;
-                getTarget = true;
+    //        //hitAA = autoAttack.transform.GetChild(0).GetComponent<SB_CaitylnHitAA>();
+    //        //Debug.Assert(hitAA != null);
 
-                if (!animator.GetBool("Run") && !isAttack) // 이동, 쫓는 중, 공격 중이 아니라면
-                {
-                    FindTarget(); // 적 봄
-                }
-            }
-        }
+    //        pv = transform.parent.GetComponent<PhotonView>();
+    //    }
+    //}
 
-        if (SB_CaitylnMoving.caitylnMoving)
-        {
-            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
-            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
-        }
-    }
+    ///// <summary>
+    ///// 적이 범위 내 있음
+    ///// </summary>
+    ///// <param name="other"></param>
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if (other.gameObject.GetComponent<PhotonView>() != null && !other.gameObject.GetComponent<PhotonView>().IsMine)
+    //    {
+    //        if (!SB_CaitylnMoving.skillAct && other.CompareTag("Player")) // 평타
+    //        {
+    //            enemy = (GameObject)other.gameObject; // 인식한 적을 담는 임시 컨테이너
+    //            if (enemy != null)
+    //            {
+    //                //hitAA.GetPlayerName(enemy);
+    //                enemyPoint = enemy.transform.position;
+    //            }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            enemy = (GameObject)other.gameObject;
-            getTarget = false;
-            //animator.SetBool("Auto Attack", false);
-        }
-    }
+    //            getTarget = true;
 
-    /// <summary>
-    /// 범위 내 적을 바라봄. 
-    /// </summary>
-    private void FindTarget()
-    {
-        Vector3 dir = enemyPoint - caityln.transform.position;
-        dir.y = 0f;
+    //            if (!animator.GetBool("Run") && !isAttack) // 이동, 쫓는 중, 공격 중이 아니라면
+    //            {
+    //                FindTarget(); // 적 봄
+    //            }
+    //        }
+    //    }
 
-        Quaternion targetRotation = Quaternion.LookRotation(dir); // 목표 방향
-        caityln.transform.rotation = targetRotation;
-        autoAttack.transform.rotation = targetRotation;
+    //    if (SB_CaitylnMoving.caitylnMoving)
+    //    {
+    //        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+    //        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
+    //    }
 
-        StartCoroutine(AutoAttack());
-    }
 
-    /// <summary>
-    /// 범위 내 적에 자동 평타
-    /// </summary>
-    private IEnumerator AutoAttack()
-    {
-        SB_CaitylnMoving.normalAct = true;
+    //}
 
-        isAttack = true;
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.tag == "Player")
+    //    {
+    //        enemy = (GameObject)other.gameObject;
+    //        getTarget = false;
+    //        animator.SetBool("Auto Attack", false);
+    //    }
+    //}
 
-        targetEnemy = enemy;
+    ///// <summary>
+    ///// 범위 내 적을 바라봄. 
+    ///// </summary>
+    //private void FindTarget()
+    //{
+    //    Vector3 dir = enemyPoint - caityln.transform.position;
+    //    dir.y = 0f;
 
-        animator.SetBool("Auto Attack", true);
+    //    Quaternion targetRotation = Quaternion.LookRotation(dir); // 목표 방향
+    //    caityln.transform.rotation = targetRotation;
+    //    autoAttack.transform.rotation = targetRotation;
 
-        Vector3 aaPos = caityln.transform.position;
-        aaPos.z += 1f;
-        aaPos.x += 0.6f;
-        aaPos.y += 3f;
-        autoAttack.transform.position = caityln.transform.position;
-        autoAttack.transform.position += new Vector3(0, 3, 1);
+    //    StartCoroutine(AutoAttack());
+    //}
 
-        yield return null;
-        targetPoint = enemyPoint;
-        targetPoint.y = 2.5f;
+    ///// <summary>
+    ///// 범위 내 적에 자동 평타
+    ///// </summary>
+    //private IEnumerator AutoAttack()
+    //{
+    //    SB_CaitylnMoving.normalAct = true;
 
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.15f);
-        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
-        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.75f);
-        animator.SetBool("Auto Attack", false);
-        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
-        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
-        isAttack = false; // 다시 평타
-    }
+    //    isAttack = true;
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W)
-            || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R)) // 마우스 오른쪽 버튼 => 케이틀린이 이동 중
-        {
-            SB_CaitylnMoving.normalAct = false;
-            animator.SetBool("Auto Attack", false);
-            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
-            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
-            getTarget = false;
-        }
-            
-        if (SB_CaitylnMoving.caitylnMoving) // 자의로 이동 중이면
-        {
-            //trace = false;
-            animator.SetBool("Auto Attack", false); // 자동 평타 종료 
+    //    animator.SetBool("Auto Attack", true);
 
-            if (!getTarget)
-            {
-                SB_CaitylnMoving.normalAct = false;
-                targetEnemy = null;
-            }
-        }
+    //    Vector3 aaPos = caityln.transform.position;
+    //    aaPos.z += 1f;
+    //    aaPos.x += 0.6f;
+    //    aaPos.y += 3f;
+    //    Vector3 bulletPos = caityln.transform.position + caityln.transform.forward * 2f +
+    //        caityln.transform.up * 3f - caityln.transform.right * 0.5f;
+    //    autoAttack.transform.position = bulletPos;
 
-        if (SB_CaitylnMoving.skillAct || SB_CaitylnMoving.caitylnMoving)
-        {
-            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
-            autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
-        }
-    }
+    //    yield return null;
+    //    targetPoint = enemyPoint;
+    //    targetPoint.y = 2.5f;
+
+    //    yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.15f);
+    //    autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
+    //    autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+    //    yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length * 0.75f);
+    //    animator.SetBool("Auto Attack", false);
+    //    autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+    //    autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
+    //    isAttack = false; // 다시 평타
+    //}
+
+    //private void Update()
+    //{
+    //    if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W)
+    //        || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R)) // 마우스 오른쪽 버튼 => 케이틀린이 이동 중
+    //    {
+    //        SB_CaitylnMoving.normalAct = false;
+    //        animator.SetBool("Auto Attack", false);
+    //        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+    //        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
+    //        getTarget = false;
+    //    }
+
+    //    if (SB_CaitylnMoving.caitylnMoving) // 자의로 이동 중이면
+    //    {
+    //        //trace = false;
+    //        animator.SetBool("Auto Attack", false); // 자동 평타 종료 
+
+    //        if (!getTarget)
+    //        {
+    //            SB_CaitylnMoving.normalAct = false;
+    //        }
+    //    }
+
+    //    if (SB_CaitylnMoving.skillAct || SB_CaitylnMoving.caitylnMoving)
+    //    {
+    //        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+    //        autoAttack.transform.GetChild(0).GetComponent<ParticleSystem>().Clear();
+    //    }
+    //}
 }

@@ -11,4 +11,12 @@ public class SB_TestInit : Unit
 
         base.Init();
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.name == "Gragas")
+        {
+            Debug.Log("그라거스와 충돌");
+        }
+    }
 }

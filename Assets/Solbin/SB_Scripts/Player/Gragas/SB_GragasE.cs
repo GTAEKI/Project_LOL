@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
 
 public class SB_GragasE : MonoBehaviour
 {
@@ -19,11 +20,15 @@ public class SB_GragasE : MonoBehaviour
     private List<Vector3> originPosList = new List<Vector3>();
     private List<GameObject> targetList = new List<GameObject>();
 
+    PhotonView pv;
+
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
+
+        pv = transform.GetComponent<PhotonView>();
     }
 
     public void SkillE()
@@ -60,7 +65,7 @@ public class SB_GragasE : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && isAttack && other.name !="Gragas")
+        if (other.CompareTag("Player") && isAttack && other.name != "Gragas")
         {
             Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
 
@@ -85,6 +90,19 @@ public class SB_GragasE : MonoBehaviour
         }
 
         if (other.name == "Dummy" && isAttack && other.name != "Gragas")
+        {
+            Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
+
+            Vector3 originPos = other.gameObject.transform.position;
+            Vector3 gragasPos = transform.position;
+            gragasPos.y = originPos.y;
+            Vector3 dir = other.gameObject.transform.position - gragasPos;
+            dir = dir.normalized;
+            GameObject target = other.gameObject;
+        }
+
+
+        if (other.name == "Dummy" && isAttack)
         {
             Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
 
@@ -136,8 +154,9 @@ public class SB_GragasE : MonoBehaviour
             if (Vector3.Distance(transform.position, gragasDes) <= 0.1f)
             {
                 isAttack = false;
-                animator.SetTrigger("Back Idle");
-            } 
+                //animator.SetTrigger("Back Idle");
+                pv.RPC("AnimationESync", RpcTarget.All);
+            }
         }
 
         if (apply)
@@ -151,5 +170,11 @@ public class SB_GragasE : MonoBehaviour
                 }
             }
         }
-    }   
+    }
+
+    [PunRPC]
+    private void AnimationESync()
+    {
+        animator.SetTrigger("Back Idle");
+    }
 }

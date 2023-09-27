@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -20,6 +21,8 @@ public class SB_CaitylnW : MonoBehaviour
 
     int trapNumber; // 사용 중 폭탄 인덱스
 
+    PhotonView pv;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +39,7 @@ public class SB_CaitylnW : MonoBehaviour
         }
 
         rangeCollider = range.transform.GetComponent<SphereCollider>();
+        pv = transform.GetComponent<PhotonView>();
     }
 
     public void SkillW()
@@ -103,9 +107,16 @@ public class SB_CaitylnW : MonoBehaviour
 
         animator.SetTrigger("PressW");
         yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length);
-        animator.SetTrigger("PressW_Idle");
+        //animator.SetTrigger("PressW_Idle");
+        pv.RPC("SyncWAnimation", RpcTarget.All);
 
         SB_CaitylnMoving.skillAct = false;
+    }
+
+    [PunRPC]
+    private void SyncWAnimation()
+    {
+        animator.SetTrigger("PressW_Idle");
     }
 
     private void Update()

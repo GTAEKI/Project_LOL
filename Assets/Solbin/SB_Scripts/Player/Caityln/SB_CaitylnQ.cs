@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using Photon.Pun;
 
-public class SB_CaitylnQ : MonoBehaviour
+public class SB_CaitylnQ : MonoBehaviourPun
 {
+    #region 전역변수
     Transform caityln;
 
     Animator caitylnAnimator; // 캐릭터 
     Animator armorAnimator; // 총알
 
-    public GameObject qAttackPrefab; // q스킬 프리팹
     GameObject qAttack; // q스킬 총알
 
     bool isAttack = false;
@@ -20,19 +21,27 @@ public class SB_CaitylnQ : MonoBehaviour
     Camera camera;
     Vector3 targetPosition; // 공격이 향할 마우스 포지션
 
+    PhotonView pv;
+    #endregion
+
     private void Start()
     {
-        caityln = transform;
+        caityln = gameObject.transform;
         caitylnAnimator = caityln.GetComponent<Animator>();
 
-        qAttack = Instantiate(qAttackPrefab);
-        qAttack.transform.position = new Vector3(caityln.position.x, 2.5f, caityln.position.z);
+        Vector3 pool = new Vector3(caityln.position.x, 2.5f, caityln.position.z);
+        string qAttackPath = "Prefabs/Caityln/Attack_Q";
+
+        qAttack = PhotonNetwork.Instantiate(qAttackPath, pool, Quaternion.identity);
         qAttack.transform.rotation = caityln.rotation;
 
         armorAnimator = qAttack.transform.GetComponent<Animator>();
 
         camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
         Debug.Assert(camera != null);
+
+        pv = transform.GetComponent<PhotonView>();
+
     }
 
     public void SkillQ()
@@ -43,7 +52,7 @@ public class SB_CaitylnQ : MonoBehaviour
 
             transform.position = caityln.position; // 이동 중일때를 고려하여 케이틀린 정지
 
-            int layerMask = 1 << LayerMask.NameToLayer("Floor"); 
+            int layerMask = 1 << LayerMask.NameToLayer("Floor");
 
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
@@ -63,7 +72,7 @@ public class SB_CaitylnQ : MonoBehaviour
         isAttack = true; // 중복 키 입력 X
 
         caitylnAnimator.SetTrigger("PressQ");
-        
+
         Vector3 dir = targetPosition - caityln.position;
         dir.y = 0f;
 
@@ -84,11 +93,20 @@ public class SB_CaitylnQ : MonoBehaviour
         {
             yield break;
         }
-        caitylnAnimator.SetTrigger("PressQ_Idle");
+        //caitylnAnimator.SetTrigger("PressQ_Idle");
+        pv.RPC("SyncQAnimation", RpcTarget.All);
 
         isAttack = false;
         SB_CaitylnMoving.skillAct = false;
     }
+
+    [PunRPC]
+    private void SyncQAnimation()
+    {
+        // PressQ_Idle 애니메이션을 시작
+        caitylnAnimator.SetTrigger("PressQ_Idle");
+    }
+
 
     private void UnfoldBullet()
     {
@@ -125,8 +143,6 @@ public class SB_CaitylnQ : MonoBehaviour
                 qAttack.transform.position = new Vector3(caityln.position.x, 2.5f, caityln.position.z);
             }
         }
-        
+
     }
-
-
 }

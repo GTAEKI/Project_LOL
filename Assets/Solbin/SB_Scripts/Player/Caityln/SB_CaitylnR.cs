@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
+using Photon.Pun;
 
 public class SB_CaitylnR : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class SB_CaitylnR : MonoBehaviour
     private Camera camera;
     private LineRenderer lineRenderer;
 
+    PhotonView pv;
+
     private void Start()
     {
         caityln = transform;
@@ -38,6 +41,8 @@ public class SB_CaitylnR : MonoBehaviour
 
         rBullet = Instantiate(rBulletPrefab);
         rBullet.transform.position = new Vector3(0, 0, -10);
+
+        pv = transform.GetComponent<PhotonView>();
     }
 
     public void SkillR()
@@ -87,11 +92,18 @@ public class SB_CaitylnR : MonoBehaviour
         fireBullet = true;
         Invoke("TraceBullet", 1f);
 
-        animator.SetTrigger("PressR_Idle");
+        //animator.SetTrigger("PressR_Idle");
+        pv.RPC("SyncRAnimation", RpcTarget.All);
         rEffect.transform.position = new Vector3(0, 0, -10);
 
         isAttack = false;
         SB_CaitylnMoving.skillAct = false;
+    }
+
+    [PunRPC]
+    private void SyncRAnimation()
+    {
+        animator.SetTrigger("PressR_Idle");
     }
 
     private void TraceBullet()
