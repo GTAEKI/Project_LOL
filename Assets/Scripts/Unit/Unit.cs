@@ -45,6 +45,9 @@ public class Unit : MonoBehaviourPun
 
     protected Animator anim;            // 유닛 애니메이터
 
+    // 시야 오브젝트
+    private FieldOfView eyeSight;
+
     #region 프로퍼티
 
     /// <summary>
@@ -77,6 +80,19 @@ public class Unit : MonoBehaviourPun
     private void Start()
     {
         Init();
+        //eyeSight = transform.Find("ViewVisualisation");
+        eyeSight = transform.GetComponentInChildren<FieldOfView>();
+
+        if (photonView.IsMine)
+        {
+            eyeSight.gameObject.SetActive(true);
+            Debug.Log("시야 켰다");
+        }
+        else
+        {
+            eyeSight.gameObject.SetActive(false);
+            Debug.Log("시야 껏다");
+        }
     }
 
     /// 유닛 초기화 함수

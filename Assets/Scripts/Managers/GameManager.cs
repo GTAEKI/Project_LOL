@@ -134,7 +134,7 @@ public class GameManager
 
     private void OnResultStage()
     {
-        for(int i = 0; i < players.Count; i++)
+        for (int i = 0; i < players.Count; i++)
         {
             if (players[i].PlayerUnit.CurrentUnitStat.Hp > 0)
             {   // 승리한 플레이어
@@ -204,7 +204,7 @@ public class GameManager
 
             Debug.Log($"{battleStage} 이벤트 실행");
 
-            switch(battleStage)
+            switch (battleStage)
             {
                 case BattleStageMode.READY_MODE: OnReady(); break;
                 case BattleStageMode.MANETIC_FIGHT_MODE: OnManetic(); break;
@@ -256,7 +256,7 @@ public class GameManager
         // 자기장 초기화
         magneticField = GameObject.Find("MagneticField").GetComponent<MagneticFieldController>();
         magneticField.Clear();
-        
+
         director = GameObject.Find("Director");
 
         roundNumber = 0;
