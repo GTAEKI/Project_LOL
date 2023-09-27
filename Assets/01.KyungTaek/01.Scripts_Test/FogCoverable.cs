@@ -28,7 +28,6 @@ public class FogCoverable : MonoBehaviourPun
 
     void FieldOfViewOnTargetsVisibilityChange(List<Transform> newTargets)
     {
-        Debug.Log("왜 못찾니");
         //renderer.enabled = newTargets.Contains(transform);
         skinnedMeshRenderer.enabled = newTargets.Contains(transform);
         //skinnedMeshRenderer.enabled = true;
