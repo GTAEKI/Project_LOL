@@ -28,6 +28,8 @@ public class SB_CaitylnHitE : MonoBehaviourPun
             if (obj.name == "Caityln" && obj.GetComponent<PhotonView>().IsMine)
             {
                 caityln = obj;
+
+                Debug.Assert(caityln != null);
                 break;
             }
         }
