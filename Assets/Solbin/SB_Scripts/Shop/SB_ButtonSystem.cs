@@ -75,7 +75,7 @@ public class SB_ButtonSystem : MonoBehaviour
         buyList.Add(item);
 
         invenrotySlot.ReceiveItem(item);
-        tabInventorySlot.ReceiveItem(item);
+        //tabInventorySlot.ReceiveItem(item);
 
         m_buyButton.interactable = false;
         m_item.GetComponent<Button>().interactable = false; // 선택한 아이템 버튼 비활성화
