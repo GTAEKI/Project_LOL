@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 7361413575327544010}
   m_Layer: 11
   m_Name: BushCheck
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1045,6 +1045,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitTeam: 0
+  isCool_SpellQ: 0
+  isCool_SpellW: 0
+  isCool_SpellE: 0
+  isCool_SpellR: 0
   currentState: 1
   animator: {fileID: 0}
   rangeImg_Attack: {fileID: 0}

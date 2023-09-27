@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 
 public class SB_GragasR : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class SB_GragasR : MonoBehaviour
     bool orbitForward = false;
 
     Vector3 targetPosition; // 마우스 위치 
+    Animator animator;
+
+    PhotonView pv;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +27,10 @@ public class SB_GragasR : MonoBehaviour
         barrel.transform.position = new Vector3(0, 0, -10);
         rb = barrel.transform.GetComponent<Rigidbody>();
         camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
+
+        animator = transform.GetComponent<Animator>();
+
+        pv = transform.GetComponent<PhotonView>();
     }
 
     public void SkillR()
@@ -39,12 +47,30 @@ public class SB_GragasR : MonoBehaviour
             {
                 targetPosition = hit.point;// 폭탄의 목적지, 플레이어가 바라봄
                 transform.LookAt(targetPosition);
+                StartCoroutine(ThrowBomb());
 
                 barrel.transform.position = transform.position + transform.forward * 3f + transform.up * 3f;
                 orbitJump = true;
                 orbitForward = true;
             }
         }
+    }
+
+    /// <summary>
+    /// 폭탄 던지기 애니메이션
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ThrowBomb()
+    {
+        animator.SetTrigger("PressR");
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        pv.RPC("AnimationRSync", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void AnimationRSync()
+    {
+        animator.SetTrigger("Back Idle");
     }
 
     private void FixedUpdate()

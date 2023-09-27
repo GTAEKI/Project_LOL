@@ -45,6 +45,9 @@ public class Unit : MonoBehaviourPun
 
     protected Animator anim;            // 유닛 애니메이터
 
+    // 시야 오브젝트
+    private FieldOfView eyeSight;
+
     #region 프로퍼티
 
     /// <summary>
@@ -77,6 +80,19 @@ public class Unit : MonoBehaviourPun
     private void Start()
     {
         Init();
+        //eyeSight = transform.Find("ViewVisualisation");
+        eyeSight = transform.GetComponentInChildren<FieldOfView>();
+
+        if (photonView.IsMine)
+        {
+            eyeSight.gameObject.SetActive(true);
+            Debug.Log("시야 켰다");
+        }
+        else
+        {
+            eyeSight.gameObject.SetActive(false);
+            Debug.Log("시야 껏다");
+        }
     }
 
     /// 유닛 초기화 함수
@@ -375,4 +391,48 @@ public class Unit : MonoBehaviourPun
     #endregion
 
     #endregion
+
+    private float currDamageTime = 0f;
+    private float damageTimeMax = 2.5f;
+
+    private bool isInMagneticField;
+
+    private void OnTriggerExit(Collider other)
+    {
+        // TODO: 자기장에 닿으면 일정 시간마다 지속 데미지
+        if(other.tag == "MagneticField")
+        {
+            Debug.Log("데미지 받아라");
+            isInMagneticField = true;
+            StartCoroutine(MagneticDamage());
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        // TODO: 자기장에서 벗어나면 지속 데미지 초기화
+        if (other.tag == "MagneticField")
+        {
+            isInMagneticField = false;
+            currDamageTime = 0f;
+        }
+    }
+
+    IEnumerator MagneticDamage()
+    {
+        while (isInMagneticField)
+        {
+            if (Managers.Game.CurrentStage != GameManager.CurrentStageMode.BATTLE_STAGE) yield break;
+
+            currDamageTime += Time.deltaTime;
+            Debug.Log(currDamageTime);
+            if (currDamageTime >= damageTimeMax)
+            {
+                currDamageTime = 0f;
+                currentUnitStat.OnDamaged((int)(unitStat.Hp * 0.05f));  // 최대 체력의 5퍼센트씩 데미지 부여
+            }
+            yield return null;
+        }
+        yield break;
+    }
 }

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using Photon.Pun;
 
-public class SB_CaitylnE : MonoBehaviour
+public class SB_CaitylnE : MonoBehaviourPun
 {
+    #region 전역변수
     Transform caityln;
 
     Animator caitylnAnimator; // 캐릭터 
     Animator armorAnimator; // 총알
 
-    public GameObject eAttackPrefab; // q스킬 프리팹
     GameObject eAttack; // q스킬 총알
 
     bool isAttack = false;
@@ -21,19 +22,25 @@ public class SB_CaitylnE : MonoBehaviour
     Camera camera;
     Vector3 targetPosition; // 공격이 향할 마우스 포지션
 
+    PhotonView pv;
+    #endregion
+
     private void Start()
     {
-        caityln = transform;
+        caityln = gameObject.transform;
         caitylnAnimator = caityln.GetComponent<Animator>();
+        string eAttackPath = "Prefabs/Caityln/Attack_E";
 
-        eAttack = Instantiate(eAttackPrefab);
-        eAttack.transform.position = new Vector3(caityln.position.x, 2.5f, caityln.position.z);
+        Vector3 pos = new Vector3(caityln.position.x, 2.5f, caityln.position.z);
+        eAttack = PhotonNetwork.Instantiate(eAttackPath, pos, Quaternion.identity);
         eAttack.transform.rotation = caityln.rotation;
 
         armorAnimator = eAttack.transform.GetComponent<Animator>();
 
         camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
         Debug.Assert(camera != null);
+
+        pv = transform.GetComponent<PhotonView>();
     }
 
     public void SkillE()
@@ -79,9 +86,16 @@ public class SB_CaitylnE : MonoBehaviour
         knockback = true; // 넉백
 
         yield return new WaitForSeconds(caitylnAnimator.GetCurrentAnimatorClipInfo(0).Length);
-        caitylnAnimator.SetTrigger("PressE_Idle");
+        //caitylnAnimator.SetTrigger("PressE_Idle");
+        pv.RPC("SyncEAnimation", RpcTarget.All);
         isAttack = false;
         SB_CaitylnMoving.skillAct = false;
+    }
+
+    [PunRPC]
+    private void SyncEAnimation()
+    {
+        caitylnAnimator.SetTrigger("PressE_Idle");
     }
 
     private void UnfoldNet()

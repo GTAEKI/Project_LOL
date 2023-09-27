@@ -14,7 +14,7 @@ public class CameraSetup : MonoBehaviourPun
             followCam.player = transform.gameObject;
             followCam.camFOV = followCam.GetComponent<Camera>().fieldOfView;
 
-            Managers.Input.Init();
+            //Managers.Input.Init();
         }
    }
 

@@ -27,8 +27,8 @@ public class Rumble : Unit
 
     // 다른 플레이어를 담아줄 게임오브젝트
     private GameObject otherPlayer;
-
     private PhotonView pv;
+    private int ownerNumber;
 
     // 럼블 객체 Init
     public override void Init()
@@ -40,6 +40,7 @@ public class Rumble : Unit
         unitSkill = new UnitSkill(Define.UnitName.Rumble);
         animator = GetComponent<Animator>();
         pv = GetComponent<PhotonView>();
+        ownerNumber = photonView.Owner.ActorNumber;
         base.Init();
     }
 
@@ -166,6 +167,7 @@ public class Rumble : Unit
     {
         Effect_Q.SetActive(true);
         Effect_Q.GetComponent<CalculateDamage>().damage = unitStat.Atk;
+        Effect_Q.GetComponent<CalculateDamage>().ownerNumber = ownerNumber;
         yield return new WaitForSeconds(3f);
 
         Effect_Q.SetActive(false);
@@ -175,7 +177,6 @@ public class Rumble : Unit
     protected override void CastActiveW()
     {
         animator.SetTrigger("W");
-
         base.CastActiveW();
     }
 
@@ -213,8 +214,9 @@ public class Rumble : Unit
     // 애니메이션 모션에 맞춰 스킬 E를 나가게 하기 위한 함수_Invoke에 사용
     private void InstantiateSkillE()
     {
-        GameObject skiil_E = Instantiate(Effect_E, MuzzleE.transform.position, MuzzleE.transform.rotation);
-        skiil_E.GetComponent<CalculateDamage>().damage = unitStat.Atk;
+        GameObject skill_E = Instantiate(Effect_E, MuzzleE.transform.position, MuzzleE.transform.rotation);
+        skill_E.GetComponent<CalculateDamage>().damage = unitStat.Atk;
+        skill_E.GetComponent<CalculateDamage>().ownerNumber = ownerNumber;
     }
 
     // 스킬 R
@@ -263,11 +265,10 @@ public class Rumble : Unit
             Vector3 direction = (rotationR - startPosR).normalized;
             Quaternion rotation = Quaternion.LookRotation(direction);
             // Effect_R을 계산된 위치와 회전값으로 생성
-            //GameObject skillR = Instantiate(Effect_R, startPosR, rotation);
-            //skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk;
-            InstantiateSkillR(startPosR, rotation);
-            pv.RPC("InstantiateSkillR", RpcTarget.Others, startPosR, rotation);
-            //Destroy(skillR, 3.5f);
+
+            // 스킬을 시전하는 사람의 photonView 고유 번호를 RPC를 통해 넘김
+            // 고유번호를 통해 자신과 적을 구분하여 데미지처리함
+            pv.RPC("InstantiateSkillR", RpcTarget.All, startPosR, rotation, ownerNumber);
 
             RangeImg_R.SetActive(false);
             ShotImg.SetActive(false);
@@ -276,10 +277,11 @@ public class Rumble : Unit
         }
     }
     [PunRPC]
-    private void InstantiateSkillR(Vector3 startPosR, Quaternion rotation)
+    private void InstantiateSkillR(Vector3 _startPosR, Quaternion _rotation, int _ownerNumber)
     {
-        GameObject skillR = Instantiate(Effect_R, startPosR, rotation);
+        GameObject skillR = Instantiate(Effect_R, _startPosR, _rotation);
         skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk;
+        skillR.GetComponent<CalculateDamage>().ownerNumber = _ownerNumber;
     }
 
 

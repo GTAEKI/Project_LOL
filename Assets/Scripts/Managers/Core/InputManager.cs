@@ -17,6 +17,7 @@ public class InputManager
     public void Init()
     {
         playerSubject = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log(playerSubject != null);
         playerUnit = playerSubject?.GetOrAddComponent<Unit>();
     }
 
@@ -27,7 +28,7 @@ public class InputManager
     public void OnUpdate()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;   // UI 터치 방지
-
+        
         playerUnit?.OnUpdate();
 
         if(Input.GetKeyDown(KeyCode.Z))
@@ -58,4 +59,6 @@ public class InputManager
     {
 
     }
+
+    
 }

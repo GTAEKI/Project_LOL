@@ -1825,6 +1825,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitTeam: 0
+  isCool_SpellQ: 0
+  isCool_SpellW: 0
+  isCool_SpellE: 0
+  isCool_SpellR: 0
   currentState: 1
   animator: {fileID: 0}
   RangeImg_R: {fileID: 1807432505659584250}
