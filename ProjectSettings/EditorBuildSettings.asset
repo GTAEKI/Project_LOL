@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/KyungTeak_Test_Eyesight.unity
     guid: cba9f78def21a48cc81da26fb00d712e
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: 8c3d88734dcfbb146b29d2a6866157c7
   - enabled: 1
@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/KyungTaek_Player.unity
     guid: cefd0d162f465412b873501caf311c77
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SolBin_Scene.unity
     guid: 4a19cf44b090a164785cbd21ee6c790e
   m_configObjects: {}
