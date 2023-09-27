@@ -29,9 +29,9 @@ public class Managers : MonoBehaviour
     public static SpriteManager Sprite => Instance._sprite;
 
     // Contents
-   // private GameManager _game = new GameManager();
+    private GameManager _game = new GameManager();
 
-    //public static GameManager Game => Instance._game; 
+    public static GameManager Game => Instance._game; 
 
     private void Start()
     {

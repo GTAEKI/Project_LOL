@@ -34,9 +34,6 @@ public class CreatePlayer : MonoBehaviourPun
         GameObject myCharacter = PhotonNetwork.Instantiate(playerUnit, resPoint.position, Quaternion.identity);
         UI_UnitBottomLayer bottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
 
-        TextMeshProUGUI test = GameObject.Find("Canvas/Test").GetComponent<TextMeshProUGUI>();
-        test.text = myCharacter.name;
-
         switch (PlayerData.Instance.myCharactor)
         {
             case Define.UnitName.Rumble: player.SettingUnit(myCharacter.GetComponent<Rumble>()); break;

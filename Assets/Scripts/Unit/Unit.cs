@@ -395,27 +395,44 @@ public class Unit : MonoBehaviourPun
     private float currDamageTime = 0f;
     private float damageTimeMax = 2.5f;
 
-    private void OnTriggerStay(Collider other)
+    private bool isInMagneticField;
+
+    private void OnTriggerExit(Collider other)
     {
         // TODO: 자기장에 닿으면 일정 시간마다 지속 데미지
         if(other.tag == "MagneticField")
         {
-            currDamageTime += Time.deltaTime;
-
-            if(currDamageTime >= damageTimeMax )
-            {
-                currDamageTime = 0f;
-                currentUnitStat.OnDamaged((int)(unitStat.Hp * 0.05f));  // 최대 체력의 5퍼센트씩 데미지 부여
-            }
+            Debug.Log("데미지 받아라");
+            isInMagneticField = true;
+            StartCoroutine(MagneticDamage());
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         // TODO: 자기장에서 벗어나면 지속 데미지 초기화
         if (other.tag == "MagneticField")
         {
+            isInMagneticField = false;
             currDamageTime = 0f;
         }
+    }
+
+    IEnumerator MagneticDamage()
+    {
+        while (isInMagneticField)
+        {
+            if (Managers.Game.CurrentStage != GameManager.CurrentStageMode.BATTLE_STAGE) yield break;
+
+            currDamageTime += Time.deltaTime;
+            Debug.Log(currDamageTime);
+            if (currDamageTime >= damageTimeMax)
+            {
+                currDamageTime = 0f;
+                currentUnitStat.OnDamaged((int)(unitStat.Hp * 0.05f));  // 최대 체력의 5퍼센트씩 데미지 부여
+            }
+            yield return null;
+        }
+        yield break;
     }
 }
