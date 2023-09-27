@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,7 +61,7 @@ public class GameManager
     private BattleStageMode battleStage;       // 전투 스테지이 타입 (대기 / 전투 / 자기장 전투)
 
     private Dictionary<string, PlayerController> originPlayerDict = new Dictionary<string, PlayerController>();     // 플레이어 정보 원본 데이터 변수
-    private List<PlayerController> players = new List<PlayerController>();                                          // 현재 플레이가 가능한 플레이어 정보 데이터 변수
+    public List<PlayerController> players = new List<PlayerController>();                                          // 현재 플레이가 가능한 플레이어 정보 데이터 변수
     private MagneticFieldController magneticField;                                                                  // 자기장
 
     private Transform[] waitAreaResPoint;       // 웨이팅존 스폰 포인트
@@ -111,11 +112,8 @@ public class GameManager
         director.transform.position = new Vector3(0f, 0f, WAITZONE_POSITION_Z);     // 카메라 이동
 
         // 살아남은 플레이어 웨이팅존으로 이동
-        for (int i = 0; i < players.Count; i++)
-        {
-            players[i].PlayerUnit.transform.position = waitAreaResPoint[i].position;
-            players[i].PlayerUnit.transform.SetParent(waitAreaResPoint[i]);
-        }
+        CreatePlayer creator = GameObject.Find("Creator").GetComponent<CreatePlayer>();
+        creator.MovePoint(players[creator.GetMyIndex()], waitAreaResPoint[creator.GetMyIndex()]);
 
         // 현재 라운드에 맞춰서 웨이팅 이벤트 실행
         WaitStage = waitStageModes[roundNumber];
@@ -130,11 +128,8 @@ public class GameManager
         director.transform.position = new Vector3(0f, 0f, BATTLEZONE_POSITION_Z);       // 카메라 이동
 
         // 살아남은 플레이어 배틀존으로 이동
-        for (int i = 0; i < players.Count; i++)
-        {
-            players[i].PlayerUnit.transform.position = battleResPoint[i].position;
-            players[i].PlayerUnit.transform.SetParent(battleResPoint[i]);
-        }
+        CreatePlayer creator = GameObject.Find("Creator").GetComponent<CreatePlayer>();
+        creator.MovePoint(players[creator.GetMyIndex()], battleResPoint[creator.GetMyIndex()]);
     }
 
     private void OnResultStage()
@@ -301,20 +296,16 @@ public class GameManager
     /// </summary>
     private void SettingPlayer()
     {
-        for (int i = 0; i < PLAYER_COUNT; i++)
+        for (int i = 1; i <= PhotonNetwork.CurrentRoom.PlayerCount; i++)     // 현재 방 접속 인원수에 맞춰서 세팅
         {
             PlayerController player = new PlayerController();
-            originPlayerDict.Add(i.ToString(), player);
+            originPlayerDict.Add(PhotonNetwork.CurrentRoom.Players[i].NickName, player);
             players.Add(player);
         }
 
-        // TODO: 서버에서 받아온 플레이어 유닛 생성
-        for (int i = 0; i < PLAYER_COUNT; i++)
-        {
-            // TEST: 임시로 야스오 4마리 생성
-            GameObject player = Managers.Resource.Instantiate("Unit/Yasuo/Player_Yasuo", waitAreaResPoint[i]);
-            players[i].SettingUnit(player.GetComponent<Yasuo>());
-        }
+        // 서버에서 받아온 플레이어 유닛 플레이어 생성
+        CreatePlayer creator = GameObject.Find("Creator").GetComponent<CreatePlayer>();
+        creator.Create(Players[creator.GetMyIndex()], waitAreaResPoint[creator.GetMyIndex()]);
     }
 
     public void OnUpdate()

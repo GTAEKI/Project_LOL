@@ -4,25 +4,27 @@ using UnityEngine;
 
 public class PlayerInfo : MonoBehaviour
 {
-    private Define.UnitName _myCharactor;
+    // PlayerData와 병합함 김민섭_230927 
 
-    public Define.UnitName myCharactor
-    {
-        get
-        {
-            return _myCharactor;
-        }
+    //private Define.UnitName _myCharactor;
 
-        set
-        {
-            _myCharactor = value;
-        }
-    }
+    //public Define.UnitName myCharactor
+    //{
+    //    get
+    //    {
+    //        return _myCharactor;
+    //    }
 
-    //다음씬으로 내가 선택한 캐릭터 넘김
-    private void Start()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
+    //    set
+    //    {
+    //        _myCharactor = value;
+    //    }
+    //}
+
+    ////다음씬으로 내가 선택한 캐릭터 넘김
+    //private void Start()
+    //{
+    //    DontDestroyOnLoad(this.gameObject);
+    //}
 
 }

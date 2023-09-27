@@ -17,6 +17,7 @@ public class InputManager
     public void Init()
     {
         playerSubject = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log(playerSubject != null);
         playerUnit = playerSubject?.GetOrAddComponent<Unit>();
     }
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8365947305557520690}
   m_Layer: 0
   m_Name: MagneticField
-  m_TagString: Untagged
+  m_TagString: MagneticField
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

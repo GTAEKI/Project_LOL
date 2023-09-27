@@ -10,6 +10,7 @@ TagManager:
   - FxTemporaire
   - Dummy
   - Enemy
+  - MagneticField
   layers:
   - Default
   - TransparentFX

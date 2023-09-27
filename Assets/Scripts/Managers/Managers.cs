@@ -40,11 +40,13 @@ public class Managers : MonoBehaviour
 
     private void Update()
     {
-        // Core
-        _input.OnUpdate();
-        
-        // Contents
-        _game.OnUpdate();
+        if(Scene.CurrentScene.SceneType == Define.Scene.Game)
+        {
+            // Core
+            _input.OnUpdate();
+
+            _game.OnUpdate();
+        }
     }
 
     private static void Init()
@@ -65,11 +67,7 @@ public class Managers : MonoBehaviour
             s_instance._data.Init();
             s_instance._pool.Init();
             s_instance._sound.Init();
-            s_instance._input.Init();
             s_instance._ui.Init();
-            
-            // Contents
-            s_instance._game.Init();
         }
     }
 
