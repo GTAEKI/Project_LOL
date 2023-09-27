@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-
     public PlayerData playerData;
     private string gameVersion = "1";
     public Button ReturnButton;
@@ -82,11 +81,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
 
-    //캐릭터 이름정보
-    public PlayerInfo saveMyCharactor;
-    //Define.UnitName myPlayerUnit;
-    //Dictionary<>
-
     //프로그램을 실행하자마자
     private void Awake()
     {
@@ -99,8 +93,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     //프로그램을 실행하면
     void Start()
     {
-        saveMyCharactor = GameObject.Find("PlayerInfo").GetComponent<PlayerInfo>(); //다음 씬으로 플레이어 이름 넘기기용
-
         PhotonNetwork.GameVersion = gameVersion;
         Login.gameObject.SetActive(true);
 
@@ -402,30 +394,22 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 switch (characterIndex)
                 {
                     case 0:
-                        saveMyCharactor.myCharactor = Define.UnitName.Ashe;
-                        Debug.Log(saveMyCharactor.myCharactor);
+                        PlayerData.Instance.myCharactor = Define.UnitName.Ashe;
                         break;
                     case 1:
-                        saveMyCharactor.myCharactor = Define.UnitName.Caityln;
-                        Debug.Log(saveMyCharactor.myCharactor);
-
+                        PlayerData.Instance.myCharactor = Define.UnitName.Caityln;
                         break;
                     case 2:
-                        saveMyCharactor.myCharactor = Define.UnitName.Gragas;
-                        Debug.Log(saveMyCharactor.myCharactor);
-
+                        PlayerData.Instance.myCharactor = Define.UnitName.Gragas;
                         break;
                     case 3:
-                        saveMyCharactor.myCharactor = Define.UnitName.Rumble;
-                        Debug.Log(saveMyCharactor.myCharactor);
-
+                        PlayerData.Instance.myCharactor = Define.UnitName.Rumble;
                         break;
                     case 4:
-                        saveMyCharactor.myCharactor = Define.UnitName.Yasuo;
-                        Debug.Log(saveMyCharactor.myCharactor);
-
+                        PlayerData.Instance.myCharactor = Define.UnitName.Yasuo;
                         break;
                 }
+                Debug.Log(PlayerData.Instance.myCharactor);
             }
 
             // 선택한 캐릭터 인덱스 저장
@@ -542,8 +526,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             {
                 // 선택한 캐릭터 이름과 닉네임을 PlayerData에 설정
                 PlayerData.Instance.SetCharacterAndNickName(CharacterName[selectedCharacterIndex], PhotonNetwork.LocalPlayer.NickName);
-
-                PhotonNetwork.LoadLevel("KyungTaek_Player");
+                PhotonNetwork.LoadLevel("Prototype_Scene");     // 프로토 타입 씬으로 변경 , 김민섭_230927
             }
         }
     }

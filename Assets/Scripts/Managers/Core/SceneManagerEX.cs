@@ -8,9 +8,9 @@ public class SceneManagerEx
     public BaseScene CurrentScene => GameObject.FindObjectOfType<BaseScene>();
 
     /// <summary>
-    /// ¾ÀÀÇ Å¸ÀÔ¿¡ µû¶ó ÇØ´ç ¾ÀÀ» ·ÎµùÇÏ´Â ÇÔ¼ö
+    /// ì”¬ì˜ íƒ€ì…ì— ë”°ë¼ í•´ë‹¹ ì”¬ì„ ë¡œë”©í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="_type">¾À Å¸ÀÔ</param>
+    /// <param name="_type">ì”¬ íƒ€ì…</param>
     public void LoadScene(Define.Scene _type)
     {
         Managers.Clear();

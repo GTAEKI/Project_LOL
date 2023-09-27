@@ -8,10 +8,13 @@ public class GameScene : BaseScene
     {
         base.Init();
 
-        SceneType = Define.Scene.Game;
+        // 게임 매니저 초기화
+        Managers.Game.Init();
 
-        // 기본 Scene UI
-        Managers.UI.ShowSceneUI<UI_UnitBottomLayer>().SetTarget(Define.UnitName.Ashe); // 플레이어 하단 UI 생성
+        // 인풋 매니저 초기화
+        Managers.Input.Init();
+
+        SceneType = Define.Scene.Game;
     }
 
     public override void Clear()
