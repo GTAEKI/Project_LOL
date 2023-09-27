@@ -65,8 +65,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public TMP_InputField RoomChat;
 
+
+    public Image CharacterbackGround;
     public Button[] Characters;
     public GameObject[] characters;
+    public Sprite[] backgroundCharacters;
+    public Sprite[] backgroundPoro;
+    public Image[] roommine;
     public Image[] MyCharacter;
     public string[] NickName;
     public string[] CharacterName;
@@ -76,14 +81,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public TMP_Text[] Ready;
     private int[] CharacterReadyState;
 
+
+    private Sprite back;
     //public scrollview RoomScrollView;
     public Button RoomGameStart;
     public Button Roomback;
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
-
+    public GameObject[] explanations;
     //캐릭터 이름정보
     public PlayerInfo saveMyCharactor;
+    private int chanum;
     //Define.UnitName myPlayerUnit;
     //Dictionary<>
 
@@ -91,7 +99,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
 
-        Screen.SetResolution(1920, 1080, false);
+        Screen.SetResolution(1920/4, 1080/4, false);
         PhotonNetwork.AutomaticallySyncScene = true;
 
     }
@@ -368,26 +376,40 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (leftPlayerIndex >= 0 && leftPlayerIndex < CharacterReadyState.Length)
         {
             CharacterReadyState[leftPlayerIndex] = 0; // 해당 플레이어의 준비 상태를 초기화합니다.
-            Ready[leftPlayerIndex].text = "준비중"; // 해당 플레이어의 Ready 텍스트를 업데이트합니다.
+            Ready[leftPlayerIndex].text = ""; // 해당 플레이어의 Ready 텍스트를 업데이트합니다.
             RoomPlayerCharacterImg[leftPlayerIndex].sprite = null;
             RoomPlayerNickName[leftPlayerIndex].text = "";
-        }
 
+        }
+        // 남은 플레이어를 정렬하여 빈 자리를 채움
+        List<Player> remainingPlayers = new List<Player>();
         // 플레이어를 다시 정렬
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            // 플레이어의 닉네임을 업데이트합니다.
-            RoomPlayerNickName[i].text = PhotonNetwork.PlayerList[i].NickName;
+            if (PhotonNetwork.PlayerList[i] != null)
+            {
+                remainingPlayers.Add(PhotonNetwork.PlayerList[i]);
+            }
+        }
+        // 빈 자리를 채우기 위해 플레이어 정보를 다시 정렬
+        for (int i = 0; i < remainingPlayers.Count; i++)
+        {
+            RoomPlayerNickName[i].text = remainingPlayers[i].NickName;
         }
 
+        // 나간 플레이어의 정보를 초기화
+        RoomPlayerNickName[remainingPlayers.Count].text = "";
+        RoomPlayerCharacterImg[remainingPlayers.Count].sprite = null;
+
+
         RoomRenewal();
-        // 게임 시작 가능 여부 확인
-        CheckStartGame();
+
         PV.RPC("ChatRPC", RpcTarget.AllBuffered, "<color=yellow>" + otherPlayer.NickName + "님이 퇴장하셨습니다</color>");
     }
 
     public void SelectCharacter(int characterIndex)
     {
+        chanum = characterIndex;
         if (!isCharacterLocked)
         {
             // 현재 플레이어의 인덱스를 얻어옵니다.
@@ -396,6 +418,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             // 해당 플레이어의 MyCharacter에 선택한 캐릭터 스프라이트를 할당합니다.
             if (myPlayerIndex >= 0 && myPlayerIndex < MyCharacter.Length)
             {
+                CharacterbackGround.sprite = backgroundPoro[characterIndex];
                 MyCharacter[myPlayerIndex].sprite = Characters[characterIndex].image.sprite;
 
                 //선택한 캐릭터 번호에 맞춰서 캐릭터 이름 저장 _ 230926 배경택 
@@ -442,6 +465,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         // 다른 플레이어의 MyCharacter 배열에 선택한 캐릭터 스프라이트를 할당
         if (playerIndex >= 0 && playerIndex < MyCharacter.Length)
         {
+            MyCharacter[playerIndex].color = new Color(1, 1, 1, 1);
             MyCharacter[playerIndex].sprite = Characters[characterIndex].image.sprite;
         }
     }
@@ -449,78 +473,55 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         isCharacterLocked = !isCharacterLocked;
 
-        CharacterLock.interactable = isCharacterLocked;
-        RoomChat.interactable = isCharacterLocked;
+        CharacterLock.interactable = true;
+
         int myPlayerIndex = Array.IndexOf(PhotonNetwork.PlayerList, PhotonNetwork.LocalPlayer);
 
-
-
-        for (int i = 0; i < Characters.Length; i++)
+        if (myPlayerIndex >= 0 && myPlayerIndex < MyCharacter.Length)
         {
-            if (!isCharacterLocked)
+
+            for (int i = 0; i < Characters.Length; i++)
             {
-                Characters[i].interactable = false;
-                Roomback.interactable = true;
-                CharacterReadyState[myPlayerIndex] = 0; // "준비중"으로 설정
+                Characters[i].interactable = !isCharacterLocked; // 버튼 상태를 토글합니다.
+
+
+
+                // CharacterReadyState 업데이트
+                CharacterReadyState[myPlayerIndex] = isCharacterLocked ? 1 : 0; // 잠긴 경우 1 (준비완료), 아닌 경우 0 (준비중)
+                Ready[myPlayerIndex].text = (CharacterReadyState[myPlayerIndex] == 0) ? "준비중" : "준비완료";
+
+                // roommine 스프라이트 업데이트
+                if (myPlayerIndex >= 0 && myPlayerIndex < roommine.Length)
+                {
+                    roommine[myPlayerIndex].color = (CharacterReadyState[myPlayerIndex] == 0) ? roommine[myPlayerIndex].color : new Color(1, 1, 1, 1);
+                    roommine[myPlayerIndex].sprite = (CharacterReadyState[myPlayerIndex] == 0) ? roommine[myPlayerIndex].sprite : backgroundCharacters[chanum];
+                }
+
+                // 다른 플레이어에게 캐릭터 준비 상태를 알리기 위한 RPC 호출
+                PV.RPC("UpdateCharacterLockStatus", RpcTarget.AllBuffered, myPlayerIndex, CharacterReadyState[myPlayerIndex],chanum);
+
+
             }
-            else
-            {
-                Characters[i].interactable = true;
-                Roomback.interactable = false;
-                CharacterReadyState[myPlayerIndex] = 1; // "준비완료"으로 설정
 
-            }
-
-            // characterReadyState에 따라 Ready 텍스트 업데이트
-            if (i >= 0 && i < Ready.Length)
-            {
-                Ready[i].text = (CharacterReadyState[i] == 0) ? "준비중" : "준비완료";
-            }
-
-            // 다른 플레이어에게 캐릭터 준비 상태를 알리기 위한 RPC 호출
-            PV.RPC("UpdateCharacterLockStatus", RpcTarget.AllBuffered, myPlayerIndex, CharacterReadyState[myPlayerIndex]);
-
-
-        }
-        Roomback.interactable = false;
-
-
-        // 게임 시작 가능 여부 확인
-        CheckStartGame();
-
-    }
-
-    void CheckStartGame()
-    {
-        // 모든 플레이어가 "준비완료" 상태인지 확인
-        bool allPlayersReady = true;
-        for (int i = 0; i < CharacterReadyState.Length; i++)
-        {
-            if (CharacterReadyState[i] == 0)
-            {
-                allPlayersReady = false;
-                break;
-            }
-        }
-
-        // 모든 플레이어가 "준비완료" 상태이면 게임을 시작
-        if (allPlayersReady)
-        {
-            // 각 플레이어의 닉네임과 캐릭터 인덱스를 PlayerPrefs에 저장
-            int myPlayerIndex = Array.IndexOf(PhotonNetwork.PlayerList, PhotonNetwork.LocalPlayer);
-            PlayerPrefs.SetString("SelectedCharacterName", CharacterName[selectedCharacterIndex]);
-            PlayerPrefs.SetString("NickName", PhotonNetwork.LocalPlayer.NickName);
         }
     }
+
 
     [PunRPC]
-    private void UpdateCharacterLockStatus(int characterIndex, int readyState)
+    void UpdateCharacterLockStatus(int playerIndex, int characterIndex, int _chanum) // playerIndex 는 내 캐릭터 인덱스, characterIndex는 결정을 했는지 안했는지
     {
-        // 다른 플레이어에게 캐릭터 준비 상태 업데이트
-        CharacterReadyState[characterIndex] = readyState;
+        Debug.LogFormat("chanum={0} 락인하고 PunRPC에서", chanum);
+  
 
-        // 다른 플레이어에게 캐릭터 준비 상태에 따라 Ready 텍스트 업데이트
-        Ready[characterIndex].text = (readyState == 0) ? "준비중" : "준비완료";
+        if (playerIndex >= 0 && playerIndex < MyCharacter.Length)
+        {
+            roommine[playerIndex].sprite = backgroundCharacters[_chanum];
+            roommine[playerIndex].color = new Color(1, 1, 1, 1);
+            CharacterReadyState[playerIndex] = characterIndex;
+            Ready[playerIndex].text = (CharacterReadyState[playerIndex] == 0) ? "준비중" : "준비완료";
+            
+        }
+
     }
 
 
