@@ -9,8 +9,21 @@ public class SB_CaitylnHitAA : MonoBehaviour
 
     GameObject target;
 
-    private void Start()
+    //private void Start()
+    //{
+    //    playerList = GameObject.FindGameObjectsWithTag("Player");
+    //    playerCount = playerList.Length;
+
+    //    for (int i = 0; i < playerCount; i++)
+    //    {
+    //        transform.GetComponent<ParticleSystem>().trigger.SetCollider(i, playerList[i].transform.GetComponent<Collider>());
+    //    }
+    //}
+
+    public void GetPlayerName(GameObject _player) // 공격 대상 판별 (HP-)
     {
+        Debug.Log(_player.name);
+
         playerList = GameObject.FindGameObjectsWithTag("Player");
         playerCount = playerList.Length;
 
@@ -18,11 +31,8 @@ public class SB_CaitylnHitAA : MonoBehaviour
         {
             transform.GetComponent<ParticleSystem>().trigger.SetCollider(i, playerList[i].transform.GetComponent<Collider>());
         }
-    }
 
-    public void GetPlayerName(GameObject _player) // 공격 대상 판별 (HP-)
-    {
-        target = _player;
+        //target = _player;
     }
 
     private void OnParticleTrigger()

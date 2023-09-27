@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Photon.Pun;
 
 public class SB_GragasMoving : Unit
 {
@@ -18,6 +19,8 @@ public class SB_GragasMoving : Unit
     public static bool gragasSkill = false;
     public static bool gragasMoving = false;
 
+    PhotonView pv;
+
     public override void Init()
     {
         unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Gragas]);
@@ -29,22 +32,42 @@ public class SB_GragasMoving : Unit
         gragasE = transform.GetComponent<SB_GragasE>();
         gragasR = transform.GetComponent<SB_GragasR>();
 
-        base.Init();   
+        base.Init();
+
+        pv = transform.GetComponent<PhotonView>();
     }
 
+    [PunRPC]
     protected override void UpdateMove()
     {
         gragasMoving = true;
+        //pv.RPC("SyncRun", RpcTarget.All);
         animator.SetBool("Run", true);
+
         base.UpdateMove();
     }
+    
+    //[PunRPC]
+    //private void SyncRun()
+    //{
+    //    animator.SetBool("Run", true);
+    //}
 
+    [PunRPC]
     protected override void UpdateIdle()
     {
         gragasMoving = false;
+        //pv.RPC("SyncIdle", RpcTarget.All);
         animator.SetBool("Run", false);
+
         base.UpdateIdle();
     }
+
+    //[PunRPC]
+    //private void SyncIdle()
+    //{
+    //    animator.SetBool("Run", false);
+    //}
 
     protected override void CastActiveQ() // 술통 굴리기
     {

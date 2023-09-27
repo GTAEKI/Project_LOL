@@ -86,11 +86,11 @@ public class SB_PhotonTest : MonoBehaviourPunCallbacks
         // 룸에 입장시 실행되는 함수
         GameObject mine_1 = PhotonNetwork.Instantiate
             ("Caityln", respawnPoint.transform.position, respawnPoint.transform.rotation);
-        mine_1.name = "Caityln"; // (Clone) 지우기
         Debug.Assert(mine_1 != null);
 
         //GameObject mine_2 = PhotonNetwork.Instantiate
         //    ("Gragas", respawnPoint.transform.position, respawnPoint.transform.rotation);
         //mine_2.name = "Gragas"; // (Clone) 지우기
+
     }
 }

@@ -45,6 +45,24 @@ MonoBehaviour:
   - CastActiveQ
   - InstantiateSkillR
   - InvokeSkillE
+  - UpdateIdle
+  - UpdateMove
+  - CastActiveE
+  - CastActiveR
+  - CastActiveW
+  - SyncPressQIdleAnimation
+  - SyncAnimation
+  - SyncEAnimation
+  - SyncQAnimation
+  - SyncRAnimation
+  - SyncWAnimation
+  - AnimationQSync
+  - AnimationESync
+  - AnimationRSync
+  - TurnIdle
+  - TurnRun
+  - SyncIdle
+  - SyncRun
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

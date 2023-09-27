@@ -26,15 +26,16 @@ public class SB_CaitylnMoving : Unit
 
         base.Init();
 
-        animator = GetComponent<Animator>();
-        caitylnQ = transform.GetComponent<SB_CaitylnQ>();
-        caitylnW = transform.GetComponent<SB_CaitylnW>();
-        caitylnE = transform.GetComponent<SB_CaitylnE>();
-        caitylnR = transform.GetComponent<SB_CaitylnR>();
+        animator = gameObject.GetComponent<Animator>();
+        caitylnQ = gameObject.transform.GetComponent<SB_CaitylnQ>();
+        caitylnW = gameObject.transform.GetComponent<SB_CaitylnW>();
+        caitylnE = gameObject.transform.GetComponent<SB_CaitylnE>();
+        caitylnR = gameObject.transform.GetComponent<SB_CaitylnR>();
 
         pv = GetComponent<PhotonView>();
     }
 
+    [PunRPC]
     protected override void UpdateMove()
     {
         if (!skillAct)
@@ -43,9 +44,9 @@ public class SB_CaitylnMoving : Unit
             animator.SetBool("Run", true);
             base.UpdateMove();
         }
-
     }
 
+    [PunRPC]
     protected override void UpdateIdle()
     {
         if (!skillAct && !normalAct)
@@ -54,23 +55,27 @@ public class SB_CaitylnMoving : Unit
             animator.SetBool("Run", false);
             base.UpdateIdle();
         }
-
     }
 
     protected override void CastActiveQ() // 필트오버 피스메이커
     {
-        if (!skillAct)
+        if (pv.IsMine)
         {
-            CurrentState = Define.UnitState.IDLE;
-            caitylnQ.SkillQ();
+            Debug.Log("Q 입력");
 
-            base.CastActiveQ();
+            if (!skillAct)
+            {
+                CurrentState = Define.UnitState.IDLE;
+                caitylnQ.SkillQ();
+
+                base.CastActiveQ();
+            }
         }
     }
 
     protected override void CastActiveW() // 요들잡이 덫 
     {
-        if (photonView.IsMine)
+        if (pv.IsMine)
         {
             if (!skillAct)
             {
@@ -84,7 +89,7 @@ public class SB_CaitylnMoving : Unit
 
     protected override void CastActiveE() // 90구경 투망
     {
-        if (photonView.IsMine)
+        if (pv.IsMine)
         {
             if (!skillAct)
             {
@@ -98,7 +103,7 @@ public class SB_CaitylnMoving : Unit
 
     protected override void CastActiveR() // 비장의 한 발
     {
-        if (photonView.IsMine)
+        if (pv.IsMine)
         {
             if (!skillAct)
             {

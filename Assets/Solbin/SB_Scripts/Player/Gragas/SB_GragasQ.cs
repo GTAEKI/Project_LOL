@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using Photon.Pun;
 
 public class SB_GragasQ : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class SB_GragasQ : MonoBehaviour
     Collider collider;
     ParticleSystem particle;
 
+    PhotonView pv;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +41,8 @@ public class SB_GragasQ : MonoBehaviour
         q2Animator = q2.GetComponent<Animator>();
         collider = q2.transform.GetChild(2).GetComponent<Collider>();
         particle = q2.transform.GetChild(3).GetComponent<ParticleSystem>();
+
+        pv = GetComponent<PhotonView>();
     }
 
     public void SkillQ()
@@ -71,6 +76,12 @@ public class SB_GragasQ : MonoBehaviour
         //barrelDes = q1.transform.position + q1.transform.forward * 7f; // 술통 목적지
         animator.SetTrigger("PressQ");
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        pv.RPC("AnimationQSync", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void AnimationQSync()
+    {
         animator.SetTrigger("Back Idle");
     }
 

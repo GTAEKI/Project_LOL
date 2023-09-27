@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
 
 public class SB_GragasE : MonoBehaviour
 {
@@ -19,11 +20,15 @@ public class SB_GragasE : MonoBehaviour
     private List<Vector3> originPosList = new List<Vector3>();
     private List<GameObject> targetList = new List<GameObject>();
 
+    PhotonView pv;
+
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         camera = GameObject.Find("GameView Camera").GetComponent<Camera>();
+
+        pv = transform.GetComponent<PhotonView>();
     }
 
     public void SkillE()
@@ -149,7 +154,8 @@ public class SB_GragasE : MonoBehaviour
             if (Vector3.Distance(transform.position, gragasDes) <= 0.1f)
             {
                 isAttack = false;
-                animator.SetTrigger("Back Idle");
+                //animator.SetTrigger("Back Idle");
+                pv.RPC("AnimationESync", RpcTarget.All);
             }
         }
 
@@ -164,5 +170,11 @@ public class SB_GragasE : MonoBehaviour
                 }
             }
         }
+    }
+
+    [PunRPC]
+    private void AnimationESync()
+    {
+        animator.SetTrigger("Back Idle");
     }
 }
