@@ -420,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7102887057461166149, guid: af4df02a7e6f34dacb982619bdea48a8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.13
+      value: -2.8
       objectReference: {fileID: 0}
     - target: {fileID: 7102887057461166149, guid: af4df02a7e6f34dacb982619bdea48a8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -713,7 +713,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 680535659}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 11.3}
+  m_LocalPosition: {x: 0, y: 1, z: 6.76}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1200,8 +1200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93bdddf7b4274553ab82e65cd2a0692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnPoint: {fileID: 559416980}
-  loadMyCharactor: {fileID: 0}
 --- !u!4 &1606485249
 Transform:
   m_ObjectHideFlags: 0

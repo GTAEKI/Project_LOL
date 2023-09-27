@@ -23,8 +23,8 @@ public class VideoSwitcher : MonoBehaviour
 
         if (!switchedToSecondVideo && firstVideoPlayer.isPrepared && firstVideoPlayer.isPlaying)
         {
-            Debug.Log(firstVideoPlayer.time);
-            Debug.Log(firstVideoPlayer.clip.length);
+            //Debug.Log(firstVideoPlayer.time);
+            //Debug.Log(firstVideoPlayer.clip.length);
             if (firstVideoPlayer.time >= firstVideoPlayer.clip.length-1)
             {
                 switchedToSecondVideo = true;

@@ -8646,6 +8646,7 @@ GameObject:
   - component: {fileID: -8492721262365108649}
   - component: {fileID: -118645626389547411}
   - component: {fileID: -6398985275508206971}
+  - component: {fileID: 5659670858574124835}
   m_Layer: 14
   m_Name: Yasuo_Photon
   m_TagString: Player
@@ -8662,8 +8663,8 @@ Transform:
   m_GameObject: {fileID: 6828557053874113867}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2970385124647765871}
   - {fileID: 8698095568008237867}
@@ -8738,7 +8739,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
@@ -8762,6 +8763,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: -118645626389547411}
+  - {fileID: -6398985275508206971}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -8817,6 +8819,19 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &5659670858574124835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6828557053874113867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db3f7b695a05b419ca1f3de0b1fddf8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followCam: {fileID: 0}
 --- !u!1 &6843591710762712210
 GameObject:
   m_ObjectHideFlags: 0
@@ -9997,7 +10012,7 @@ Transform:
   m_GameObject: {fileID: 8252437890390663590}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.2, z: 0}
-  m_LocalScale: {x: 0.33333334, y: 0.16666667, z: 0.33333334}
+  m_LocalScale: {x: 0.25, y: 0.125, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6163238601394477041}
@@ -10074,7 +10089,11 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  visibleTargets: []
+  visibleTargets:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   meshResolution: 16
   edgeResolveIterations: 1
   edgeDstThreshold: 0
