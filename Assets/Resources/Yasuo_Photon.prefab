@@ -8646,7 +8646,7 @@ GameObject:
   - component: {fileID: -8492721262365108649}
   - component: {fileID: -118645626389547411}
   - component: {fileID: -6398985275508206971}
-  - component: {fileID: 2876001255722416285}
+  - component: {fileID: 5659670858574124835}
   m_Layer: 14
   m_Name: Yasuo_Photon
   m_TagString: Player
@@ -8663,8 +8663,8 @@ Transform:
   m_GameObject: {fileID: 6828557053874113867}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2970385124647765871}
   - {fileID: 8698095568008237867}
@@ -8739,7 +8739,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
@@ -8819,7 +8819,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &2876001255722416285
+--- !u!114 &5659670858574124835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8874,7 +8874,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8698095568008237867}
   - component: {fileID: 4042820961415158794}
-  m_Layer: 0
+  - component: {fileID: 2959923607696459627}
+  - component: {fileID: 3030908496564865407}
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9056,6 +9058,32 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.01101926, y: 0.06568521, z: -0.23441418}
     m_Extent: {x: 0.24159774, y: 0.49806356, z: 0.47173148}
   m_DirtyAABB: 0
+--- !u!114 &2959923607696459627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6859028587730926592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76254c70e8004c1f8c545d104fc802d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &3030908496564865407
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6859028587730926592}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.1982503
+  m_Height: 2.5301614
+  m_Direction: 1
+  m_Center: {x: 0.03368202, y: 1.2368096, z: -0.5463391}
 --- !u!1 &6864210233708622324
 GameObject:
   m_ObjectHideFlags: 0
@@ -10012,7 +10040,7 @@ Transform:
   m_GameObject: {fileID: 8252437890390663590}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.2, z: 0}
-  m_LocalScale: {x: 0.33333334, y: 0.16666667, z: 0.33333334}
+  m_LocalScale: {x: 0.25, y: 0.125, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6163238601394477041}

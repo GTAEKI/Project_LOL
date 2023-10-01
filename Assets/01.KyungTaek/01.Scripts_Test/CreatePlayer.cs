@@ -38,6 +38,8 @@ public class CreatePlayer : MonoBehaviourPun
         {
             case Define.UnitName.Rumble: player.SettingUnit(myCharacter.GetComponent<Rumble>()); break;
             case Define.UnitName.Ashe: player.SettingUnit(myCharacter.GetComponent<Ashe>()); break;
+            case Define.UnitName.Gragas:player.SettingUnit(myCharacter.GetComponent<SB_GragasMoving>()); break;
+            case Define.UnitName.Caityln: player.SettingUnit(myCharacter.GetComponent<SB_CaitylnMoving>()); break;
             //case Define.UnitName.Caityln: players[i].SettingUnit(myCharacter.GetComponent<cait>()); break;
             // case Define.UnitName.Gragas: players[i].SettingUnit(myCharacter.GetComponent<gragas>()); ; break;
             case Define.UnitName.Yasuo: player.SettingUnit(myCharacter.GetComponent<Yasuo>()); ; break;

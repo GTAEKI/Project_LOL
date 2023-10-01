@@ -85,6 +85,6 @@ public class PhotonManager_T : MonoBehaviourPunCallbacks
                 //GameObject charactorPrefab = Resources.Load<GameObject>("Unit/Rumble/Rumble_Photon");
        
         // 룸에 입장시 실행되는 함수
-        PhotonNetwork.Instantiate("Rumble_Photon", respawnPoint.transform.position, respawnPoint.transform.rotation);
+        PhotonNetwork.Instantiate("Ashe_Photon", respawnPoint.transform.position, respawnPoint.transform.rotation);
     }
 }
