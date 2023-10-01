@@ -28,7 +28,8 @@ public class Ashe : Unit
     private bool isAttack;
 
     // 다른 플레이어를 담아줄 게임오브젝트
-    private GameObject otherPlayer;
+    //private GameObject otherPlayer;
+    public int otherActorNumber;
 
     private PhotonView pv;
 
@@ -65,13 +66,15 @@ public class Ashe : Unit
                 if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")) && hit.transform.gameObject != pv.IsMine)
                 {
                     isAttack = true;
-                    otherPlayer = hit.transform.gameObject;
+                    otherActorNumber = hit.transform.GetComponent<PhotonView>().Owner.ActorNumber;
+                    //otherPlayer = hit.transform.gameObject;
                     Debug.Log("상대 선택");
 
                 }
                 else
                 {
-                    otherPlayer = default;
+                    otherActorNumber = 0;
+                    //otherPlayer = default;
                     isAttack = false;
                 }
 
@@ -139,18 +142,24 @@ public class Ashe : Unit
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
             RaycastHit hit;
 
-            // 유닛 오브젝트를 선택했으며 + 나를 선택한것이 아니라면
-            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")) && (hit.transform != pv.IsMine))
+            // 유닛 오브젝트를 선택했다면
+            if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object")))
             {
                 isAttack = true;
 
-                otherPlayer = hit.transform.gameObject;
+                otherActorNumber = hit.transform.GetComponent<PhotonView>().Owner.ActorNumber;
+
+                //otherPlayer = hit.transform.gameObject;
 
                 Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
 
                 targetPos = hit.point;
 
                 CurrentState = Define.UnitState.MOVE;
+            }
+            else
+            {
+                otherActorNumber = 0;
             }
         }
     }
@@ -322,9 +331,20 @@ public class Ashe : Unit
 
     private void AutoAttack()
     {
+        if (photonView.IsMine && otherActorNumber != 0)
+        {
+            photonView.RPC("AutoAttackRPC", RpcTarget.All, otherActorNumber);
+        }
+    }
+
+    [PunRPC]
+    private void AutoAttackRPC(int _otherActorNumber)
+    {
         GameObject guidedArrow = Instantiate(effect_Attack, muzzle_Attack.transform.position, muzzle_Attack.transform.rotation);
-        guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer;
+        //guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer;
+        guidedArrow.GetComponent<GuidedArrow>().actorNumber = _otherActorNumber;
         guidedArrow.GetComponent<CalculateDamage>().damage = unitStat.Atk;
+        
         Debug.Log(unitStat.Atk);
 
     }
@@ -335,7 +355,10 @@ public class Ashe : Unit
     /// </summary>
     private void AutoAttackQ()
     {
-        StartCoroutine(MakeAttackQ());
+        if (photonView.IsMine && otherActorNumber != 0)
+        {
+            StartCoroutine(MakeAttackQ());
+        }
     }
 
     // AutoAttackQ에 맞춰 실행되는 코루틴, 여러개의 화살을 발사하기 위한 함수
@@ -343,16 +366,23 @@ public class Ashe : Unit
     {
         for (int i = -2; i < 3; i++)
         {
-            Vector3 localPosition = new Vector3(i * 0.3f, 0f, 0f);
-            Vector3 arrowPosition = muzzle_Q.transform.TransformPoint(localPosition);
-
-            // 화살 생성
-            GameObject guidedArrow = Instantiate(effect_Attack, arrowPosition, muzzle_Attack.transform.rotation);
-            guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer; // Enemy값을 추가하여 화살이 대상을 따라가도록 함
-            guidedArrow.GetComponent<CalculateDamage>().damage = unitStat.Atk / 3; // 데미지 계산
-
+            photonView.RPC("MakeAttackQRPC", RpcTarget.All, i, otherActorNumber);
             yield return new WaitForSeconds(0.05f); // 각 화살을 일정 시간 간격으로 발사 (조절 가능)
         }
+    }
+
+    [PunRPC]
+    private void MakeAttackQRPC(int i, int _otherActorNumber)
+    {
+        Vector3 localPosition = new Vector3(i * 0.3f, 0f, 0f);
+        Vector3 arrowPosition = muzzle_Q.transform.TransformPoint(localPosition);
+
+        // 화살 생성
+        GameObject guidedArrow = Instantiate(effect_Attack, arrowPosition, muzzle_Attack.transform.rotation);
+        //guidedArrow.GetComponent<GuidedArrow>().enemy = otherPlayer; // Enemy값을 추가하여 화살이 대상을 따라가도록 함
+        guidedArrow.GetComponent<GuidedArrow>().actorNumber = _otherActorNumber;// Enemy값을 추가하여 화살이 대상을 따라가도록 함
+        guidedArrow.GetComponent<CalculateDamage>().damage = unitStat.Atk / 3; // 데미지 계산
+
     }
 
     //죽었는지 체크

@@ -63,6 +63,8 @@ MonoBehaviour:
   - TurnRun
   - SyncIdle
   - SyncRun
+  - AutoAttackRPC
+  - MakeAttackQRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
