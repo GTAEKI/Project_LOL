@@ -115,6 +115,13 @@ public class GameManager
         CreatePlayer creator = GameObject.Find("Creator").GetComponent<CreatePlayer>();
         creator.MovePoint(players[creator.GetMyIndex()], waitAreaResPoint[creator.GetMyIndex()]);
 
+        if (roundNumber >= 1)
+        {
+            players[creator.GetMyIndex()].PlayerUnit.CurrentUnitStat.SettingHpGroup(
+                players[creator.GetMyIndex()].PlayerUnit.CurrentUnitStat.UnitStat.Hp,
+                players[creator.GetMyIndex()].PlayerUnit.CurrentUnitStat.UnitStat.HpRecovery);
+        }
+
         // 현재 라운드에 맞춰서 웨이팅 이벤트 실행
         WaitStage = waitStageModes[roundNumber];
     }
@@ -134,20 +141,47 @@ public class GameManager
 
     private void OnResultStage()
     {
-        for (int i = 0; i < players.Count; i++)
+        CreatePlayer creator = GameObject.Find("Creator").GetComponent<CreatePlayer>();
+
+        if (players[creator.GetMyIndex()].PlayerUnit.CurrentUnitStat.Hp > 0)
         {
-            if (players[i].PlayerUnit.CurrentUnitStat.Hp > 0)
-            {   // 승리한 플레이어
-                Debug.Log($"{players[i].PlayerUnit.gameObject.name} 이 승리했습니다.");
-            }
-            else
-            {   // 패배한 플레이어
-                Debug.Log($"{players[i].PlayerUnit.gameObject.name} 이 패배했습니다.");
-                players[i].OnDamaged(teamRoundDamages[roundNumber]);            // 라운드 별 데미지를 입힘 (플레이어)
+            // TODO: 현재 플레이어가 승리했습니다.
+        }
+        else
+        {
+            // TODO: 현재 플레이어가 패배했습니다.
+            players[creator.GetMyIndex()].OnDamaged(teamRoundDamages[roundNumber]);
+
+            UI_TopLayer topLayer = Managers.UI.GetScene<UI_TopLayer>();
+            topLayer?.TeamBoxes[creator.GetMyIndex()].SettingHp(teamRoundDamages[roundNumber], TEAM_HP_MAX);
+        }
+
+        int dieCount = 0;
+        for(int i = 0; i < players.Count; i++)
+        {
+            if (players[i].IsDie)
+            {
+                dieCount++;
             }
         }
 
-        CurrentStage = CurrentStageMode.WAIT_STAGE;
+        if(dieCount >= PLAYER_COUNT - 1)
+        {
+            // TODO: 최종 승리
+            if (players[creator.GetMyIndex()].Hp > 0)
+            {
+                Debug.Log($"{PhotonNetwork.CurrentRoom.Players[creator.GetMyIndex()].NickName}가 승리했습니다.");
+            }
+            else
+            {
+                Debug.Log($"{PhotonNetwork.CurrentRoom.Players[creator.GetMyIndex()].NickName}가 패배했습니다.");
+            }
+        }
+        else
+        {
+            // TODO: 계속 지속
+            CurrentStage = CurrentStageMode.WAIT_STAGE;
+        }
     }
 
     #endregion
@@ -243,6 +277,7 @@ public class GameManager
     //private const float MAGNETIC_CYCLE = 20f;            // 20f
     private const float WAITZONE_POSITION_Z = -93f;     // 대기존 카메라 z좌표       
     private const float BATTLEZONE_POSITION_Z = 0f;     // 배틀존 카메라 z좌표
+    private const int TEAM_HP_MAX = 20;                 // 팀 최대 체력
 
     #endregion
 
@@ -300,12 +335,23 @@ public class GameManager
         {
             PlayerController player = new PlayerController();
             originPlayerDict.Add(PhotonNetwork.CurrentRoom.Players[i].NickName, player);
+            player.OnHealing(TEAM_HP_MAX);
             players.Add(player);
         }
 
         // 서버에서 받아온 플레이어 유닛 플레이어 생성
         CreatePlayer creator = GameObject.Find("Creator").GetComponent<CreatePlayer>();
         creator.Create(Players[creator.GetMyIndex()], waitAreaResPoint[creator.GetMyIndex()]);
+
+        // 서버에서 받아온 플레이어 유닛에 맞춰서 세팅
+        UI_TopLayer topLayer = Managers.UI.ShowSceneUI<UI_TopLayer>();
+        topLayer?.Init();
+
+        for(int i = 1; i <= PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            topLayer?.TeamBoxes[i - 1].SettingNickname(PhotonNetwork.CurrentRoom.Players[i].NickName);
+            topLayer?.TeamBoxes[i - 1].SettingHp(players[i - 1].Hp, TEAM_HP_MAX);
+        }
     }
 
     public void OnUpdate()
@@ -368,6 +414,15 @@ public class GameManager
 
     private void UpdateBattle_FightMode()
     {
+        List<PlayerController> playerTemp = players.FindAll(x => !x.IsDie);
+        if(playerTemp.Count <= 1)
+        {
+            baseTimer = 0f;
+
+            roundNumber++;
+            CurrentStage = CurrentStageMode.RESULT_STAGE;
+        }
+
         if (baseTimer >= START_MAGNETIC_TIME)
         {
             baseTimer = 0f;
@@ -381,6 +436,17 @@ public class GameManager
 
     private void UpdateBattle_Manetic()
     {
+        List<PlayerController> playerTemp = players.FindAll(x => !x.IsDie);
+        if (playerTemp.Count >= 1)
+        {
+            magneticField.Clear();
+
+            baseTimer = 0f;
+
+            roundNumber++;
+            CurrentStage = CurrentStageMode.RESULT_STAGE;
+        }
+
         if (magneticField.MagneticCount >= MAGNETIC_STACK)
         {
             magneticField.Clear();

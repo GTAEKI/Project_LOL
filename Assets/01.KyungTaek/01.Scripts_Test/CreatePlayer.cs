@@ -47,7 +47,7 @@ public class CreatePlayer : MonoBehaviourPun
 
     public void MovePoint(PlayerController player, Transform resPoint)
     {
-        if(photonView.IsMine)
+        //if(photonView.IsMine)
         {
             player.PlayerUnit.transform.position = resPoint.position;
             player.PlayerUnit.transform.SetParent(resPoint);

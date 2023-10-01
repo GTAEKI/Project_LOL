@@ -247,7 +247,11 @@ public class CurrentUnitStat
     /// 김민섭_230911
     /// </summary>
     /// <param name="value">수치값</param>
-    public void SettingHp(float value) => Hp = value;
+    public void SettingHp(float value)
+    {
+        Hp = value;
+        RefreshStatusUI();
+    }
 
     /// <summary>
     /// 마나 세팅 함수
@@ -390,9 +394,9 @@ public class CurrentUnitStat
 
         if (Hp <= 0)
         {
-            Hp = 0;
-            
+            Hp = 0;   
         }
-        
+
+        SettingHpGroup(Hp, HpRecovery);
     }
 }

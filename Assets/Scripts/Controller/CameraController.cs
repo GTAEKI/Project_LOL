@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        //player = GameObject.FindWithTag("Player");
+        player = GameObject.FindWithTag("Player");
         delta = new Vector3(0, 15, -9f); //230914 배경택 값 수정
 
         //camFOV = GetComponent<Camera>().fieldOfView;        
