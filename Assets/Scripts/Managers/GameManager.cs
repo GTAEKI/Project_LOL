@@ -165,16 +165,16 @@ public class GameManager
             }
         }
 
-        if(dieCount >= PLAYER_COUNT - 1)
+        if (dieCount >= PLAYER_COUNT - 1)
         {
             // TODO: 최종 승리
             if (players[creator.GetMyIndex()].Hp > 0)
             {
-                Debug.Log($"{PhotonNetwork.CurrentRoom.Players[creator.GetMyIndex()].NickName}가 승리했습니다.");
+                Debug.Log($"{PhotonNetwork.CurrentRoom.Players[creator.GetMyIndex() + 1].NickName}가 승리했습니다.");
             }
             else
             {
-                Debug.Log($"{PhotonNetwork.CurrentRoom.Players[creator.GetMyIndex()].NickName}가 패배했습니다.");
+                Debug.Log($"{PhotonNetwork.CurrentRoom.Players[creator.GetMyIndex() + 1].NickName}가 패배했습니다.");
             }
         }
         else
