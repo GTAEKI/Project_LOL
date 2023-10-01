@@ -3162,11 +3162,7 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  visibleTargets:
-  - {fileID: 0}
-  - {fileID: 6351334251462267071}
-  - {fileID: 0}
-  - {fileID: 0}
+  visibleTargets: []
   meshResolution: 16
   edgeResolveIterations: 1
   edgeDstThreshold: 0
@@ -4148,6 +4144,7 @@ MonoBehaviour:
   muzzle_E: {fileID: 7759451689573431902}
   muzzle_R: {fileID: 7759451689937146772}
   vision: {fileID: 3982423139661996830, guid: 9d9ed8385b3e64596bb93d15483d401e, type: 3}
+  otherActorNumber: 0
 --- !u!114 &6409587731742579563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4582,7 +4579,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9196778306255110036}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.9857877
   m_Height: 1.802365
