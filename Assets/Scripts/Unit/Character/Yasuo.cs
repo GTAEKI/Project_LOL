@@ -235,6 +235,8 @@ public class Yasuo : Unit
 
         if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object", "Unit_Blue", "Unit_Red")))
         {
+            if (hit.transform == transform) return;
+
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
 
             targetPos = default;
@@ -325,6 +327,8 @@ public class Yasuo : Unit
 
         if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object", "Unit_Blue", "Unit_Red")))
         {
+            if (hit.transform == transform) return; 
+
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
 
             targetPos = default;
