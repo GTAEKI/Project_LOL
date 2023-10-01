@@ -437,7 +437,7 @@ public class GameManager
     private void UpdateBattle_Manetic()
     {
         List<PlayerController> playerTemp = players.FindAll(x => !x.IsDie);
-        if (playerTemp.Count >= 1)
+        if (playerTemp.Count <= 1)
         {
             magneticField.Clear();
 
