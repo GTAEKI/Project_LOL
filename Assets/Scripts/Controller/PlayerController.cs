@@ -56,4 +56,14 @@ public class PlayerController
             IsDie = true;
         }
     }
+
+    public void OnHealing(int heal)
+    {
+        Hp += heal;
+
+        if(Hp > 20)
+        {
+            Hp = 20;
+        }
+    }
 }
