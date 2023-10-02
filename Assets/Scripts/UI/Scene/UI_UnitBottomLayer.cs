@@ -57,6 +57,7 @@ public class UI_UnitBottomLayer : UI_Scene
     protected Define.UnitName targetUnit;     // 타겟 유닛
 
     public void SetTarget(Define.UnitName targetUnit) => this.targetUnit = targetUnit;
+    public Define.UnitName GetTarget => targetUnit;
 
     public override void Init()
     {

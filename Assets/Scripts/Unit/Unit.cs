@@ -83,15 +83,18 @@ public class Unit : MonoBehaviourPun
         //eyeSight = transform.Find("ViewVisualisation");
         eyeSight = transform.GetComponentInChildren<FieldOfView>();
 
-        if (photonView.IsMine)
+        if (Managers.Scene.CurrentScene.SceneType == Define.Scene.Game)
         {
-            eyeSight.gameObject.SetActive(true);
-            Debug.Log("시야 켰다");
-        }
-        else
-        {
-            eyeSight.gameObject.SetActive(false);
-            Debug.Log("시야 껏다");
+            if (photonView.IsMine)
+            {
+                eyeSight.gameObject.SetActive(true);
+                Debug.Log("시야 켰다");
+            }
+            else
+            {
+                eyeSight.gameObject.SetActive(false);
+                Debug.Log("시야 껏다");
+            }
         }
     }
 
