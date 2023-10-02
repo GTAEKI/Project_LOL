@@ -286,7 +286,7 @@ public class CurrentUnitStat
         SettingHpRecovery(recovery);
 
         UI_UnitBottomLayer bottomLayer = Managers.UI.GetScene<UI_UnitBottomLayer>();
-        if (bottomLayer != null)
+        if (bottomLayer != null && bottomLayer.GetTarget == (Define.UnitName)UnitStat.indexnumber)
         {
             bottomLayer.SetGaugeBar(UI_UnitBottomLayer.GaugeType.Hp, hp, UnitStat.Hp, recovery);
         }
