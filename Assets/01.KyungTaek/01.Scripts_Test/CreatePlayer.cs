@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -11,6 +12,7 @@ using UnityEngine.EventSystems;
 public class CreatePlayer : MonoBehaviourPun
 {
     public int GetMyIndex() => Array.IndexOf(PhotonNetwork.PlayerList, PhotonNetwork.LocalPlayer);       // 인덱스 가져오기
+    public int GetAllPlayerNum() => PhotonNetwork.PlayerList.Length;
 
     /// <summary>
     /// 플레이어 인덱스에 맞춰서 캐릭터 생성
@@ -49,10 +51,17 @@ public class CreatePlayer : MonoBehaviourPun
 
     public void MovePoint(PlayerController player, Transform resPoint)
     {
-        //if(photonView.IsMine)
-        {
-            player.PlayerUnit.transform.position = resPoint.position;
-            player.PlayerUnit.transform.SetParent(resPoint);
-        }
+        //photonView.RPC("MovePointRPC", RpcTarget.All, player, resPoint);
+
+        player.PlayerUnit.transform.position = resPoint.position;
+        //player.PlayerUnit.transform.SetParent(resPoint);
+        
     }
+
+    //[PunRPC]
+    //private void MovePointRPC(PlayerController player, Transform resPoint)
+    //{
+    //    player.PlayerUnit.transform.position = resPoint.position;
+    //    player.PlayerUnit.transform.SetParent(resPoint);
+    //}
 }
