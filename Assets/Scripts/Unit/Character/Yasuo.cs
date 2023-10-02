@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Yasuo : Unit
 {
@@ -12,17 +13,18 @@ public class Yasuo : Unit
     private IEnumerator co_SpellQ_OutTime;      // Q 스택 초기화 시간 코루틴
     private int spellQ_Count = 0;               // Q 스택 카운트
     private float spellQ_currentTimer = 0f;     // Q 스택 현재 유지 시간
+    private Hitbox_SpellQ spellQ_hitBox;          // Q 스킬 히트박스
 
     #region 프로퍼티
 
-    public override Define.UnitState CurrentState 
-    { 
-        get => base.CurrentState; 
+    public override Define.UnitState CurrentState
+    {
+        get => base.CurrentState;
         set
         {
             base.CurrentState = value;
 
-            switch(base.CurrentState)
+            switch (base.CurrentState)
             {
                 case Define.UnitState.IDLE: anim?.SetFloat("MovementSpeed", 0f); break;
                 case Define.UnitState.MOVE: anim?.SetFloat("MovementSpeed", currentUnitStat.MoveMentSpeed); break;
@@ -67,7 +69,9 @@ public class Yasuo : Unit
 
         unitStat = new UnitStat(Managers.Data.UnitBaseStatDict[Define.UnitName.Yasuo]);
         unitSkill = new UnitSkill(Define.UnitName.Yasuo);
-        spellEffect = GetComponentInChildren<ParticleSystem>(); 
+        spellEffect = GetComponentInChildren<ParticleSystem>();
+
+        spellQ_hitBox = transform.Find("Hitbox_SpellQ").GetComponent<Hitbox_SpellQ>();
 
         base.Init();
     }
@@ -91,6 +95,30 @@ public class Yasuo : Unit
         targetPos = default;
         CurrentState = Define.UnitState.SPELLQ;
 
+        // 마우스가 보는 방향으로 스킬을 시전함
+        Vector3 mousePos = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Floor")))
+        {
+            if (hit.transform == transform) return;
+
+            Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
+            transform.LookAt(hit.point);
+        }
+
+        if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object", "Unit_Blue", "Unit_Red")))
+        {
+            if (hit.transform == transform) return;
+
+            Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
+            Vector3 goalPos = hit.transform.position;
+            goalPos.y = 0f;
+            transform.LookAt(goalPos);
+        }
+
+        // 찌르기 모션
         StartCoroutine(Thrust());
     }
 
@@ -101,7 +129,7 @@ public class Yasuo : Unit
         // 해당 스킬 애니메이션인지 딜레이
         while (!anim.GetCurrentAnimatorStateInfo(0).IsName("SPELL_Q_" + SpellQ_Count))
         {
-            //anim.SetBool("SpellQ", true);
+            anim.SetBool("SpellQ", true);
             yield return null;
         }
 
@@ -116,8 +144,13 @@ public class Yasuo : Unit
             Vector3 moveDirection = (targetPosition - initialPosition).normalized;
 
             GameObject tornado = Managers.Resource.Instantiate("Unit/Yasuo/Tornado", spawnPosition, transform.rotation);
-            tornado.GetComponent<TornadoController>().moveDirect = moveDirection;
+            TornadoController tornadoCtrl = tornado.GetComponent<TornadoController>();
+            tornadoCtrl.moveDirect = moveDirection;
             Managers.Resource.Destroy(tornado, SPELL_W_WORK_TIME);
+        }
+        else
+        {   // 2스택 이하 히트박스
+            spellQ_hitBox.SetActiveHitbox(true);
         }
 
         while (elapsedTime < animDuration / 2f)
@@ -126,12 +159,43 @@ public class Yasuo : Unit
             yield return null;
         }
 
+        // 히트박스 생성 해제
+        spellQ_hitBox.SetActiveHitbox(false);
+
+        // 피격 받은 적이 없다면 스택 무효
+        if (spellQ_hitBox.HitTargets.Count <= 0)
+        {
+            SpellQ_Count = 0;
+        }
+        else
+        {   // 피격 받은 적이 있다면 데미지
+            for (int i = 0; i < spellQ_hitBox.HitTargets.Count; i++)
+            {
+                SpellQDamage(spellQ_hitBox.HitTargets[i].transform);
+            }
+        }
+
+        // 모든게 끝나면 피격 리스트 초기화
+        spellQ_hitBox.HitTargets.Clear();
+
         anim.SetBool("SpellQ", false);
         CurrentState = Define.UnitState.IDLE;
 
         if (SpellQ_Count >= 3) SpellQ_Count = 0;
 
         base.CastActiveQ();
+    }
+
+    private void SpellQDamage(Transform target)
+    {
+        CurrentUnitStat targetStat = target.GetComponent<Unit>().CurrentUnitStat;       // 타겟의 현재 스탯
+
+        // 20 + (1.05 물리계수)
+
+        float atk = currentUnitStat.Atk * 1.05f;
+        float totalDamage = 20 + atk;
+
+        targetStat.OnDamaged(totalDamage);
     }
 
     /// <summary>
@@ -202,7 +266,7 @@ public class Yasuo : Unit
         float elapsedTime = 0f;
 
         Vector3 initialPosition = transform.position;                           // 시작 위치
-        Vector3 targetPosition = initialPosition + transform.forward * 10f;
+        Vector3 targetPosition = initialPosition + transform.forward * 3f;
 
         while (elapsedTime < animDuration / 2f)
         {
@@ -252,7 +316,7 @@ public class Yasuo : Unit
             StartCoroutine(Dash(goalPos));
 
             // 타겟에게 데미지 부여
-            StartCoroutine(SpellDamage(hit.transform));
+            StartCoroutine(SpellEDamage(hit.transform));
         }
     }
 
@@ -274,8 +338,8 @@ public class Yasuo : Unit
             float t = elapsedTime / dashDuration;
             Vector3 moveDirection = (targetPosition - initialPosition).normalized;
 
-            transform.position = Vector3.Lerp(initialPosition, targetPosition + moveDirection * 10f, t);
-            elapsedTime += Time.deltaTime * 2.2f;
+            transform.position = Vector3.Lerp(initialPosition, targetPosition + moveDirection * 3f, t);
+            elapsedTime += Time.deltaTime * 2.3f;
 
             yield return null;
         }
@@ -286,7 +350,7 @@ public class Yasuo : Unit
         base.CastActiveE();
     }
 
-    private IEnumerator SpellDamage(Transform target)
+    private IEnumerator SpellEDamage(Transform target)
     {
         CurrentUnitStat targetStat = target.GetComponent<Unit>().CurrentUnitStat;       // 타겟의 현재 스탯
 
@@ -301,16 +365,17 @@ public class Yasuo : Unit
             yield return null;
         }
 
-        float dashDuration = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - 0.1f;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < dashDuration / 3.5f)
+        while (true)
         {
-            elapsedTime += Time.deltaTime;
+            float distance = Vector3.Distance(transform.position, target.position);
+            if (distance <= 3.1f)
+            {
+                targetStat.OnDamaged(totalDamage);
+                yield break;
+            }
+
             yield return null;
         }
-
-        targetStat.OnDamaged(totalDamage);
     }
 
     #endregion
@@ -327,7 +392,7 @@ public class Yasuo : Unit
 
         if (Physics.Raycast(ray, out hit, RAY_DISTANCE, LayerMask.GetMask("Unit_Object", "Unit_Blue", "Unit_Red")))
         {
-            if (hit.transform == transform) return; 
+            if (hit.transform == transform) return;
 
             Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.blue);
 
@@ -342,7 +407,24 @@ public class Yasuo : Unit
 
             // 타겟을 향해 돌진 시작
             StartCoroutine(Ultimate(goalPos));
+
+            // 타겟에게 데미지 부여
+            StartCoroutine(SpellRDamage(hit.transform));
+
+            // 타겟 1초동안 더 공중에 머물게
+            StartCoroutine(AddAirbone(hit.transform));
         }
+    }
+
+    private IEnumerator AddAirbone(Transform target)
+    {
+        target.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //target.GetComponent<Rigidbody>().useGravity = false;
+
+        yield return new WaitForSeconds(1f);
+
+        target.GetComponent<Rigidbody>().velocity = -Vector3.one * 20f;
+        //target.GetComponent<Rigidbody>().useGravity = true;
     }
 
     private IEnumerator Ultimate(Vector3 targetPosition)
@@ -360,11 +442,9 @@ public class Yasuo : Unit
 
         while (elapsedTime < dashDuration)
         {
-            float t = elapsedTime / dashDuration;
             Vector3 moveDirection = (targetPosition - initialPosition).normalized;
 
-            //transform.position = Vector3.Lerp(initialPosition, targetPosition + moveDirection * 10f, t);
-            transform.position = targetPosition + moveDirection * 8f;
+            transform.position = targetPosition + moveDirection * 3f;
             elapsedTime += Time.deltaTime * 2f;
 
             transform.LookAt(targetPosition);
@@ -376,6 +456,34 @@ public class Yasuo : Unit
         CurrentState = Define.UnitState.IDLE;
 
         base.CastActiveR();
+    }
+
+    private IEnumerator SpellRDamage(Transform target)
+    {
+        CurrentUnitStat targetStat = target.GetComponent<Unit>().CurrentUnitStat;       // 타겟의 현재 스탯
+
+        // 200 + (1.5 물리계수)
+
+        float atk = currentUnitStat.Atk * 1.5f;
+        float totalDamage = 200 + atk;
+
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("SPELL_R"))
+        {
+            yield return null;
+        }
+
+        while (true)
+        {
+            float distance = Vector3.Distance(transform.position, target.position);
+            Debug.Log(distance);
+            if (distance <= 3.2f)
+            {
+                targetStat.OnDamaged(totalDamage);
+                yield break;
+            }
+
+            yield return null;
+        }
     }
 
     #endregion

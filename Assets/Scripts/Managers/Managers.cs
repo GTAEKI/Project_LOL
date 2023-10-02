@@ -47,6 +47,12 @@ public class Managers : MonoBehaviour
 
             _game.OnUpdate();
         }
+
+        if(Scene.CurrentScene.SceneType == Define.Scene.Test)
+        {
+            // Core
+            _input.OnUpdate();
+        }
     }
 
     private static void Init()
