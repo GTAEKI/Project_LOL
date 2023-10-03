@@ -66,6 +66,7 @@ MonoBehaviour:
   - AutoAttackRPC
   - MakeAttackQRPC
   - MovePointRPC
+  - CastActiveWRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

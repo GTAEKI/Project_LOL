@@ -190,6 +190,16 @@ public class Ashe : Unit
             transform.rotation = Quaternion.LookRotation(direct);
         }
 
+        photonView.RPC("CastActiveWRPC", RpcTarget.All);
+
+        animator.SetTrigger("W");
+        base.CastActiveW();
+    }
+
+    // 네트워크 상 상대편 컴퓨터에서도 데미지가 들어갈 수 있도록 RPC처리함
+    [PunRPC]
+    private void CastActiveWRPC()
+    {
         int numProjectiles = 10; // 이펙트 개수
         float startAngle = -45f; // 시작 각도
         float endAngle = 45f; // 끝 각도
@@ -204,9 +214,6 @@ public class Ashe : Unit
             skill_W.GetComponent<CalculateDamage>().damage = unitStat.Atk; // 스킬 W 데미지 계산
             Destroy(skill_W, 0.7f);
         }
-
-        animator.SetTrigger("W");
-        base.CastActiveW();
     }
 
     // 스킬 E
