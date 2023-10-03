@@ -292,11 +292,12 @@ public class Ashe : Unit
             {
                 Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
-                transform.LookAt(hit.point);
+                Vector3 direct = hit.point;
+                direct.y = 0;
 
-                GameObject skillR = Instantiate(effect_R, muzzle_R.transform.position, muzzle_R.transform.rotation);
-                skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk * 3; // 데미지 계산
-                Destroy(skillR, 10f);
+                transform.LookAt(direct);
+
+                photonView.RPC("CastActiveRRPC", RpcTarget.All);
 
                 shotImg_R.SetActive(false);
 
@@ -307,6 +308,16 @@ public class Ashe : Unit
         }
     }
 
+
+    [PunRPC]
+    private void CastActiveRRPC() // 애쉬 스킬 R 네트워크 연동
+    {
+        GameObject skillR = Instantiate(effect_R, muzzle_R.transform.position, muzzle_R.transform.rotation);
+        skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk * 3; // 데미지 계산
+    }
+
+
+    // 패시브 비활성화
     protected override void CastPassive()
     {
         //base.CastPassive();
