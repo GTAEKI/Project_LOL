@@ -48,8 +48,7 @@ public class Rumble : Unit
     protected override void Move()
     {
         if (Managers.Input.CheckKeyEvent(1))
-        {
-            Debug.Log("시작");
+        {            
             UI_DummyController ui_dummy = Managers.UI.GetPopupUI<UI_DummyController>();
             if (ui_dummy == null || (ui_dummy != null && !ui_dummy.IsCreate))
             {

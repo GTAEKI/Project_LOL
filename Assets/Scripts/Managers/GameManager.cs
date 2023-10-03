@@ -271,9 +271,9 @@ public class GameManager
 
     private const int PLAYER_COUNT = 4;                 // 플레이어 수
     private const int MAGNETIC_STACK = 5;               // 자기장 최대 스택
-    private const float WAIT_AREA_TIME = 5f;            // 40f
-    private const float BATTLE_READY_TIME = 1f;         // 5f
-    private const float START_MAGNETIC_TIME = 10f;       // 30f
+    private const float WAIT_AREA_TIME = 40f;            // 40f
+    private const float BATTLE_READY_TIME = 5f;         // 5f
+    private const float START_MAGNETIC_TIME = 30f;       // 30f
     //private const float MAGNETIC_CYCLE = 20f;            // 20f
     private const float WAITZONE_POSITION_Z = -93f;     // 대기존 카메라 z좌표       
     private const float BATTLEZONE_POSITION_Z = 0f;     // 배틀존 카메라 z좌표
@@ -437,6 +437,7 @@ public class GameManager
     private void UpdateBattle_Manetic()
     {
         List<PlayerController> playerTemp = players.FindAll(x => !x.IsDie);
+
         if (playerTemp.Count <= 1)
         {
             magneticField.Clear();
