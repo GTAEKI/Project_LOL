@@ -235,8 +235,17 @@ public class Ashe : Unit
             transform.rotation = Quaternion.LookRotation(direct);
         }
         GameObject skill_E = Instantiate(effect_E, muzzle_E.transform.position, muzzle_E.transform.rotation);
+
+        photonView.RPC("CastActiveERPC", RpcTarget.Others);
+
         StartCoroutine(DetectionSight(skill_E, targetPos));
         base.CastActiveE();
+    }
+
+    [PunRPC]
+    private void CastActiveERPC() // 상대방 화면에서는 E가 날아가는 객체는 보이되, 실제로 시야가 밝혀지면 안됨
+    {
+        GameObject skill_E = Instantiate(effect_E, muzzle_E.transform.position, muzzle_E.transform.rotation);
     }
 
     IEnumerator DetectionSight(GameObject skill_E, Vector3 targetPos)
