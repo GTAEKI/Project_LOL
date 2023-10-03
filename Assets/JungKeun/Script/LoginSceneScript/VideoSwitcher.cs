@@ -10,12 +10,8 @@ public class VideoSwitcher : MonoBehaviour
 
     void Start()
     {
-        
-
         firstVideoPlayer.Play();
         secondVideoPlayer.Stop();
-        Debug.Log(firstVideoPlayer.time);
-
     }
 
     void Update()
