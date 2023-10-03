@@ -129,8 +129,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < characters.Length; i++)
         {
             CharacterName[i] = characters[i].name;
-
-            Debug.Log(CharacterName[i]);
         }
 
     }
@@ -437,7 +435,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                         PlayerData.Instance.myCharactor = Define.UnitName.Yasuo;
                         break;
                 }
-                Debug.Log(PlayerData.Instance.myCharactor);
             }
 
             // 선택한 캐릭터 인덱스 저장
@@ -499,7 +496,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void UpdateCharacterLockStatus(int playerIndex, int characterIndex, int _chanum) // playerIndex 는 내 캐릭터 인덱스, characterIndex는 결정을 했는지 안했는지
     {
-        Debug.LogFormat("chanum={0} 락인하고 PunRPC에서", chanum);
   
 
         if (playerIndex >= 0 && playerIndex < MyCharacter.Length)
