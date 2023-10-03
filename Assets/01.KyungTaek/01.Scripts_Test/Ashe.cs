@@ -190,6 +190,16 @@ public class Ashe : Unit
             transform.rotation = Quaternion.LookRotation(direct);
         }
 
+        photonView.RPC("CastActiveWRPC", RpcTarget.All);
+
+        animator.SetTrigger("W");
+        base.CastActiveW();
+    }
+
+    // 네트워크 상 상대편 컴퓨터에서도 데미지가 들어갈 수 있도록 RPC처리함
+    [PunRPC]
+    private void CastActiveWRPC()
+    {
         int numProjectiles = 10; // 이펙트 개수
         float startAngle = -45f; // 시작 각도
         float endAngle = 45f; // 끝 각도
@@ -204,9 +214,6 @@ public class Ashe : Unit
             skill_W.GetComponent<CalculateDamage>().damage = unitStat.Atk; // 스킬 W 데미지 계산
             Destroy(skill_W, 0.7f);
         }
-
-        animator.SetTrigger("W");
-        base.CastActiveW();
     }
 
     // 스킬 E
@@ -228,8 +235,17 @@ public class Ashe : Unit
             transform.rotation = Quaternion.LookRotation(direct);
         }
         GameObject skill_E = Instantiate(effect_E, muzzle_E.transform.position, muzzle_E.transform.rotation);
+
+        photonView.RPC("CastActiveERPC", RpcTarget.Others);
+
         StartCoroutine(DetectionSight(skill_E, targetPos));
         base.CastActiveE();
+    }
+
+    [PunRPC]
+    private void CastActiveERPC() // 상대방 화면에서는 E가 날아가는 객체는 보이되, 실제로 시야가 밝혀지면 안됨
+    {
+        GameObject skill_E = Instantiate(effect_E, muzzle_E.transform.position, muzzle_E.transform.rotation);
     }
 
     IEnumerator DetectionSight(GameObject skill_E, Vector3 targetPos)
@@ -276,11 +292,12 @@ public class Ashe : Unit
             {
                 Util.DrawTouchRay(Camera.main.transform.position, hit.point, Color.red);
 
-                transform.LookAt(hit.point);
+                Vector3 direct = hit.point;
+                direct.y = 0;
 
-                GameObject skillR = Instantiate(effect_R, muzzle_R.transform.position, muzzle_R.transform.rotation);
-                skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk * 3; // 데미지 계산
-                Destroy(skillR, 10f);
+                transform.LookAt(direct);
+
+                photonView.RPC("CastActiveRRPC", RpcTarget.All);
 
                 shotImg_R.SetActive(false);
 
@@ -291,6 +308,16 @@ public class Ashe : Unit
         }
     }
 
+
+    [PunRPC]
+    private void CastActiveRRPC() // 애쉬 스킬 R 네트워크 연동
+    {
+        GameObject skillR = Instantiate(effect_R, muzzle_R.transform.position, muzzle_R.transform.rotation);
+        skillR.GetComponent<CalculateDamage>().damage = unitStat.Atk * 3; // 데미지 계산
+    }
+
+
+    // 패시브 비활성화
     protected override void CastPassive()
     {
         //base.CastPassive();
