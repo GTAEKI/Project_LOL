@@ -4848,6 +4848,7 @@ GameObject:
   - component: {fileID: 1751559782188637709}
   - component: {fileID: 1832506883057829587}
   - component: {fileID: 717778462528544469}
+  - component: {fileID: 6855936370813056850}
   m_Layer: 8
   m_Name: Effect_R_Ashe
   m_TagString: Untagged
@@ -9764,7 +9765,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768030640663406479}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.15
@@ -9779,6 +9780,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6ba32dcd35134336a8a097e494509a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  ownerNumber: 0
+--- !u!114 &6855936370813056850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768030640663406479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac8c649f01304e1ea04299f480c2993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1768279329288635315
