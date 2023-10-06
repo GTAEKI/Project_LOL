@@ -33,7 +33,7 @@ public class TornadoController : MonoBehaviour
                 targetStat?.OnDamaged(totalDamage);
 
                 // 공중에 띄움
-                other.GetComponent<Rigidbody>().AddForce(Vector3.up * 0.3f, ForceMode.Impulse);
+                other.GetComponent<Rigidbody>().AddForce(Vector3.up * 3f, ForceMode.Impulse);
 
                 StartCoroutine(AddAirbone(other.transform));
             }
