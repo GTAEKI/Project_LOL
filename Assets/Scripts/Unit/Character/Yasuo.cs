@@ -476,7 +476,7 @@ public class Yasuo : Unit
         {
             float distance = Vector3.Distance(transform.position, target.position);
             Debug.Log(distance);
-            if (distance <= 3.2f)
+            if (distance <= 5f)
             {
                 targetStat.OnDamaged(totalDamage);
                 yield break;
